@@ -11,12 +11,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using IdentityRight.Models;
 using IdentityRight.Services;
+using Microsoft.Extensions.PlatformAbstractions;
 
 namespace IdentityRight
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostingEnvironment env,IApplicationEnvironment appEnv)
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
@@ -30,7 +31,7 @@ namespace IdentityRight
             }
 
             builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = builder.Build();        
         }
 
         public IConfigurationRoot Configuration { get; set; }
