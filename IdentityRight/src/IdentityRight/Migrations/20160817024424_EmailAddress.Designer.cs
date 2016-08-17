@@ -8,9 +8,10 @@ using IdentityRight.Models;
 namespace IdentityRight.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160817024424_EmailAddress")]
+    partial class EmailAddress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -88,18 +89,6 @@ namespace IdentityRight.Migrations
                     b.Property<string>("emailAddress");
 
                     b.HasKey("ID");
-                });
-
-            modelBuilder.Entity("IdentityRight.Models.UserEmails_UserOrganisationLinks", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("UserEmailAddressesID");
-
-                    b.Property<int?>("UserOrganisationLinksId");
-
-                    b.HasKey("Id");
                 });
 
             modelBuilder.Entity("IdentityRight.Models.UserOrganisationLinks", b =>
@@ -227,17 +216,6 @@ namespace IdentityRight.Migrations
                     b.HasOne("IdentityRight.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
-                });
-
-            modelBuilder.Entity("IdentityRight.Models.UserEmails_UserOrganisationLinks", b =>
-                {
-                    b.HasOne("IdentityRight.Models.UserEmailAddresses")
-                        .WithMany()
-                        .HasForeignKey("UserEmailAddressesID");
-
-                    b.HasOne("IdentityRight.Models.UserOrganisationLinks")
-                        .WithMany()
-                        .HasForeignKey("UserOrganisationLinksId");
                 });
 
             modelBuilder.Entity("IdentityRight.Models.UserOrganisationLinks", b =>

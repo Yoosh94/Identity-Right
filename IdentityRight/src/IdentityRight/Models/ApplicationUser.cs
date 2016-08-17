@@ -13,5 +13,8 @@ namespace IdentityRight.Models
         public ICollection<UserOrganisationLinks> CustomerOrganisationLinks { get; set; }
         //One User can have many phone numbers
         public ICollection<UserPhoneNumbers> UserPhoneNumber { get; set; }
+        //One User can have many email addresses
+        public ICollection<UserEmailAddresses> UserEmailAddress { get; set; }
+
     }
 }

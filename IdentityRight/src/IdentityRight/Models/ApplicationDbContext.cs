@@ -15,6 +15,8 @@ namespace IdentityRight.Models
         public DbSet<UserOrganisationLinks> CustomerOrganisationLinks { get; set; }
         public DbSet<UserPhoneNumbers> UsersPhoneNumbers { get; set; }
         public DbSet<UserPhoneNumbers_CustomerOrganisationLinks> PhoneNumber_CustomerOrganisationLink { get; set; }
+        public DbSet<UserEmailAddresses> UserEmailAddress { get; set; }
+        public DbSet<UserEmails_UserOrganisationLinks> UserEmail_UserOrganisationLink { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
