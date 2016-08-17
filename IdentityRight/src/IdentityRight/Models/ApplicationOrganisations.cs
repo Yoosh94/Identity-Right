@@ -13,5 +13,6 @@ namespace IdentityRight.Models
         public string organisationName { get; set; }
         public string organisationAddress { get; set; }
         public ICollection<UserOrganisationLinks> CustomerOrganisationLinks { get; set; }
+        public Guid APIKey { get; set; }
     }
 }
