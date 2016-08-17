@@ -17,6 +17,11 @@ namespace IdentityRight.Models
         public DbSet<UserPhoneNumbers_CustomerOrganisationLinks> PhoneNumber_CustomerOrganisationLink { get; set; }
         public DbSet<UserEmailAddresses> UserEmailAddress { get; set; }
         public DbSet<UserEmails_UserOrganisationLinks> UserEmail_UserOrganisationLink { get; set; }
+        public DbSet<UserAddresses> UserAddress { get; set; }
+        public DbSet<UserAddresses_CustomerOrganisationLinks> UserAddress_UserOrganisationLink { get; set; }
+        public DbSet<Locations> Location { get; set; }
+        public DbSet<Countries> Country { get; set; }
+        public DbSet<Regions>Region { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

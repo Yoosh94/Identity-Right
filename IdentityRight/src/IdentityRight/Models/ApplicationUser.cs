@@ -15,6 +15,7 @@ namespace IdentityRight.Models
         public ICollection<UserPhoneNumbers> UserPhoneNumber { get; set; }
         //One User can have many email addresses
         public ICollection<UserEmailAddresses> UserEmailAddress { get; set; }
-
+        //One user can have many addresses
+        public ICollection<UserAddresses> UserAddress { get; set; }
     }
 }
