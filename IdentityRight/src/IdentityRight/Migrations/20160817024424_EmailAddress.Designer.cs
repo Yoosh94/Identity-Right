@@ -8,9 +8,10 @@ using IdentityRight.Models;
 namespace IdentityRight.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160817024424_EmailAddress")]
+    partial class EmailAddress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -76,70 +77,6 @@ namespace IdentityRight.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
-            modelBuilder.Entity("IdentityRight.Models.Countries", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("Regionsid");
-
-                    b.Property<string>("countryName");
-
-                    b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("IdentityRight.Models.Locations", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("CountriesId");
-
-                    b.Property<int>("postcode");
-
-                    b.Property<string>("state");
-
-                    b.Property<string>("streetName");
-
-                    b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("IdentityRight.Models.Regions", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("regionDescription");
-
-                    b.Property<string>("regionName");
-
-                    b.HasKey("id");
-                });
-
-            modelBuilder.Entity("IdentityRight.Models.UserAddresses", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ApplicationUserId");
-
-                    b.Property<int?>("LocationsId");
-
-                    b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("IdentityRight.Models.UserAddresses_CustomerOrganisationLinks", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("UserAddressesId");
-
-                    b.Property<int?>("UserOrganisationLinksId");
-
-                    b.HasKey("Id");
-                });
-
             modelBuilder.Entity("IdentityRight.Models.UserEmailAddresses", b =>
                 {
                     b.Property<int>("ID")
@@ -152,18 +89,6 @@ namespace IdentityRight.Migrations
                     b.Property<string>("emailAddress");
 
                     b.HasKey("ID");
-                });
-
-            modelBuilder.Entity("IdentityRight.Models.UserEmails_UserOrganisationLinks", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("UserEmailAddressesID");
-
-                    b.Property<int?>("UserOrganisationLinksId");
-
-                    b.HasKey("Id");
                 });
 
             modelBuilder.Entity("IdentityRight.Models.UserOrganisationLinks", b =>
@@ -286,58 +211,11 @@ namespace IdentityRight.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("IdentityRight.Models.Countries", b =>
-                {
-                    b.HasOne("IdentityRight.Models.Regions")
-                        .WithMany()
-                        .HasForeignKey("Regionsid");
-                });
-
-            modelBuilder.Entity("IdentityRight.Models.Locations", b =>
-                {
-                    b.HasOne("IdentityRight.Models.Countries")
-                        .WithMany()
-                        .HasForeignKey("CountriesId");
-                });
-
-            modelBuilder.Entity("IdentityRight.Models.UserAddresses", b =>
-                {
-                    b.HasOne("IdentityRight.Models.ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("IdentityRight.Models.Locations")
-                        .WithMany()
-                        .HasForeignKey("LocationsId");
-                });
-
-            modelBuilder.Entity("IdentityRight.Models.UserAddresses_CustomerOrganisationLinks", b =>
-                {
-                    b.HasOne("IdentityRight.Models.UserAddresses")
-                        .WithMany()
-                        .HasForeignKey("UserAddressesId");
-
-                    b.HasOne("IdentityRight.Models.UserOrganisationLinks")
-                        .WithMany()
-                        .HasForeignKey("UserOrganisationLinksId");
-                });
-
             modelBuilder.Entity("IdentityRight.Models.UserEmailAddresses", b =>
                 {
                     b.HasOne("IdentityRight.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
-                });
-
-            modelBuilder.Entity("IdentityRight.Models.UserEmails_UserOrganisationLinks", b =>
-                {
-                    b.HasOne("IdentityRight.Models.UserEmailAddresses")
-                        .WithMany()
-                        .HasForeignKey("UserEmailAddressesID");
-
-                    b.HasOne("IdentityRight.Models.UserOrganisationLinks")
-                        .WithMany()
-                        .HasForeignKey("UserOrganisationLinksId");
                 });
 
             modelBuilder.Entity("IdentityRight.Models.UserOrganisationLinks", b =>

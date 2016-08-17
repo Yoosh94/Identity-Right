@@ -5,8 +5,11 @@ using System.Threading.Tasks;
 
 namespace IdentityRight.Models
 {
-    public class User
+    public enum PhoneNumberTypes
     {
-        public int ID { get; set; }
+        Mobile,
+        Home,
+        Work,
+        Business
     }
 }
