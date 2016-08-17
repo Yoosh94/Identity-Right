@@ -8,9 +8,10 @@ using IdentityRight.Models;
 namespace IdentityRight.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160817020441_phoneNumber_customerOrganisationLink")]
+    partial class phoneNumber_customerOrganisationLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -76,14 +77,18 @@ namespace IdentityRight.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
-            modelBuilder.Entity("IdentityRight.Models.UserOrganisationLinks", b =>
+            modelBuilder.Entity("IdentityRight.Models.CustomerOrganisationLinks", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("ApplicationOrganisationId");
+
                     b.Property<int?>("ApplicationOrganisationsId");
 
-                    b.Property<string>("ApplicationUserId");
+                    b.Property<int>("ApplicationUserId");
+
+                    b.Property<string>("ApplicationUserId1");
 
                     b.HasKey("Id");
                 });
@@ -93,7 +98,9 @@ namespace IdentityRight.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ApplicationUserId");
+                    b.Property<int>("ApplicationUserId");
+
+                    b.Property<string>("ApplicationUserId1");
 
                     b.Property<string>("PhoneNumber");
 
@@ -107,7 +114,11 @@ namespace IdentityRight.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("UserOrganisationLinksId");
+                    b.Property<int>("CustomerOrganisationLinkId");
+
+                    b.Property<int?>("CustomerOrganisationLinksId");
+
+                    b.Property<int>("CustomerPhoneNumberId");
 
                     b.Property<int?>("UserPhoneNumbersId");
 
@@ -196,7 +207,7 @@ namespace IdentityRight.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("IdentityRight.Models.UserOrganisationLinks", b =>
+            modelBuilder.Entity("IdentityRight.Models.CustomerOrganisationLinks", b =>
                 {
                     b.HasOne("IdentityRight.Models.ApplicationOrganisations")
                         .WithMany()
@@ -204,21 +215,21 @@ namespace IdentityRight.Migrations
 
                     b.HasOne("IdentityRight.Models.ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId1");
                 });
 
             modelBuilder.Entity("IdentityRight.Models.UserPhoneNumbers", b =>
                 {
                     b.HasOne("IdentityRight.Models.ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId1");
                 });
 
             modelBuilder.Entity("IdentityRight.Models.UserPhoneNumbers_CustomerOrganisationLinks", b =>
                 {
-                    b.HasOne("IdentityRight.Models.UserOrganisationLinks")
+                    b.HasOne("IdentityRight.Models.CustomerOrganisationLinks")
                         .WithMany()
-                        .HasForeignKey("UserOrganisationLinksId");
+                        .HasForeignKey("CustomerOrganisationLinksId");
 
                     b.HasOne("IdentityRight.Models.UserPhoneNumbers")
                         .WithMany()

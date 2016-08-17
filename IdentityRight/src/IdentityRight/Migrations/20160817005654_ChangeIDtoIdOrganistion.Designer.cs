@@ -8,9 +8,10 @@ using IdentityRight.Models;
 namespace IdentityRight.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160817005654_ChangeIDtoIdOrganistion")]
+    partial class ChangeIDtoIdOrganistion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -74,44 +75,6 @@ namespace IdentityRight.Migrations
                         .HasAnnotation("Relational:Name", "UserNameIndex");
 
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
-                });
-
-            modelBuilder.Entity("IdentityRight.Models.UserOrganisationLinks", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("ApplicationOrganisationsId");
-
-                    b.Property<string>("ApplicationUserId");
-
-                    b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("IdentityRight.Models.UserPhoneNumbers", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ApplicationUserId");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<int>("PhoneNumberType");
-
-                    b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("IdentityRight.Models.UserPhoneNumbers_CustomerOrganisationLinks", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("UserOrganisationLinksId");
-
-                    b.Property<int?>("UserPhoneNumbersId");
-
-                    b.HasKey("Id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRole", b =>
@@ -194,35 +157,6 @@ namespace IdentityRight.Migrations
                     b.HasKey("UserId", "RoleId");
 
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
-                });
-
-            modelBuilder.Entity("IdentityRight.Models.UserOrganisationLinks", b =>
-                {
-                    b.HasOne("IdentityRight.Models.ApplicationOrganisations")
-                        .WithMany()
-                        .HasForeignKey("ApplicationOrganisationsId");
-
-                    b.HasOne("IdentityRight.Models.ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-                });
-
-            modelBuilder.Entity("IdentityRight.Models.UserPhoneNumbers", b =>
-                {
-                    b.HasOne("IdentityRight.Models.ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-                });
-
-            modelBuilder.Entity("IdentityRight.Models.UserPhoneNumbers_CustomerOrganisationLinks", b =>
-                {
-                    b.HasOne("IdentityRight.Models.UserOrganisationLinks")
-                        .WithMany()
-                        .HasForeignKey("UserOrganisationLinksId");
-
-                    b.HasOne("IdentityRight.Models.UserPhoneNumbers")
-                        .WithMany()
-                        .HasForeignKey("UserPhoneNumbersId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>

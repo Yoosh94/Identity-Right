@@ -9,6 +9,12 @@ namespace IdentityRight.Models
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        //The following DbSets are used as contexts to query the database.
+        //These are also needed here for the Entity Framework to convert classes to tables.
+        public DbSet<ApplicationOrganisations> ApplicationOrganisations { get; set; }
+        public DbSet<UserOrganisationLinks> CustomerOrganisationLinks { get; set; }
+        public DbSet<UserPhoneNumbers> UsersPhoneNumbers { get; set; }
+        public DbSet<UserPhoneNumbers_CustomerOrganisationLinks> PhoneNumber_CustomerOrganisationLink { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
