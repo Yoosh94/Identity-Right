@@ -8,8 +8,8 @@ using IdentityRight.Models;
 namespace IdentityRight.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160818121114_NewMigration")]
-    partial class NewMigration
+    [Migration("20160818141523_allowAutoIncrementofIRID")]
+    partial class allowAutoIncrementofIRID
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,6 +45,10 @@ namespace IdentityRight.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<int>("IRID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -67,6 +71,8 @@ namespace IdentityRight.Migrations
 
                     b.Property<string>("UserName")
                         .HasAnnotation("MaxLength", 256);
+
+                    b.Property<bool>("isAccountCompleted");
 
                     b.HasKey("Id");
 

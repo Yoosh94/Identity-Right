@@ -44,7 +44,9 @@ namespace IdentityRight.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<int>("IRID");
+                    b.Property<int>("IRID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -72,8 +74,6 @@ namespace IdentityRight.Migrations
                     b.Property<bool>("isAccountCompleted");
 
                     b.HasKey("Id");
-
-                    b.HasAlternateKey("IRID");
 
                     b.HasIndex("NormalizedEmail")
                         .HasAnnotation("Relational:Name", "EmailIndex");

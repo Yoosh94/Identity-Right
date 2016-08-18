@@ -29,8 +29,9 @@ namespace IdentityRight.Models
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
 
-            //Add a Alternate Key to the ApplicationUser
-            builder.Entity<ApplicationUser>().HasAlternateKey(x => x.IRID);
+            //This allows the property IRID to be set as an IDENTITY type so we can auto increment the value.
+            builder.Entity<ApplicationUser>().Property<int>(nameof(ApplicationUser.IRID)).UseSqlServerIdentityColumn();
+                
         }
     }
 }

@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Data.Entity.Migrations;
+using Microsoft.Data.Entity.Metadata;
 
 namespace IdentityRight.Migrations
 {
-    public partial class addAnotherPrimaryKeyToUser : Migration
+    public partial class allowAutoIncrementofIRID : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,10 +24,12 @@ namespace IdentityRight.Migrations
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserLogin<string>_ApplicationUser_UserId", table: "AspNetUserLogins");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_IdentityRole_RoleId", table: "AspNetUserRoles");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_ApplicationUser_UserId", table: "AspNetUserRoles");
-            migrationBuilder.AddUniqueConstraint(
-                name: "AK_ApplicationUser_IRID",
+            migrationBuilder.DropUniqueConstraint(name: "AK_ApplicationUser_IRID", table: "AspNetUsers");
+            migrationBuilder.AlterColumn<int>(
+                name: "IRID",
                 table: "AspNetUsers",
-                column: "IRID");
+                nullable: false)
+                .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
             migrationBuilder.AddForeignKey(
                 name: "FK_Countries_Regions_RegionsId",
                 table: "Countries",
@@ -151,7 +154,14 @@ namespace IdentityRight.Migrations
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserLogin<string>_ApplicationUser_UserId", table: "AspNetUserLogins");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_IdentityRole_RoleId", table: "AspNetUserRoles");
             migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_ApplicationUser_UserId", table: "AspNetUserRoles");
-            migrationBuilder.DropUniqueConstraint(name: "AK_ApplicationUser_IRID", table: "AspNetUsers");
+            migrationBuilder.AlterColumn<int>(
+                name: "IRID",
+                table: "AspNetUsers",
+                nullable: false);
+            migrationBuilder.AddUniqueConstraint(
+                name: "AK_ApplicationUser_IRID",
+                table: "AspNetUsers",
+                column: "IRID");
             migrationBuilder.AddForeignKey(
                 name: "FK_Countries_Regions_RegionsId",
                 table: "Countries",
