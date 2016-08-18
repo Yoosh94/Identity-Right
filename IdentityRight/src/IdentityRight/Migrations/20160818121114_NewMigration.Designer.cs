@@ -8,8 +8,8 @@ using IdentityRight.Models;
 namespace IdentityRight.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160817021038_removedVirtual")]
-    partial class removedVirtual
+    [Migration("20160818121114_NewMigration")]
+    partial class NewMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,6 +21,8 @@ namespace IdentityRight.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("APIKey");
 
                     b.Property<string>("organisationAddress");
 
@@ -77,12 +79,106 @@ namespace IdentityRight.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
-            modelBuilder.Entity("IdentityRight.Models.CustomerOrganisationLinks", b =>
+            modelBuilder.Entity("IdentityRight.Models.Countries", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("ApplicationOrganisationsId");
+                    b.Property<int>("RegionsId");
+
+                    b.Property<string>("countryName");
+
+                    b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("IdentityRight.Models.Locations", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CountriesId");
+
+                    b.Property<int>("postcode");
+
+                    b.Property<string>("state");
+
+                    b.Property<string>("streetName");
+
+                    b.Property<string>("suburb");
+
+                    b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("IdentityRight.Models.Regions", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("regionDescription");
+
+                    b.Property<string>("regionName");
+
+                    b.HasKey("id");
+                });
+
+            modelBuilder.Entity("IdentityRight.Models.UserAddresses", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AddressType");
+
+                    b.Property<string>("ApplicationUserId");
+
+                    b.Property<int>("LocationsId");
+
+                    b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("IdentityRight.Models.UserAddresses_CustomerOrganisationLinks", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("UserAddressesId");
+
+                    b.Property<int>("UserOrganisationLinksId");
+
+                    b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("IdentityRight.Models.UserEmailAddresses", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ApplicationUserId");
+
+                    b.Property<int>("EmailType");
+
+                    b.Property<string>("emailAddress");
+
+                    b.HasKey("ID");
+                });
+
+            modelBuilder.Entity("IdentityRight.Models.UserEmails_UserOrganisationLinks", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("UserEmailAddressesId");
+
+                    b.Property<int>("UserOrganisationLinksId");
+
+                    b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("IdentityRight.Models.UserOrganisationLinks", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ApplicationOrganisationsId");
 
                     b.Property<string>("ApplicationUserId");
 
@@ -94,9 +190,7 @@ namespace IdentityRight.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("ApplicationUserId");
-
-                    b.Property<string>("ApplicationUserId1");
+                    b.Property<string>("ApplicationUserId");
 
                     b.Property<string>("PhoneNumber");
 
@@ -110,13 +204,9 @@ namespace IdentityRight.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CustomerOrganisationLinkId");
+                    b.Property<int>("UserOrganisationLinksId");
 
-                    b.Property<int?>("CustomerOrganisationLinksId");
-
-                    b.Property<int>("CustomerPhoneNumberId");
-
-                    b.Property<int?>("UserPhoneNumbersId");
+                    b.Property<int>("UserPhoneNumbersId");
 
                     b.HasKey("Id");
                 });
@@ -203,7 +293,61 @@ namespace IdentityRight.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("IdentityRight.Models.CustomerOrganisationLinks", b =>
+            modelBuilder.Entity("IdentityRight.Models.Countries", b =>
+                {
+                    b.HasOne("IdentityRight.Models.Regions")
+                        .WithMany()
+                        .HasForeignKey("RegionsId");
+                });
+
+            modelBuilder.Entity("IdentityRight.Models.Locations", b =>
+                {
+                    b.HasOne("IdentityRight.Models.Countries")
+                        .WithMany()
+                        .HasForeignKey("CountriesId");
+                });
+
+            modelBuilder.Entity("IdentityRight.Models.UserAddresses", b =>
+                {
+                    b.HasOne("IdentityRight.Models.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("IdentityRight.Models.Locations")
+                        .WithMany()
+                        .HasForeignKey("LocationsId");
+                });
+
+            modelBuilder.Entity("IdentityRight.Models.UserAddresses_CustomerOrganisationLinks", b =>
+                {
+                    b.HasOne("IdentityRight.Models.UserAddresses")
+                        .WithMany()
+                        .HasForeignKey("UserAddressesId");
+
+                    b.HasOne("IdentityRight.Models.UserOrganisationLinks")
+                        .WithMany()
+                        .HasForeignKey("UserOrganisationLinksId");
+                });
+
+            modelBuilder.Entity("IdentityRight.Models.UserEmailAddresses", b =>
+                {
+                    b.HasOne("IdentityRight.Models.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+                });
+
+            modelBuilder.Entity("IdentityRight.Models.UserEmails_UserOrganisationLinks", b =>
+                {
+                    b.HasOne("IdentityRight.Models.UserEmailAddresses")
+                        .WithMany()
+                        .HasForeignKey("UserEmailAddressesId");
+
+                    b.HasOne("IdentityRight.Models.UserOrganisationLinks")
+                        .WithMany()
+                        .HasForeignKey("UserOrganisationLinksId");
+                });
+
+            modelBuilder.Entity("IdentityRight.Models.UserOrganisationLinks", b =>
                 {
                     b.HasOne("IdentityRight.Models.ApplicationOrganisations")
                         .WithMany()
@@ -218,14 +362,14 @@ namespace IdentityRight.Migrations
                 {
                     b.HasOne("IdentityRight.Models.ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId1");
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("IdentityRight.Models.UserPhoneNumbers_CustomerOrganisationLinks", b =>
                 {
-                    b.HasOne("IdentityRight.Models.CustomerOrganisationLinks")
+                    b.HasOne("IdentityRight.Models.UserOrganisationLinks")
                         .WithMany()
-                        .HasForeignKey("CustomerOrganisationLinksId");
+                        .HasForeignKey("UserOrganisationLinksId");
 
                     b.HasOne("IdentityRight.Models.UserPhoneNumbers")
                         .WithMany()
