@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.ComponentModel.DataAnnotations;
 
 namespace IdentityRight.Models
 {
@@ -17,5 +18,9 @@ namespace IdentityRight.Models
         public virtual ICollection<UserEmailAddresses> UserEmailAddress { get; set; }
         //One user can have many addresses
         public virtual ICollection<UserAddresses> UserAddress { get; set; }
+
+        public bool isAccountCompleted { get; set; }
+        [Key]
+        public int IRID { get; set; }
     }
 }
