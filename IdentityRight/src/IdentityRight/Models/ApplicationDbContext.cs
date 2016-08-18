@@ -31,6 +31,7 @@ namespace IdentityRight.Models
 
             //Add a Alternate Key to the ApplicationUser
             builder.Entity<ApplicationUser>().HasAlternateKey(x => x.IRID);
+                
         }
     }
 }
