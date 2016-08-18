@@ -8,9 +8,10 @@ using IdentityRight.Models;
 namespace IdentityRight.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160818124017_isAccountCompleted")]
+    partial class isAccountCompleted
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -44,8 +45,6 @@ namespace IdentityRight.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<int>("IRID");
-
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -72,8 +71,6 @@ namespace IdentityRight.Migrations
                     b.Property<bool>("isAccountCompleted");
 
                     b.HasKey("Id");
-
-                    b.HasAlternateKey("IRID");
 
                     b.HasIndex("NormalizedEmail")
                         .HasAnnotation("Relational:Name", "EmailIndex");
