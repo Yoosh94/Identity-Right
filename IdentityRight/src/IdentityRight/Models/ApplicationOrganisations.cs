@@ -12,7 +12,7 @@ namespace IdentityRight.Models
         public int Id { get; set; }
         public string organisationName { get; set; }
         public string organisationAddress { get; set; }
-        public ICollection<UserOrganisationLinks> CustomerOrganisationLinks { get; set; }
+        public virtual ICollection<UserOrganisationLinks> CustomerOrganisationLinks { get; set; }
         public Guid APIKey { get; set; }
     }
 }

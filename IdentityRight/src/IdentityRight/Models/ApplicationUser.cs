@@ -10,12 +10,12 @@ namespace IdentityRight.Models
     public class ApplicationUser : IdentityUser
     {
         //One User can have many CustomerOrganisation Links
-        public ICollection<UserOrganisationLinks> CustomerOrganisationLinks { get; set; }
+        public virtual ICollection<UserOrganisationLinks> CustomerOrganisationLinks { get; set; }
         //One User can have many phone numbers
-        public ICollection<UserPhoneNumbers> UserPhoneNumber { get; set; }
+        public virtual ICollection<UserPhoneNumbers> UserPhoneNumber { get; set; }
         //One User can have many email addresses
-        public ICollection<UserEmailAddresses> UserEmailAddress { get; set; }
+        public virtual ICollection<UserEmailAddresses> UserEmailAddress { get; set; }
         //One user can have many addresses
-        public ICollection<UserAddresses> UserAddress { get; set; }
+        public virtual ICollection<UserAddresses> UserAddress { get; set; }
     }
 }

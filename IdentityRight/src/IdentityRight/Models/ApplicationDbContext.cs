@@ -12,7 +12,7 @@ namespace IdentityRight.Models
         //The following DbSets are used as contexts to query the database.
         //These are also needed here for the Entity Framework to convert classes to tables.
         public DbSet<ApplicationOrganisations> ApplicationOrganisations { get; set; }
-        public DbSet<UserOrganisationLinks> CustomerOrganisationLinks { get; set; }
+        public DbSet<UserOrganisationLinks> UserOrganisationLinks { get; set; }
         public DbSet<UserPhoneNumbers> UsersPhoneNumbers { get; set; }
         public DbSet<UserPhoneNumbers_CustomerOrganisationLinks> PhoneNumber_CustomerOrganisationLink { get; set; }
         public DbSet<UserEmailAddresses> UserEmailAddress { get; set; }

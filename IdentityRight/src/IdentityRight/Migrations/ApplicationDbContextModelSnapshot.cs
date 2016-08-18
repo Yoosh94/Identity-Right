@@ -21,6 +21,8 @@ namespace IdentityRight.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid>("APIKey");
+
                     b.Property<string>("organisationAddress");
 
                     b.Property<string>("organisationName");
@@ -81,7 +83,7 @@ namespace IdentityRight.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("Regionsid");
+                    b.Property<int>("RegionsId");
 
                     b.Property<string>("countryName");
 
@@ -93,13 +95,15 @@ namespace IdentityRight.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("CountriesId");
+                    b.Property<int>("CountriesId");
 
                     b.Property<int>("postcode");
 
                     b.Property<string>("state");
 
                     b.Property<string>("streetName");
+
+                    b.Property<string>("suburb");
 
                     b.HasKey("Id");
                 });
@@ -121,9 +125,11 @@ namespace IdentityRight.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("AddressType");
+
                     b.Property<string>("ApplicationUserId");
 
-                    b.Property<int?>("LocationsId");
+                    b.Property<int>("LocationsId");
 
                     b.HasKey("Id");
                 });
@@ -133,9 +139,9 @@ namespace IdentityRight.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("UserAddressesId");
+                    b.Property<int>("UserAddressesId");
 
-                    b.Property<int?>("UserOrganisationLinksId");
+                    b.Property<int>("UserOrganisationLinksId");
 
                     b.HasKey("Id");
                 });
@@ -159,9 +165,9 @@ namespace IdentityRight.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("UserEmailAddressesID");
+                    b.Property<int>("UserEmailAddressesId");
 
-                    b.Property<int?>("UserOrganisationLinksId");
+                    b.Property<int>("UserOrganisationLinksId");
 
                     b.HasKey("Id");
                 });
@@ -171,7 +177,7 @@ namespace IdentityRight.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("ApplicationOrganisationsId");
+                    b.Property<int>("ApplicationOrganisationsId");
 
                     b.Property<string>("ApplicationUserId");
 
@@ -197,9 +203,9 @@ namespace IdentityRight.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("UserOrganisationLinksId");
+                    b.Property<int>("UserOrganisationLinksId");
 
-                    b.Property<int?>("UserPhoneNumbersId");
+                    b.Property<int>("UserPhoneNumbersId");
 
                     b.HasKey("Id");
                 });
@@ -290,7 +296,7 @@ namespace IdentityRight.Migrations
                 {
                     b.HasOne("IdentityRight.Models.Regions")
                         .WithMany()
-                        .HasForeignKey("Regionsid");
+                        .HasForeignKey("RegionsId");
                 });
 
             modelBuilder.Entity("IdentityRight.Models.Locations", b =>
@@ -333,7 +339,7 @@ namespace IdentityRight.Migrations
                 {
                     b.HasOne("IdentityRight.Models.UserEmailAddresses")
                         .WithMany()
-                        .HasForeignKey("UserEmailAddressesID");
+                        .HasForeignKey("UserEmailAddressesId");
 
                     b.HasOne("IdentityRight.Models.UserOrganisationLinks")
                         .WithMany()
