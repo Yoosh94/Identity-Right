@@ -44,7 +44,7 @@ namespace IdentityRight.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<int>("IRID")
+                    b.Property<long>("IRID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
