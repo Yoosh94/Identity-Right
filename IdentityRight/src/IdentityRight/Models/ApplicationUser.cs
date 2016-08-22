@@ -22,5 +22,8 @@ namespace IdentityRight.Models
         public bool isAccountCompleted { get; set; }
         [Key]
         public long IRID { get; set; }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }
