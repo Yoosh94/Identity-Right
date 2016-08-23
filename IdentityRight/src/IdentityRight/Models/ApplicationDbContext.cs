@@ -22,6 +22,9 @@ namespace IdentityRight.Models
         public DbSet<Locations> Location { get; set; }
         public DbSet<Countries> Country { get; set; }
         public DbSet<Regions>Region { get; set; }
+        public DbSet<Branches> Branch { get; set; }
+        public DbSet<Departments> Department { get; set; }
+        public DbSet<BranchDepartmentConnection> BranchDepartmentConnection { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

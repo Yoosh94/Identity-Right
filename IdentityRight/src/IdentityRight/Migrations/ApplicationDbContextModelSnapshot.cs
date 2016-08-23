@@ -88,6 +88,32 @@ namespace IdentityRight.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
+            modelBuilder.Entity("IdentityRight.Models.BranchDepartmentConnection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BranchesId");
+
+                    b.Property<int>("DepartmentsId");
+
+                    b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("IdentityRight.Models.Branches", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ApplicationOrganisationsId");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("LocationsId");
+
+                    b.HasKey("Id");
+                });
+
             modelBuilder.Entity("IdentityRight.Models.Countries", b =>
                 {
                     b.Property<int>("Id")
@@ -96,6 +122,21 @@ namespace IdentityRight.Migrations
                     b.Property<int>("RegionsId");
 
                     b.Property<string>("countryName");
+
+                    b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("IdentityRight.Models.Departments", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("email")
+                        .IsRequired();
+
+                    b.Property<int>("planLevel");
 
                     b.HasKey("Id");
                 });
@@ -300,6 +341,28 @@ namespace IdentityRight.Migrations
                     b.HasKey("UserId", "RoleId");
 
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("IdentityRight.Models.BranchDepartmentConnection", b =>
+                {
+                    b.HasOne("IdentityRight.Models.Branches")
+                        .WithMany()
+                        .HasForeignKey("BranchesId");
+
+                    b.HasOne("IdentityRight.Models.Departments")
+                        .WithMany()
+                        .HasForeignKey("DepartmentsId");
+                });
+
+            modelBuilder.Entity("IdentityRight.Models.Branches", b =>
+                {
+                    b.HasOne("IdentityRight.Models.ApplicationOrganisations")
+                        .WithMany()
+                        .HasForeignKey("ApplicationOrganisationsId");
+
+                    b.HasOne("IdentityRight.Models.Locations")
+                        .WithMany()
+                        .HasForeignKey("LocationsId");
                 });
 
             modelBuilder.Entity("IdentityRight.Models.Countries", b =>
