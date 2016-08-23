@@ -12,8 +12,9 @@ namespace IdentityRight.Models
         public int ID { get; set; }
         public string emailAddress { get; set; }
         public EmailTypes EmailType { get; set; }
-        public virtual ICollection<UserEmails_UserOrganisationLinks> UserEmail_UserOrganisationLink { get; set; }
-        [ForeignKey("ApplicationUserId")]
+        public List<UserEmails_UserOrganisationLinks> UserEmail_UserOrganisationLink { get; set; }
+        //Foreign Key
+        public ApplicationUser ApplicationUser { get; set; }
         public string ApplicationUserId { get; set; }
     }
 }

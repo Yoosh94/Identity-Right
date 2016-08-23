@@ -9,12 +9,11 @@ namespace IdentityRight.Models
     public class UserAddresses_CustomerOrganisationLinks
     {
         public int Id { get; set; }
-        [ForeignKey("UserOrganistionlinkId")]
+        //Foreign Keys
+        public UserOrganisationLinks UserOrganisationLink { get; set; }
         public  int UserOrganisationLinksId { get; set; }
-        //public virtual UserOrganisationLinks userOrganisationLink { get; set; }
-        [ForeignKey("UserAddressId")]
+        public UserAddresses UserAddress { get; set; }
         public  int UserAddressesId { get; set; }
-        //public virtual UserAddresses UserAddress { get; set; }
 
         
 

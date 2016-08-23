@@ -9,9 +9,10 @@ namespace IdentityRight.Models
     public class UserEmails_UserOrganisationLinks
     {
         public int Id { get; set; }
-        [ForeignKey("UserOrganisationLinksId")]
+        //Foreign Key
+        public UserOrganisationLinks UserOrganisationLink { get; set; }
         public int UserOrganisationLinksId { get; set; }
-        [ForeignKey("UserEmailAddressesId")]
+        public UserEmailAddresses UserEmailAddress { get; set; }
         public int UserEmailAddressesId { get; set; }
 
 

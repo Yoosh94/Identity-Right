@@ -9,12 +9,14 @@ namespace IdentityRight.Models
     public class UserAddresses
     {
         public int Id { get; set; }
-        public virtual ICollection<UserAddresses_CustomerOrganisationLinks> UserAddress_UserOrganisationLink { get; set; }
+        public List<UserAddresses_CustomerOrganisationLinks> UserAddress_UserOrganisationLink { get; set; }
         public AddressType AddressType { get; set; }
-        [ForeignKey("ApplicationUserId")]
+        public DateTime dateStart { get; set; }
+        public DateTime dateEnd { get; set; }
+        //Foreign Key
+        public ApplicationUser ApplicationUser { get; set; }
         public string ApplicationUserId { get; set; }
-
-        [ForeignKey("LocationsId")]
+        public Locations Location { get; set; }
         public int LocationsId { get; set; }
     }
 }
