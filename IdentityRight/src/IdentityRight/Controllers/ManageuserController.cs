@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using IdentityRight.Models;
+using IdentityRight.Services;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,19 +12,29 @@ namespace IdentityRight.Controllers
 {
     
     [Route("api/[controller]")]
-    public class LinkController : Controller
+    public class ManageuserController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
+        private ManageuserRepository _ManageuserRepository;     
 
-        public LinkController(ApplicationDbContext dbcontext)
+        public ManageuserController()
         {
-            _dbContext = dbcontext;
+            this._ManageuserRepository = new ManageuserRepository();
         }
-        // GET: api/values
+        /// <summary>
+        /// This method will get a customer address and return it
+        /// </summary>
+        /// <param name="apiKey"></param>
+        /// <returns>Customers address</returns>
+        // GET: api/link/key/{someKey}
         [HttpGet]
-        public IEnumerable<UserOrganisationLinks> Get()
+        [Route("key/{apiKey}/{userID}")]
+        public UserAddresses GetCustomerAddress(string apiKey,string userID)
         {
-            return _dbContext.UserOrganisationLinks;
+            if(_ManageuserRepository.DoesLinkExist(apiKey, userID))
+            {
+                //_ManageuserRepository.getAddress();
+            }
+            
         }
 
         // GET api/values/5
