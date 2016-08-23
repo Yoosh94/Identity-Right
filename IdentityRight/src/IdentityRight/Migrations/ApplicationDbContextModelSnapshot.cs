@@ -182,6 +182,10 @@ namespace IdentityRight.Migrations
 
                     b.Property<int>("LocationsId");
 
+                    b.Property<DateTime>("dateEnd");
+
+                    b.Property<DateTime>("dateStart");
+
                     b.HasKey("Id");
                 });
 

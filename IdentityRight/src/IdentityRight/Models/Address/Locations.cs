@@ -13,9 +13,9 @@ namespace IdentityRight.Models
         public string streetName { get; set; }
         public int postcode { get; set; } 
         public string suburb { get; set; }   
-        public virtual ICollection<UserAddresses> UserAddresses { get; set; }
-
-        [ForeignKey("CountriesId")]
+        public List<UserAddresses> UserAddresses { get; set; }
+        //Foreign Key
+        public Countries Countries { get; set; }
         public int CountriesId { get; set; }
     }
 }

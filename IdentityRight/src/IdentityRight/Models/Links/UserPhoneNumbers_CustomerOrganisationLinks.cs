@@ -9,9 +9,10 @@ namespace IdentityRight.Models
     public class UserPhoneNumbers_CustomerOrganisationLinks
     {
         public int Id { get; set; }
-        [ForeignKey("UserPhoneNumbersId")]
+        //Foreign Key
+        public UserPhoneNumbers UserPhoneNumber { get; set; }
         public int UserPhoneNumbersId { get; set; }
-        [ForeignKey("UserOrganisationLinksId")]
+        public UserOrganisationLinks UserOrganisationLink { get; set; }
         public int UserOrganisationLinksId { get; set; }
     }
 }

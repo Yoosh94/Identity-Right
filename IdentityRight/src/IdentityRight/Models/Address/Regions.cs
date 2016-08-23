@@ -10,7 +10,7 @@ namespace IdentityRight.Models
         public int id { get; set; }
         public string regionName { get; set; }
         public string regionDescription { get; set; }
-        public virtual ICollection<Countries> Country { get; set; }
+        public List<Countries> Country { get; set; }
         
     }
 }

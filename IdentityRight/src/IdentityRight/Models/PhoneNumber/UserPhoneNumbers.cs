@@ -12,9 +12,10 @@ namespace IdentityRight.Models
         public int Id { get; set; }
         [Phone]
         public string PhoneNumber { get; set; }
-        public virtual PhoneNumberTypes PhoneNumberType { get; set; }
-        public virtual ICollection<UserPhoneNumbers_CustomerOrganisationLinks> PhoneNumber_CustomerOrganisationLink { get; set; }
-        [ForeignKey("ApplicationUserId")]
+        public PhoneNumberTypes PhoneNumberType { get; set; }
+        public List<UserPhoneNumbers_CustomerOrganisationLinks> PhoneNumber_CustomerOrganisationLink { get; set; }
+        //Foreign Key
+        public ApplicationUser ApplicationUser { get; set; }
         public string ApplicationUserId { get; set; }
     }
 }

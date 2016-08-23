@@ -11,9 +11,9 @@ namespace IdentityRight.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int planLevel { get; set; }
-
         [Required]
         [EmailAddress]
         public string email { get; set; }
+        public List<BranchDepartmentConnection> BranchDepartmentConnection { get; set; }
     }
 }
