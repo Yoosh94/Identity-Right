@@ -9,39 +9,19 @@ namespace IdentityRight.Services
 {
     public class AuthEmail :IEmailSender
     {
-        public void SendEmail(string email, string subject, string message)
-        {
-            var body = "This is the test email. It seems like you have been signed up for Identity Right.";
-
-            var messageToSend = new MailMessage();
-            messageToSend.To.Add(new MailAddress(email));
-            messageToSend.From = new MailAddress("identityright@gmail.com");
-            messageToSend.Subject = subject;
-            messageToSend.Body = body;
-            messageToSend.IsBodyHtml = true;
-            using (var smtp = new SmtpClient())
-            {
-                var credentials = new NetworkCredential
-                {
-                    UserName = "identityright@gmail.com",
-                    Password = "deakinSIT302"
-                };
-                smtp.Credentials = credentials;
-                smtp.Host = "smtp.gmail.com";
-                smtp.Port = 587;
-                smtp.EnableSsl = true;
-                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtp.Send(messageToSend);
-            }
-        }
-
+        /// <summary>
+        /// This method will create the message and send an email to the specified email
+        /// </summary>
+        /// <param name="email">email address of user to send the email to</param>
+        /// <param name="subject">Subject of the email</param>
+        /// <param name="message">body of the message</param>
+        /// <returns></returns>
         public Task SendEmailAsync(string email, string subject, string message)
         {
             var body = message;
-
             var messageToSend = new MailMessage();
             messageToSend.To.Add(new MailAddress(email));
-            messageToSend.From = new MailAddress("identityright@gmail.com");
+            messageToSend.From = new MailAddress("Identity Right");
             messageToSend.Subject = subject;
             messageToSend.Body = body;
             messageToSend.IsBodyHtml = true;
