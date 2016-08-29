@@ -5,13 +5,19 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using IdentityRight.Models;
 using IdentityRight.Services;
+using IdentityRight.Controllers;
 using Microsoft.Extensions.PlatformAbstractions;
+using System.Web;
+using System.Net;
+using System.Text;
+using System.IO;
 
 namespace IdentityRight
 {
@@ -19,6 +25,9 @@ namespace IdentityRight
     {
         public Startup(IHostingEnvironment env,IApplicationEnvironment appEnv)
         {
+
+            
+
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
@@ -31,7 +40,30 @@ namespace IdentityRight
             }
 
             builder.AddEnvironmentVariables();
-            Configuration = builder.Build();        
+            Configuration = builder.Build();
+
+
+            StringBuilder data = new StringBuilder();
+            data.Append("Email=fifffff@f.com&");
+            data.Append("Password=Qwe!23&");
+            data.Append("ConfirmPassword=Qwe!23");
+
+            ASCIIEncoding ascii = new ASCIIEncoding();
+            byte[] dataBytes = ascii.GetBytes(data.ToString());
+
+            HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create("http://localhost:57894/Account/Register");
+
+            hwr.Method = "POST";
+            hwr.ContentLength = dataBytes.Length;
+            hwr.ContentType = "application/x-www-form-urlencoded";
+
+
+            Stream postStream = hwr.GetRequestStream();
+            postStream.Write(dataBytes, 0, dataBytes.Length);
+            postStream.Flush();
+            postStream.Close();
+
+
         }
 
         public IConfigurationRoot Configuration { get; set; }
