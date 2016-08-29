@@ -33,7 +33,7 @@ namespace IdentityRight.Models
             // Add your customizations after calling base.OnModelCreating(builder);
 
             //This allows the property IRID to be set as an IDENTITY type so we can auto increment the value.
-            builder.Entity<ApplicationUser>().Property<long>(nameof(ApplicationUser.IRID)).UseSqlServerIdentityColumn();
+            //builder.Entity<ApplicationUser>().Property<long>(nameof(ApplicationUser.IRID)).UseSqlServerIdentityColumn();
                 
         }
 
