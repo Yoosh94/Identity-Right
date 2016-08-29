@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using IdentityRight.Models;
 using IdentityRight.Services;
 using IdentityRight.ViewModels.Account;
+using System.Net.Mail;
 
 namespace IdentityRight.Controllers
 {
@@ -23,19 +24,23 @@ namespace IdentityRight.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly AuthEmail _authEmail;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory
+            )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _authEmail = new AuthEmail();
+
         }
 
         //
@@ -52,7 +57,8 @@ namespace IdentityRight.Controllers
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        //Comment this out to allow testing using Postman
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -99,22 +105,27 @@ namespace IdentityRight.Controllers
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {  
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                //This is just a temporary ID. A class will need to be made to handle the creation of IRID.
+                string tempIRID = "mJh6Fdw";
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, IRID = tempIRID };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
                     // Send an email with this link
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    //This method will send an email from identityright@gmail.com to the email the user inputted.
+                    await _authEmail.SendEmailAsync(model.Email, "Confirm Email", "Please confirm your account by clicking this <a href=\"" + callbackUrl + "\">link</a>");
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                    //    "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                      // "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
+                      //uncomment below if we want the user to be signed in automatically. (Not recommended)
+                    //await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToAction(nameof(HomeController.Index), "Home");
                 }
@@ -239,6 +250,7 @@ namespace IdentityRight.Controllers
             {
                 return View("Error");
             }
+            
             var result = await _userManager.ConfirmEmailAsync(user, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }

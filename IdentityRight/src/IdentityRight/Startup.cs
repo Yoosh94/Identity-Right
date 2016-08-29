@@ -21,6 +21,7 @@ namespace IdentityRight
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
+                .SetBasePath(appEnv.ApplicationBasePath)
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
@@ -53,7 +54,7 @@ namespace IdentityRight
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddTransient<ISmsSender, AuthMessageSender>();            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
