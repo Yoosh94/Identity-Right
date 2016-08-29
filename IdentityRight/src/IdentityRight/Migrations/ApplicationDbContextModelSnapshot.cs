@@ -46,9 +46,9 @@ namespace IdentityRight.Migrations
 
                     b.Property<string>("FirstName");
 
-                    b.Property<long>("IRID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("IRID")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 7);
 
                     b.Property<string>("LastName");
 

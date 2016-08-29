@@ -20,8 +20,10 @@ namespace IdentityRight.Models
         public List<UserAddresses> UserAddress { get; set; }
 
         public bool isAccountCompleted { get; set; }
-        [Key]
-        public long IRID { get; set; }
+        //[Key]
+        [Required]
+        [MaxLength(7)]
+        public string IRID { get; set; }
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
