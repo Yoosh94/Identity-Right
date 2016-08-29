@@ -110,7 +110,9 @@ namespace IdentityRight.Controllers
         {  
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                //This is just a temporary ID. A class will need to be made to handle the creation of IRID.
+                string tempIRID = "mJh6Fdw";
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, IRID = tempIRID };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -118,9 +120,11 @@ namespace IdentityRight.Controllers
                     // Send an email with this link
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    await _authEmail.SendEmailAsync(model.Email, "Confirm Email", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
+                    //This method will send an email from identityright@gmail.com to the email the user inputted.
+                    await _authEmail.SendEmailAsync(model.Email, "Confirm Email", "Please confirm your account by clicking this <a href=\"" + callbackUrl + "\">link</a>");
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                       // "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
+                      //uncomment below if we want the user to be signed in automatically. (Not recommended)
                     //await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToAction(nameof(HomeController.Index), "Home");
