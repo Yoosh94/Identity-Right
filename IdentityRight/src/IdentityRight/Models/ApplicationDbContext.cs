@@ -36,5 +36,10 @@ namespace IdentityRight.Models
             builder.Entity<ApplicationUser>().Property<long>(nameof(ApplicationUser.IRID)).UseSqlServerIdentityColumn();
                 
         }
+
+        private void s()
+        {
+
+        }
     }
 }

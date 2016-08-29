@@ -246,6 +246,7 @@ namespace IdentityRight.Controllers
             {
                 return View("Error");
             }
+            
             var result = await _userManager.ConfirmEmailAsync(user, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }

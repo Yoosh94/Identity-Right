@@ -20,6 +20,7 @@ namespace IdentityRight.Models
         public List<UserAddresses> UserAddress { get; set; }
 
         public bool isAccountCompleted { get; set; }
+
         [Key]
         public long IRID { get; set; }
 

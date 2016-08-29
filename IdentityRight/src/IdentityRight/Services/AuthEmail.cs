@@ -62,6 +62,7 @@ namespace IdentityRight.Services
                 SendCompletedCallBack(s, e);
                 smtp.Dispose();
                 messageToSend.Dispose();
+                System.Diagnostics.Debug.WriteLine("Email sent successfully");
             };
             smtp.SendAsync(messageToSend,null);            
             
@@ -74,7 +75,7 @@ namespace IdentityRight.Services
 
             if (!e.Cancelled && e.Error != null)
             {
-                System.Diagnostics.Debug.WriteLine("Email sent successfully");
+               
             }
         }
     }
