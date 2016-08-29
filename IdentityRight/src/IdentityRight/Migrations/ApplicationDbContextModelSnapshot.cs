@@ -171,6 +171,16 @@ namespace IdentityRight.Migrations
                     b.HasKey("id");
                 });
 
+            modelBuilder.Entity("IdentityRight.Models.test", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("description");
+
+                    b.HasKey("Id");
+                });
+
             modelBuilder.Entity("IdentityRight.Models.UserAddresses", b =>
                 {
                     b.Property<int>("Id")
