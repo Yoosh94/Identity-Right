@@ -36,7 +36,6 @@ namespace IdentityRight.Services
             smtp.Port = 587;
             smtp.EnableSsl = true;
             smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-            Object state = messageToSend;
             smtp.SendCompleted += (s, e) =>
             {
                 SendCompletedCallBack(s, e);
@@ -44,8 +43,8 @@ namespace IdentityRight.Services
                 messageToSend.Dispose();
                 System.Diagnostics.Debug.WriteLine("Email sent successfully");
             };
-            smtp.SendAsync(messageToSend,null);            
-            
+
+            smtp.SendAsync(messageToSend, null);                             
             return Task.FromResult(0);
         }
 
