@@ -17,7 +17,7 @@ namespace IdentityRight.ViewModels.Account
 		public string LastName { get; set; }
 
         [Required]
-        [EmailAddress]
+        //[EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
