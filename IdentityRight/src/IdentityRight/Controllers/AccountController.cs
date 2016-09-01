@@ -112,7 +112,7 @@ namespace IdentityRight.Controllers
             {
                 //This is just a temporary ID. A class will need to be made to handle the creation of IRID.
                 string tempIRID = "mJh6Fdw";
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, IRID = tempIRID };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, IRID = tempIRID, FirstName = model.FirstName, LastName = model.LastName };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
