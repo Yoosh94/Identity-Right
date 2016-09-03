@@ -40,10 +40,20 @@ namespace IdentityRight.Services
             }
         }
 
+        public static string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
+            return Encoding.UTF8.GetString(base64EncodedBytes);
+        }
+
         public string GetAccessToken()
         {
-            string url =
-                $"https://api.telstra.com/v1/oauth/token?client_id={SmsConfig.ConsumerKey}&client_secret={SmsConfig.ConsumerSecret}&grant_type=client_credentials&scope=SMS";
+            var url = "";
+            var consumerKey = Base64Decode("ZEFaTVdQc1ZZUE1GOUJ0SU5sM25WMEI3VXltWEEwQUc=");
+            var consumerSecret = Base64Decode("bkltdW5wajFjMDJpZWxGUw==");
+
+            url =
+                $"https://api.telstra.com/v1/oauth/token?client_id={consumerKey}&client_secret={consumerSecret}&grant_type=client_credentials&scope=SMS";
 
             using (var webClient = new WebClient())
             {
