@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNet.Identity;
 
-namespace IdentityRight.ViewModels.Manage
+namespace IdentityRight.ViewModels.Identity
 {
     public class IndexViewModel
     {
