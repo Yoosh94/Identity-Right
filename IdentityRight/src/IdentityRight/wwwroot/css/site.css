@@ -32,3 +32,8 @@ textarea {
         z-index: 10 !important;
     }
 }
+
+.company-slogan {
+    text-align: center;
+    margin: 50px 0px;
+}
