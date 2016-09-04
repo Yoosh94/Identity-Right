@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewData["Title"] = "Email not confirmed";
+}
+
+<h2>@ViewData["Title"].</h2>
+<div>
+    <p>
+        You have not confirmed you email. Please check your nominated email to activate your account.
+        @*Thank you for confirming your email. Please <a asp-controller="Account" asp-action="Login">Click here to Log in</a>.*@
+    </p>
+    <p>
+        If you have not got the email click <a asp-controller="Account" asp-action="ConfirmResendEmail">here</a>.
+    </p>
+</div>

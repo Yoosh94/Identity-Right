@@ -36,7 +36,6 @@ namespace IdentityRight.Controllers
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
             _authEmail = new AuthEmail();
-
         }
 
         //
@@ -54,15 +53,21 @@ namespace IdentityRight.Controllers
         [HttpPost]
         [AllowAnonymous]
         //Comment this out to allow testing using Postman
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                var userId = _userManager.FindByEmailAsync(model.Email).Result;
+                var isEmailConfirmed = await _userManager.IsEmailConfirmedAsync(userId);
+                if (!isEmailConfirmed)
+                {
+                    return View("EmailNotConfirmed");
+                }
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);        
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
@@ -83,7 +88,6 @@ namespace IdentityRight.Controllers
                     return View(model);
                 }
             }
-
             // If we got this far, something failed, redisplay form
             return View(model);
         }
@@ -101,7 +105,7 @@ namespace IdentityRight.Controllers
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {  
             if (ModelState.IsValid)
@@ -245,6 +249,11 @@ namespace IdentityRight.Controllers
             if (user == null)
             {
                 return View("Error");
+            }
+            //If the email is alraedy confirmed go to home page.
+            if (user.EmailConfirmed)
+            {
+                return View("Login");
             }
             
             var result = await _userManager.ConfirmEmailAsync(user, code);
@@ -443,6 +452,40 @@ namespace IdentityRight.Controllers
             }
         }
 
+        //This page will allow the user to enter a email address to have to email confirmation resent. It will throw an error if
+        //the user has already confirmed or if the email does not exist.
+        //HttpGet Account/ConfirmResendEmail
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ConfirmResendEmail(string error = null)
+        {
+            ViewData["ErrorMessage"] = error;
+            return View("ConfirmResendEmail");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResendEmail(ResendEmailViewModel model)
+        {
+            var user = _userManager.FindByEmailAsync(model.Email).Result;
+            if(user == null)
+            {
+                return ConfirmResendEmail("Email address does not exist.");
+            }
+            var isEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
+            if (isEmailConfirmed)
+            {
+                return View("Login");
+            }
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+            //This method will send an email from identityright@gmail.com to the email the user inputted.
+            await _authEmail.SendEmailAsync(model.Email, "Confirm Email", "Please confirm your account by clicking this <a href=\"" + callbackUrl + "\">link</a>");
+            return RedirectToAction(nameof(HomeController.Index), "Home");
+
+        }
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)
@@ -471,5 +514,7 @@ namespace IdentityRight.Controllers
         }
 
         #endregion
+
+
     }
 }
