@@ -452,13 +452,15 @@ namespace IdentityRight.Controllers
             }
         }
 
+        //This page will allow the user to enter a email address to have to email confirmation resent. It will throw an error if
+        //the user has already confirmed or if the email does not exist.
         //HttpGet Account/ConfirmResendEmail
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult ConfirmResendEmail()
+        public IActionResult ConfirmResendEmail(string error = null)
         {
+            ViewData["ErrorMessage"] = error;
             return View("ConfirmResendEmail");
-            //return RedirectToAction("ResendEmail");
         }
 
         [HttpPost]
@@ -467,6 +469,10 @@ namespace IdentityRight.Controllers
         public async Task<IActionResult> ResendEmail(ResendEmailViewModel model)
         {
             var user = _userManager.FindByEmailAsync(model.Email).Result;
+            if(user == null)
+            {
+                return ConfirmResendEmail("Email address does not exist.");
+            }
             var isEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
             if (isEmailConfirmed)
             {

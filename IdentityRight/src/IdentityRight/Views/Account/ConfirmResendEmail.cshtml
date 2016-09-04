@@ -9,7 +9,7 @@
         Please enter your email address to have the confirmation email sent again.
         @*Thank you for confirming your email. Please <a asp-controller="Account" asp-action="Login">Click here to Log in</a>.*@
     </p>
-
+    <span class="text-danger">@ViewData["ErrorMessage"]</span>
     <form asp-controller="Account" asp-action="ResendEmail" method="post" class="form-horizontal" role="form">
         <div class="form-group">
             <label asp-for="Email" class="col-md-2 control-label"></label>
