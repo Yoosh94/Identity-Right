@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using Microsoft.AspNet.Authorization;
@@ -9,12 +7,12 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
 using IdentityRight.Models;
 using IdentityRight.Services;
-using IdentityRight.ViewModels.Manage;
+using IdentityRight.ViewModels.Identity;
 
 namespace IdentityRight.Controllers
 {
     [Authorize]
-    public class ManageController : Controller
+    public class IdentityController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -22,7 +20,7 @@ namespace IdentityRight.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
 
-        public ManageController(
+        public IdentityController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IEmailSender emailSender,
@@ -33,7 +31,7 @@ namespace IdentityRight.Controllers
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
-            _logger = loggerFactory.CreateLogger<ManageController>();
+            _logger = loggerFactory.CreateLogger<IdentityController>();
         }
 
         //
@@ -119,7 +117,7 @@ namespace IdentityRight.Controllers
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 _logger.LogInformation(1, "User enabled two-factor authentication.");
             }
-            return RedirectToAction(nameof(Index), "Manage");
+            return RedirectToAction(nameof(Index), "Identity");
         }
 
         //
@@ -135,7 +133,7 @@ namespace IdentityRight.Controllers
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 _logger.LogInformation(2, "User disabled two-factor authentication.");
             }
-            return RedirectToAction(nameof(Index), "Manage");
+            return RedirectToAction(nameof(Index), "Identity");
         }
 
         //
@@ -291,7 +289,7 @@ namespace IdentityRight.Controllers
         public IActionResult LinkLogin(string provider)
         {
             // Request a redirect to the external login provider to link a login for the current user
-            var redirectUrl = Url.Action("LinkLoginCallback", "Manage");
+            var redirectUrl = Url.Action("LinkLoginCallback", "Identity");
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, User.GetUserId());
             return new ChallengeResult(provider, properties);
         }
