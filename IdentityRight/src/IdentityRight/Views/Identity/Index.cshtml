@@ -5,7 +5,128 @@
 
 <h2>@ViewData["Title"].</h2>
 <p class="text-success">@ViewData["StatusMessage"]</p>
-
+<div class="row">
+    <div class="col-md-12">
+        <h3>Update my information</h3>
+        <hr />
+        <h4>Residential Address:</h4>
+        <form>
+            <input size="300" /><input placeholder="Postcode" />
+            <select>
+                <option value="">Select organisation</option>
+                <option value="">All</option>
+                <option value="">Organisation a</option>
+                <option value="">Organisation b</option>
+                <option value="">Organisation c</option>
+                <option value="">Organisation e</option>
+                <option value="">Organisation f</option>
+                <option value="">Organisation g</option>
+            </select><span> or </span>
+            <input placeholder="Search organisation/company" size="150" />
+            <button id="btn">Update Now</button>
+            <button id="btn">Cancel update</button>
+        </form>
+        <small style="float:right;display:block;"> Status: <span style="color:lightgreen;">Updated</span></small>
+        </div>
+    <div class="col-md-12">
+        <h4>Postal Address:</h4>
+        <form>
+            <input size="300" /><input placeholder="Postcode" />
+            <select>
+                <option value="">Select organisation</option>
+                <option value="">All</option>
+                <option value="">Organisation a</option>
+                <option value="">Organisation b</option>
+                <option value="">Organisation c</option>
+                <option value="">Organisation e</option>
+                <option value="">Organisation f</option>
+                <option value="">Organisation g</option>
+            </select><span> or </span>
+            <input placeholder="Search organisation/company" size="150" />
+            <button>Update Now</button>
+            <button id="btn">Cancel update</button>
+        </form>
+        <small style="float:right;display:block;"> Status: <span style="color:lightgrey;">Cancelled</span></small>
+    </div>
+    <div class="col-md-12">
+        <h4>Mobile No.</h4>
+        <form>
+            <input size="300" />
+            <select>
+                <option value="">Select organisation</option>
+                <option value="">All</option>
+                <option value="">Organisation a</option>
+                <option value="">Organisation b</option>
+                <option value="">Organisation c</option>
+                <option value="">Organisation e</option>
+                <option value="">Organisation f</option>
+                <option value="">Organisation g</option>
+            </select><span> or </span>
+            <input placeholder="Search organisation/company" size="150" />
+            <button>Update Now</button>
+            <button id="btn">Cancel update</button>
+        </form>
+        <small style="float:right;display:block;"> Status: <span style="color:red;">Please Update</span></small>
+    </div>
+    <div class="col-md-12">
+        <h4>Home Phone No.</h4>
+        <form>
+            <input size="300" />
+            <select>
+                <option value="">Select organisation</option>
+                <option value="">All</option>
+                <option value="">Organisation a</option>
+                <option value="">Organisation b</option>
+                <option value="">Organisation c</option>
+                <option value="">Organisation e</option>
+                <option value="">Organisation f</option>
+                <option value="">Organisation g</option>
+            </select><span> or </span>
+            <input placeholder="Search organisation/company" size="150" />
+            <button>Update Now</button>
+            <button id="btn">Cancel update</button>
+        </form>
+        <small style="float:right;display:block;"> Status: <span style="color:red;">Please Update</span></small>
+    </div>
+    <div class="col-md-12" id="btn-option">
+        <h4>Primary Email Address</h4>
+        <button id="email-btn" style="background-color:blue;color:white">Update my email account only</button>
+        <span> or </span>
+        <button id="email-btn" style="background-color:blue;color:white">Update my email to organisation only</button>
+        <p></p>
+        <!--
+        <div id="email-form">
+            <form>
+                <input size="300" />
+                <select>
+                    <option value="">Select organisation</option>
+                    <option value="">All</option>
+                    <option value="">Organisation a</option>
+                    <option value="">Organisation b</option>
+                    <option value="">Organisation c</option>
+                    <option value="">Organisation e</option>
+                    <option value="">Organisation f</option>
+                    <option value="">Organisation g</option>
+                </select><span> or </span>
+                <input placeholder="Search organisation/company" size="150" />
+                <button>Update Now</button>
+                <button id="btn">Cancel update</button>
+            </form>
+            <small style="float:right;display:block;"> Status: <span style="color:red;">Please Update</span></small><br />
+        </div>    
+        -->
+        <div id="email-form">
+            <form>
+                <input size="300" />
+                <button>Update Now</button>
+                <button id="btn">Cancel update</button>
+            </form>
+            <small style="float:right;display:block;"> Status: <span style="color:red;">Please Update</span></small>
+        </div>
+            <hr />
+        </div>
+</div>
+   
 <div>
     <h4>Change your account settings</h4>
     <hr />
