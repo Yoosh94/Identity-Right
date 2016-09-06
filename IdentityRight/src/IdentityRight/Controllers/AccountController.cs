@@ -9,6 +9,9 @@ using Microsoft.Extensions.Logging;
 using IdentityRight.Models;
 using IdentityRight.Services;
 using IdentityRight.ViewModels.Account;
+using System;
+using System.Data.SqlClient;
+using Microsoft.Data.Entity.Storage;
 
 namespace IdentityRight.Controllers
 {
@@ -111,7 +114,70 @@ namespace IdentityRight.Controllers
             if (ModelState.IsValid)
             {
                 //This is just a temporary ID. A class will need to be made to handle the creation of IRID.
-                string tempIRID = "mJh6Fdw";
+                string tempIRID = "";
+                string pChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                bool idSuccess = false;
+
+                while (idSuccess == false)
+                {
+                    Random rnd = new Random();
+                    tempIRID = "";
+
+                    for (int j = 0; j < 7; j++)
+                    {
+                        int rndNum = rnd.Next(0, 61);
+                        char c = pChars[rndNum];
+                        tempIRID = string.Format("{0}{1}", tempIRID, c);
+                    }
+
+
+
+                    //Check all IRIDs in the DB that are already used. If it taken then make another one. Otherwise break.
+                    SqlConnection sqlC = new SqlConnection("Server=tcp:sit302db.database.windows.net,1433;Initial Catalog=IRDB;Persist Security Info=False;User ID=sit302;Password=IdentityRightP@ssword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+                    SqlCommand cmd = new SqlCommand();
+                    SqlDataReader reader;
+
+                    cmd.CommandText = "SELECT IRID FROM AspNetUsers";
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.Connection = sqlC;
+
+                    sqlC.Open();
+                    reader = cmd.ExecuteReader();
+
+
+                    if (reader.HasRows)
+                    {
+                        int i = 0;
+                        byte matchCount = 0;
+
+                        while (reader.Read())
+                        {
+                            string temp = reader.GetString(i);
+                            if(temp == tempIRID)
+                            {
+                                //There was a match so break;
+                                matchCount++;
+                                break;
+                            }
+                        }
+
+                        //There were no matches so it's a successful new ID
+                        if(matchCount == 0)
+                        {
+                            idSuccess = true;
+                        }
+                    }
+                    else
+                    {
+                        //There are no rows so ID can't be taken
+                        idSuccess = true;
+                    }
+
+                    sqlC.Close();
+
+                }
+
+
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, IRID = tempIRID, FirstName = model.FirstName, LastName = model.LastName };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
