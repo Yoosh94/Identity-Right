@@ -314,6 +314,13 @@ namespace IdentityRight.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
+        // GET: /Identity/AddAddress
+        [HttpGet]
+        public IActionResult AddAddress()
+        {
+            return View("AddAddressView");
+        }
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)
