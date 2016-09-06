@@ -113,7 +113,7 @@ namespace IdentityRight.Controllers
         {  
             if (ModelState.IsValid)
             {
-                //This is just a temporary ID. A class will need to be made to handle the creation of IRID.
+
                 string tempIRID = "";
                 string pChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
                 bool idSuccess = false;
@@ -132,44 +132,22 @@ namespace IdentityRight.Controllers
 
 
 
-                    //Check all IRIDs in the DB that are already used. If it taken then make another one. Otherwise break.
+                    //Check all IRIDs in the DB that are already used. If it's taken then make another one. Otherwise break and use it.
                     SqlConnection sqlC = new SqlConnection("Server=tcp:sit302db.database.windows.net,1433;Initial Catalog=IRDB;Persist Security Info=False;User ID=sit302;Password=IdentityRightP@ssword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
                     SqlCommand cmd = new SqlCommand();
                     SqlDataReader reader;
 
-                    cmd.CommandText = "SELECT IRID FROM AspNetUsers";
+                    cmd.CommandText = string.Format("SELECT IRID FROM AspNetUsers WHERE IRID = '{0}'",tempIRID);
                     cmd.CommandType = System.Data.CommandType.Text;
                     cmd.Connection = sqlC;
 
                     sqlC.Open();
                     reader = cmd.ExecuteReader();
 
-
-                    if (reader.HasRows)
+                    //If no rows were found then the IRID is not taken
+                    if(reader.HasRows == false)
                     {
-                        int i = 0;
-                        byte matchCount = 0;
-
-                        while (reader.Read())
-                        {
-                            string temp = reader.GetString(i);
-                            if(temp == tempIRID)
-                            {
-                                //There was a match so break;
-                                matchCount++;
-                                break;
-                            }
-                        }
-
-                        //There were no matches so it's a successful new ID
-                        if(matchCount == 0)
-                        {
-                            idSuccess = true;
-                        }
-                    }
-                    else
-                    {
-                        //There are no rows so ID can't be taken
+                        //The IRID can be used
                         idSuccess = true;
                     }
 
