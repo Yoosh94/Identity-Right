@@ -37,3 +37,11 @@ textarea {
     text-align: center;
     margin: 50px 0px;
 }
+
+.org-list > li{
+    width:100px;
+    height:100px;
+    display:block;
+    float:left;
+    margin: 0px 50px;
+}

@@ -48,13 +48,15 @@ else
                         <li><a asp-controller="Identity" asp-action="Index">Home</a></li>
                         <li><a asp-controller="Home" asp-action="About">About</a></li>
                         <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                        <li><a asp-controller="#" asp-action="Contact">API</a></li>
 }
 else
 {
-                        //If user is not logged in redirect to Home/Index//
+    //If user is not logged in redirect to Home/Index//
                         <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                         <li><a asp-controller="Home" asp-action="About">About</a></li>
                         <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                        <li><a asp-controller="#" asp-action="Contact">API</a></li>
 }
                
                     </ul>
