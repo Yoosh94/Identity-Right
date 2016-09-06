@@ -9,6 +9,9 @@ using Microsoft.Extensions.Logging;
 using IdentityRight.Models;
 using IdentityRight.Services;
 using IdentityRight.ViewModels.Account;
+using System;
+using System.Data.SqlClient;
+using Microsoft.Data.Entity.Storage;
 
 namespace IdentityRight.Controllers
 {
@@ -110,8 +113,49 @@ namespace IdentityRight.Controllers
         {  
             if (ModelState.IsValid)
             {
-                //This is just a temporary ID. A class will need to be made to handle the creation of IRID.
-                string tempIRID = "mJh6Fdw";
+
+                string tempIRID = "";
+                string pChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                bool idSuccess = false;
+
+                while (idSuccess == false)
+                {
+                    Random rnd = new Random();
+                    tempIRID = "";
+
+                    for (int j = 0; j < 7; j++)
+                    {
+                        int rndNum = rnd.Next(0, 61);
+                        char c = pChars[rndNum];
+                        tempIRID = string.Format("{0}{1}", tempIRID, c);
+                    }
+
+
+
+                    //Check all IRIDs in the DB that are already used. If it's taken then make another one. Otherwise break and use it.
+                    SqlConnection sqlC = new SqlConnection("Server=tcp:sit302db.database.windows.net,1433;Initial Catalog=IRDB;Persist Security Info=False;User ID=sit302;Password=IdentityRightP@ssword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+                    SqlCommand cmd = new SqlCommand();
+                    SqlDataReader reader;
+
+                    cmd.CommandText = string.Format("SELECT IRID FROM AspNetUsers WHERE IRID = '{0}'",tempIRID);
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.Connection = sqlC;
+
+                    sqlC.Open();
+                    reader = cmd.ExecuteReader();
+
+                    //If no rows were found then the IRID is not taken
+                    if(reader.HasRows == false)
+                    {
+                        //The IRID can be used
+                        idSuccess = true;
+                    }
+
+                    sqlC.Close();
+
+                }
+
+
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, IRID = tempIRID, FirstName = model.FirstName, LastName = model.LastName };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
