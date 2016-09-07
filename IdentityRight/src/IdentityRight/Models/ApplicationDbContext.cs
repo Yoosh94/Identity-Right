@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
+using IdentityRight.ViewModels.Identity;
 
 namespace IdentityRight.Models
 {
@@ -37,5 +38,7 @@ namespace IdentityRight.Models
         {
 
         }
+
+        public DbSet<AddAddressViewModel> AddAddressViewModel { get; set; }
     }
 }

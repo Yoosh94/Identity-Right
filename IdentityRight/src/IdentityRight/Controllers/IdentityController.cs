@@ -318,8 +318,18 @@ namespace IdentityRight.Controllers
         [HttpGet]
         public IActionResult AddAddress()
         {
-            return View("AddAddressView");
+            return View("ManageAddressView");
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult AddAddressView()
+        //{
+        //    // Request a redirect to the external login provider to link a login for the current user
+        //    var redirectUrl = Url.Action("LinkLoginCallback", "Identity");
+        //    var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, User.GetUserId());
+        //    return new ChallengeResult(provider, properties);
+        //}
 
         #region Helpers
 
