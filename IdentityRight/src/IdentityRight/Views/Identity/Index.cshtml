@@ -1,10 +1,46 @@
 ﻿@model IndexViewModel
+<div class=" navbar-inverse">
+    <img src="~/images/skyline.png" class="banner jumbotron" />
+</div>
+
+
 @{
     ViewData["Title"] = "Manage your identity";
 }
 
 <h2>@ViewData["Title"].</h2>
 <p class="text-success">@ViewData["StatusMessage"]</p>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div>
+                <a href="#" class="thumbnail thumbnail-grid">Search for organisation</a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div><a href="#" class="thumbnail thumbnail-grid">My current subscribed organisations</a></div>
+        </div>
+        <div class="col-md-3">
+            <div><a href="#" class="thumbnail thumbnail-grid">Update my postal address to organisation</a></div>
+        </div>
+        <div class="col-md-3">
+            <div><a href="#" class="thumbnail thumbnail-grid">Update my mobile number to organisation</a></div>
+        </div>
+        <div class="col-md-3">
+            <div><a href="#" class="thumbnail thumbnail-grid">Update my home phone number to organisation</a></div>
+        </div>
+        <div class="col-md-3">
+            <div><a href="#" class="thumbnail thumbnail-grid">Update my email to organisation</a></div>
+        </div>
+        <div class="col-md-3">
+            <div><a href="#" class="thumbnail thumbnail-grid">Change Password</a></div>
+        </div>
+        <div class="col-md-3">
+            <div><a href="#" class="thumbnail thumbnail-grid">Add joint account</a></div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12">
         <h3>Search for organisation</h3>
