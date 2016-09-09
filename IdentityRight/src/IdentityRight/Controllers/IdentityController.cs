@@ -19,6 +19,7 @@ namespace IdentityRight.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly ApplicationDbContext _dbContext;
 
         public IdentityController(
         UserManager<ApplicationUser> userManager,
@@ -32,6 +33,7 @@ namespace IdentityRight.Controllers
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<IdentityController>();
+            _dbContext = new ApplicationDbContext();
         }
 
         //
@@ -314,6 +316,81 @@ namespace IdentityRight.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
+        //This method will open the search org page
+        // GET: /Identity/searchorganisation
+        [HttpGet]
+        public IActionResult SearchOrg()
+        {
+           return View("SearchOrganisation");
+        }
+
+        //This method will open the search org page
+        // GET: /Identity/SubscribedOrganisation
+        [HttpGet]
+        public IActionResult SubscribedOrg()
+        {
+            return View("SubscribedOrganisation");
+        }
+
+        //This method will open the search org page
+        // GET: /Identity/UpdatePostalAddress
+        [HttpGet]
+        public IActionResult UpdatePostal()
+        {
+            return View("UpdatePostalAddressToOrganisation");
+        }
+
+        //This method will open the search org page
+        // GET: /Identity/UpdatePhone
+        [HttpGet]
+        public IActionResult UpdatePhoneNo()
+        {
+            return View("UpdatePhoneToOrganisation");
+        }
+
+        //This method will open the search org page
+        // GET: /Identity/UpdatePhone
+        [HttpGet]
+        public IActionResult UpdateHomePhoneNo()
+        {
+            return View("UpateHomePhoneToOrganisation");
+        }
+
+        //This method will open the search org page
+        // GET: /Identity/UpateEmailToOrganisation
+        [HttpGet]
+        public IActionResult UpateEmailToOrg()
+        {
+            return View("UpateEmailToOrganisation");
+        }
+
+        [HttpGet]
+        public IActionResult searchorganisations(string userSearch)
+        {
+            var result = from c in _dbContext.ApplicationOrganisations
+                         where c.organisationName == userSearch
+                         select c;
+            ViewData["organisation"] = result.ToString();
+            return View("SearchOrganisation");
+        }
+
+        //Settings:
+        //This method will open the search org page
+        // GET: /Identity/UpateEmailToOrganisation
+        [HttpGet]
+        public IActionResult SecondaryEmail()
+        {
+            return View("AddSecondaryEmail");
+        }
+
+        //Joint Account:
+        //This method will open the search org page
+        // GET: /Identity/UpateEmailToOrganisation
+        [HttpGet]
+        public IActionResult JointAcc()
+        {
+            return View("AddJointAccount");
+        }
         #region Helpers
 
         private void AddErrors(IdentityResult result)

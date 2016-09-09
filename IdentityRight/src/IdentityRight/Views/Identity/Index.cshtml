@@ -15,82 +15,49 @@
     <div class="row">
         <div class="col-md-3">
             <div>
-                <a href="#" class="thumbnail thumbnail-grid">Search for organisation</a>
+                <a asp-controller="Identity" asp-action="SearchOrg" class="thumbnail thumbnail-grid">Search for organisation</a>
             </div>
         </div>
         <div class="col-md-3">
-            <div><a href="#" class="thumbnail thumbnail-grid">My current subscribed organisations</a></div>
+            <div>
+                <a asp-controller="Identity" asp-action="SubscribedOrg" class="thumbnail thumbnail-grid">My current subscribed organisations</a>
+            </div>
         </div>
         <div class="col-md-3">
-            <div><a href="#" class="thumbnail thumbnail-grid">Update my postal address to organisation</a></div>
+            <div>
+                <a asp-controller="Identity" asp-action="UpdatePostal" class="thumbnail thumbnail-grid">Update my postal address to organisation</a>
+            </div>
         </div>
         <div class="col-md-3">
-            <div><a href="#" class="thumbnail thumbnail-grid">Update my mobile number to organisation</a></div>
+            <div>
+                <a asp-controller="Identity" asp-action="UpdatePhoneNo" class="thumbnail thumbnail-grid">Update my mobile number to organisation</a>
+            </div>
         </div>
         <div class="col-md-3">
-            <div><a href="#" class="thumbnail thumbnail-grid">Update my home phone number to organisation</a></div>
+            <div>
+                <a asp-controller="Identity" asp-action="UpdateHomePhoneNo" class="thumbnail thumbnail-grid">Update my home phone number to organisation</a>
+            </div>
         </div>
         <div class="col-md-3">
-            <div><a href="#" class="thumbnail thumbnail-grid">Update my email to organisation</a></div>
+            <div>
+                <a asp-controller="Identity" asp-action="UpateEmailToOrg" class="thumbnail thumbnail-grid">Update my email to organisation</a>
+            </div>
         </div>
         <div class="col-md-3">
-            <div><a href="#" class="thumbnail thumbnail-grid">Change Password</a></div>
+            <div>
+                <a asp-controller="Account" asp-action="Settings" class="thumbnail thumbnail-grid">Settings</a>
+            </div>
         </div>
         <div class="col-md-3">
-            <div><a href="#" class="thumbnail thumbnail-grid">Add joint account</a></div>
+            <div>
+                <a asp-controller="Identity" asp-action="JointAcc" class="thumbnail thumbnail-grid">Add joint account</a>
+            </div>
         </div>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-12">
-        <h3>Search for organisation</h3>
-        <hr />
-        <form>
-            <input /><button>Find</button>
-        </form>
-        <h3>Recommended organisations/companies</h3>
+    <!--    
         <div class="col-md-12">
-            <ul class="org-list">
-                <li><a>Vic Road</a><button>link now</button></li>
-                <li><a>Centrelink</a><button>link now</button></li>
-                <li><a>Electoral</a><button>link now</button></li>
-                <li><a>Momentum</a><button>link now</button></li>
-                <li><a>Virgin Mobile</a><button>link now</button></li>
-                <li><a>Optus</a><button>link now</button></li>
-                <li><a>Telstra</a><button>link now</button></li>
-                <li><a>Raywhite</a><button>link now</button></li>
-            </ul>
-        </div>
-        <hr />
-    </div>
-</div>
-<div class="row">
-    <div>
-        <h3>My current subscribe organisations</h3>
-        <hr />
-        <form>
-            <input /><button>Find</button>
-        </form>
-        <h3>Currently linking to:</h3>
-        <div class="col-md-12">
-            <ul class="org-list">
-                <li><a>Vic Road</a><button>Unlink</button></li>
-                <li><a>Centrelink</a><button>Unlink</button></li>
-                <li><a>Electoral</a><button>Unlink</button></li>
-                <li><a>Momentum</a><button>Unlink</button></li>
-                <li><a>Virgin Mobile</a><button>Unlink</button></li>
-                <li><a>Optus</a><button>Unlink</button></li>
-                <li><a>Telstra</a><button>Unlink</button></li>
-                <li><a>Raywhite</a><button>Unlink</button></li>
-                <li><a>Dodo...</a><button>Unlink</button></li>
-                <li><a>EnergyAustralia</a><button>Unlink</button></li>
-                <li><a>AGL...</a><button>Unlink</button></li>
-            </ul>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
         <h3>Update my information</h3>
         <hr />
         <h4>Residential Address:</h4>
@@ -112,131 +79,7 @@
         </form>
         <small style="float:right;display:block;"> Status: <span style="color:lightgreen;">Updated</span></small>
     </div>
-    <div class="col-md-12">
-        <h4>Postal Address:</h4>
-        <form>
-            <input size="300" /><input placeholder="Postcode" />
-            <select>
-                <option value="">Select organisation</option>
-                <option value="">All</option>
-                <option value="">Organisation a</option>
-                <option value="">Organisation b</option>
-                <option value="">Organisation c</option>
-                <option value="">Organisation e</option>
-                <option value="">Organisation f</option>
-                <option value="">Organisation g</option>
-            </select><span> or </span>
-            <input placeholder="Search organisation/company" size="150" />
-            <button>Update Now</button>
-            <button id="btn">Cancel update</button>
-        </form>
-        <small style="float:right;display:block;"> Status: <span style="color:lightgrey;">Cancelled</span></small>
-    </div>
-    <div class="col-md-12">
-        <h4>Mobile No.</h4>
-        <form>
-            <input size="300" />
-            <select>
-                <option value="">Select organisation</option>
-                <option value="">All</option>
-                <option value="">Organisation a</option>
-                <option value="">Organisation b</option>
-                <option value="">Organisation c</option>
-                <option value="">Organisation e</option>
-                <option value="">Organisation f</option>
-                <option value="">Organisation g</option>
-            </select><span> or </span>
-            <input placeholder="Search organisation/company" size="150" />
-            <button>Update Now</button>
-            <button id="btn">Cancel update</button>
-        </form>
-        <small style="float:right;display:block;"> Status: <span style="color:red;">Please Update</span></small>
-    </div>
-    <div class="col-md-12">
-        <h4>Home Phone No.</h4>
-        <form>
-            <input size="300" />
-            <select>
-                <option value="">Select organisation</option>
-                <option value="">All</option>
-                <option value="">Organisation a</option>
-                <option value="">Organisation b</option>
-                <option value="">Organisation c</option>
-                <option value="">Organisation e</option>
-                <option value="">Organisation f</option>
-                <option value="">Organisation g</option>
-            </select><span> or </span>
-            <input placeholder="Search organisation/company" size="150" />
-            <button>Update Now</button>
-            <button id="btn">Cancel update</button>
-        </form>
-        <small style="float:right;display:block;"> Status: <span style="color:red;">Please Update</span></small>
-    </div>
-    <div class="col-md-12" id="btn-option">
-        <h4>Primary Email Address</h4>
-        <button id="email-btn" style="background-color:blue;color:white">Update my email account only</button>
-        <span> or </span>
-        <button id="email-btn" style="background-color:blue;color:white">Update my email to organisation only</button>
-        <p></p>
-        <!--
-        <div id="email-form">
-            <form>
-                <input size="300" />
-                <select>
-                    <option value="">Select organisation</option>
-                    <option value="">All</option>
-                    <option value="">Organisation a</option>
-                    <option value="">Organisation b</option>
-                    <option value="">Organisation c</option>
-                    <option value="">Organisation e</option>
-                    <option value="">Organisation f</option>
-                    <option value="">Organisation g</option>
-                </select><span> or </span>
-                <input placeholder="Search organisation/company" size="150" />
-                <button>Update Now</button>
-                <button id="btn">Cancel update</button>
-            </form>
-            <small style="float:right;display:block;"> Status: <span style="color:red;">Please Update</span></small><br />
-        </div>
-        -->
-        <div id="email-form">
-            <form>
-                <input size="300" />
-                <button>Update Now</button>
-                <button id="btn">Cancel update</button>
-            </form>
-            <small style="float:right;display:block;"> Status: <span style="color:red;">Please Update</span></small>
-        </div>
-    </div>
-
-    <div class="col-md-12" id="btn-option">
-        <h4>Secondary Email Address</h4>
-        <p></p>
-        <div id="email-form">
-            <form>
-                <input size="300" />
-                <button>Update Now</button>
-                <button id="btn">Cancel update</button>
-            </form>
-            <small style="float:right;display:block;"> Status: <span style="color:red;">Please Update</span></small>
-        </div>
-        <hr />
-    </div>
-</div>
-<div class="row">
-    <div class="cold-md-12">
-        <h3>Add join account</h3>
-        <hr />
-        <h4>Search for an account</h4>
-        <form>
-            <input /><button>Look for it</button>
-        </form>
-        <ul class="org-list">
-            <li><a>Donald Trumph</a><button>Remove</button></li>
-            <li><a>Brack Obama</a><button>Remove</button></li>
-        </ul>
-    </div>
-    <hr />
+    -->
 </div>
 <div>
     <h4>Change your account settings</h4>
