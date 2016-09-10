@@ -51,6 +51,8 @@ namespace IdentityRight.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.AddAddressSuccess ? "Your address has been successfully been added."
+                :message == ManageMessageId.AddAddressFail ? "Your address was not added. Please try again."
                 : "";
 
             var user = await GetCurrentUserAsync();
@@ -334,28 +336,22 @@ namespace IdentityRight.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddAddress(AddAddressViewModel model)
         {
-
-            ///Add the address to the user.
+            //Get the current user
             var user = await GetCurrentUserAsync();
+            //Create a country object from the form the user has submitted. Region id will be set to 1 for now.
             Countries country = new Countries { countryName = model.country, RegionsId = 1 };
+            //Check if the country exists
             var countryExist = _addressProvider.checkIfCountryExists(country);
             //If there is no country add it to the db
             if (!countryExist)
             {
-                //Region Id can stay as 1 for now.
+                //Add the country to the db
                 _addressProvider.addCountry(country);
             }
-            //get Country ID
-            //var country = from c in _dbContext.Country
-            //                where c.countryName.Contains(model.country)
-            //                select c;
-            //var country = _addressProvider.checkIfCountryExists(model.country);
-
-            //convert postcode to int
+            //Parse the postcode as an int
             int postcode;
             bool result = int.TryParse(model.postal_code, out postcode);
-            //Check if location exists 
-
+            //Create a location object
             Locations location = new Locations
             {
                 CountriesId = country.Id,
@@ -366,15 +362,32 @@ namespace IdentityRight.Controllers
                 suburb = model.locality,
                 unitNumber = model.subpremise
             };
-            var locationExist =_addressProvider.checkIfLocationExists(location);         
-            //If location does not exist create it
+            //Check if location exists 
+            var locationExist = _addressProvider.checkIfLocationExists(location);
+            //If location does not exist create it in the db
             if (!locationExist)
             {
                 _addressProvider.addLocation(location);
             }
+            //Create userAddress object
+            UserAddresses userAddress = new UserAddresses
+            {
+                LocationsId = location.Id,
+                AddressType = model.addressType,
+                ApplicationUserId = user.Id
+            };
             //Create a user address
-            _addressProvider.addUserAddress((new UserAddresses { LocationsId = location.Id, AddressType = model.addressType, ApplicationUserId = user.Id }));
-            return RedirectToAction(nameof(Index));
+            _addressProvider.addUserAddress(userAddress);
+            //Check if the address added successfully
+            bool userAddressExists = _addressProvider.checkUserAddress(userAddress);
+            if (userAddressExists)
+            {
+                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.AddAddressSuccess });
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.AddAddressFail });
+            }
 
         }
 
@@ -397,7 +410,9 @@ namespace IdentityRight.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
-            Error
+            Error,
+            AddAddressSuccess,
+            AddAddressFail
         }
 
         private async Task<ApplicationUser> GetCurrentUserAsync()

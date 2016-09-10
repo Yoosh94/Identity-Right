@@ -17,16 +17,7 @@ namespace IdentityRight.Services
             _dbContext = new ApplicationDbContext();
         }
 
-        public bool checkIfCountryExists(Countries country)
-        {
-            //Check if Country Exist
-            //return from c in _dbContext.Country
-            //                    where c.countryName.Contains(CountryName)
-            //                    select c).ToList();
-            //return _dbContext.Country.Where(x => x.countryName == CountryName).ToList();
-            return _dbContext.Country.Contains(country);
-        }
-
+        #region Create Operations
         /// <summary>
         /// Add a country to the database
         /// </summary>
@@ -37,30 +28,75 @@ namespace IdentityRight.Services
             _dbContext.SaveChangesAsync();
         }
 
-        public bool checkIfLocationExists(Locations loc)
-        {
-            //var location = from loc in _dbContext.Location
-            //               where loc.CountriesId == country.First().Id
-            //               where loc.postcode == postcode
-            //               where loc.state == model.administrative_area_level_1
-            //               where loc.streetName == model.route
-            //               where loc.streetNumber == model.street_number
-            //               where loc.suburb == model.locality
-            //               where (loc.unitNumber == model.subpremise || loc.unitNumber == null)
-            //               select loc;
-            return _dbContext.Location.Contains(loc);
-        }
-
+        /// <summary>
+        /// Add a location to the database
+        /// </summary>
+        /// <param name="location">An object which contains location details</param>
         public void addLocation(Locations location)
         {
             _dbContext.Location.Add(location);
             _dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Add a User Address to the database
+        /// </summary>
+        /// <param name="ua">An object which contains user address details</param>
         public void addUserAddress(UserAddresses ua)
         {
             _dbContext.UserAddress.Add(ua);
             _dbContext.SaveChangesAsync();
         }
+        #endregion
+
+        #region Read Operations
+        /// <summary>
+        /// Check if a country exists in the databse
+        /// </summary>
+        /// <param name="country">The Country object to check for</param>
+        /// <returns>True if the object exists or false if the object does not exist</returns>
+        public bool checkIfCountryExists(Countries country)
+        {
+            return _dbContext.Country.Contains(country);
+        }
+
+        /// <summary>
+        /// Check if a Location exists in the database
+        /// </summary>
+        /// <param name="loc">The Location object to looks for</param>
+        /// <returns>True if the object exists or false if the object does not exist</returns>
+        public bool checkIfLocationExists(Locations loc)
+        {
+            return _dbContext.Location.Contains(loc);
+        }
+
+        /// <summary>
+        /// Check if the User address exists in the database
+        /// </summary>
+        /// <param name="userAddress">The user address object to look for</param>
+        /// <returns>True if the object exists or false if the object does not exist</returns>
+        public bool checkUserAddress(UserAddresses userAddress)
+        {
+            return _dbContext.UserAddress.Contains(userAddress);
+        }
+        #endregion
+
+        #region Update Operations
+        #endregion
+
+        #region Delete Operations
+        #endregion
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
