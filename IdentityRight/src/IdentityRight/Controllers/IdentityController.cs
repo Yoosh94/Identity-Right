@@ -19,6 +19,7 @@ namespace IdentityRight.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly ApplicationDbContext _dbContext;
 
         public IdentityController(
         UserManager<ApplicationUser> userManager,
@@ -32,6 +33,7 @@ namespace IdentityRight.Controllers
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<IdentityController>();
+            _dbContext = new ApplicationDbContext();
         }
 
         //
@@ -321,15 +323,49 @@ namespace IdentityRight.Controllers
             return View("ManageAddressView");
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult AddAddressView()
-        //{
-        //    // Request a redirect to the external login provider to link a login for the current user
-        //    var redirectUrl = Url.Action("LinkLoginCallback", "Identity");
-        //    var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, User.GetUserId());
-        //    return new ChallengeResult(provider, properties);
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddAddress(AddAddressViewModel model)
+        {
+            ///Add the address to the user.
+            var user = await GetCurrentUserAsync();
+            //Check if Country Exist
+            var countryExist = from c in _dbContext.Country
+                               where c.countryName == model.country
+                               select c;
+            //If there is no country add it to the db
+            if (countryExist == null)
+            {
+                //Reginoo id can stay as 1 for now for first prototype
+                _dbContext.Country.Add(new Countries { countryName = model.country, RegionsId = 1 });
+            }
+            //get Country ID
+            var countryID = from country in _dbContext.Country
+                            where country.countryName == model.country
+                            select country.Id;
+            //convert postcode to int
+            int postcode;
+            bool result = int.TryParse(model.postal_code, out postcode);
+            //Check if location exists 
+            var locationExists = from loc in _dbContext.Location
+                                 where loc.CountriesId == countryID.First()
+                                 where loc.postcode == postcode
+                                 where loc.state == model.administrative_area_level_1
+                                 where loc.streetName == model.route
+                                 where loc.streetNumber == model.street_number
+                                 where loc.suburb == model.locality
+                                 select loc;
+            if (locationExists == null)
+            {
+                //Create location object
+                _dbContext.Location.Add(new Locations { CountriesId = countryID.First(), postcode = postcode, state = model.administrative_area_level_1, streetName = model.route, streetNumber = model.street_number, suburb = model.locality, unitNumber = model.subpremise });
+            }
+
+            //Create a user address
+            _dbContext.UserAddress.Add(new UserAddresses { LocationsId = locationExists.First().Id, AddressType = model.addressType, ApplicationUserId = user.IRID });
+            return View("Index");
+
+        }
 
         #region Helpers
 

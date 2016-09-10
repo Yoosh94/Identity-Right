@@ -7,6 +7,8 @@ namespace IdentityRight.Models
         public int Id { get; set; }
         public string state { get; set; }
         public string streetName { get; set; }
+        public string streetNumber { get; set; }
+        public string unitNumber { get; set; }
         public int postcode { get; set; } 
         public string suburb { get; set; }   
         public List<UserAddresses> UserAddresses { get; set; }
