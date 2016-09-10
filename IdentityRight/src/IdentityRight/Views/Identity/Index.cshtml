@@ -50,5 +50,13 @@
                     </form>
                 }
         </dd>
+        <dt>Organisations:</dt>
+        <dd>
+            @if (!Model.TwoFactor)
+            {
+                <a href="@Url.Action("Organisations", "Identity")">View Organisations</a>
+            }
+        </dd>
+
     </dl>
 </div>

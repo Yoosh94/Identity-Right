@@ -1,0 +1,32 @@
+﻿@model IEnumerable<IdentityRight.Models.ApplicationOrganisations>
+@{
+    ViewData["Title"] = "Add/Remove Organisation Links";
+}
+
+
+<h2>@ViewData["Title"].</h2>
+<br />
+
+
+<div class="splitView" id="left-window">
+    <h3>My Linked organisations</h3>
+    <select multiple="multiple" id="leftSelect">
+        @foreach (var item in Model)
+        {
+            <option class="orgsOption" value="@Html.DisplayFor(modelItem => item.Id)">@Html.DisplayFor(modelItem => item.organisationName)</option>
+        }
+    </select>
+</div>
+<div class="splitView" id="right-window">
+    <h3>Available organisations</h3>
+    <select multiple="multiple" id="rightSelect">
+        @foreach (var item in Model)
+        {
+            <option class="orgsOption" value="@Html.DisplayFor(modelItem => item.Id)">@Html.DisplayFor(modelItem => item.organisationName)</option>
+        }
+    </select>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

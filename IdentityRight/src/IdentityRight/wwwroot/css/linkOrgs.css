@@ -1,0 +1,33 @@
+﻿body {
+}
+
+.splitView{
+    width:49%;
+    border-style:solid;
+    margin:0.5%;
+}
+
+h3{
+    margin-left: 1%;
+    margin-bottom:2%;
+}
+
+#right-window{
+    float:right;
+}
+
+#left-window{
+    float:left;
+}
+
+#leftSelect{
+    min-width: 100%;
+}
+
+#rightSelect{
+    min-width: 100%;
+}
+
+.orgsOption{
+ 
+}

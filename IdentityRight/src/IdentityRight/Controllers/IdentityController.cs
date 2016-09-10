@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using IdentityRight.Models;
 using IdentityRight.Services;
 using IdentityRight.ViewModels.Identity;
+using System.Collections.Generic;
 
 namespace IdentityRight.Controllers
 {
@@ -339,6 +340,62 @@ namespace IdentityRight.Controllers
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
             return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
+        }
+
+        // GET: /Identity/Organisations
+        [HttpGet]
+        public IActionResult Organisations()
+        {
+            ApplicationDbContext adc = new ApplicationDbContext();
+
+            var uID = User.GetUserId();
+
+            /*List<UserOrganisationLinks> rowList = adc.UserOrganisationLinks.Where(item => item.ApplicationUserId.Equals(uID))
+                .ToList();*/
+
+            IQueryable<ApplicationOrganisations> AO = from q in adc.UserOrganisationLinks
+                                                      where q.ApplicationUserId == uID
+                                                      select q.ApplicationOrganisation;
+
+            List<ApplicationOrganisations> rowList = AO.ToList();
+
+            //List<ApplicationOrganisations> orgList = new List<ApplicationOrganisations>();
+
+            //List<ApplicationOrganisations> lao = adc.ApplicationOrganisations.ToList();
+
+            //return View("ViewOrganisations");
+            //return View(adc.ApplicationOrganisations.ToList());
+            return View(rowList);
+        }
+
+
+        // GET: /Identity/Organisations
+        [HttpGet]
+        public IActionResult LinkOrganisations()
+        {
+            ApplicationDbContext adc = new ApplicationDbContext();
+
+            var uID = User.GetUserId();
+
+            /*List<UserOrganisationLinks> rowList = adc.UserOrganisationLinks.Where(item => item.ApplicationUserId.Equals(uID))
+                .ToList();*/
+
+            IQueryable<ApplicationOrganisations> AO = from q in adc.UserOrganisationLinks
+                                                      where q.ApplicationUserId == uID
+                                                      select q.ApplicationOrganisation;
+
+            List<ApplicationOrganisations> rowList = AO.ToList();
+
+            //List<ApplicationOrganisations> orgList = new List<ApplicationOrganisations>();
+
+            //List<ApplicationOrganisations> lao = adc.ApplicationOrganisations.ToList();
+
+            //return View("ViewOrganisations");
+            //return View(adc.ApplicationOrganisations.ToList());
+
+
+
+            return View(rowList);
         }
 
         #endregion
