@@ -9,6 +9,7 @@ using IdentityRight.Models;
 using IdentityRight.Services;
 using IdentityRight.ViewModels.Identity;
 using System.Collections.Generic;
+using Microsoft.AspNet.Mvc.Rendering;
 
 namespace IdentityRight.Controllers
 {
@@ -350,8 +351,6 @@ namespace IdentityRight.Controllers
 
             var uID = User.GetUserId();
 
-            /*List<UserOrganisationLinks> rowList = adc.UserOrganisationLinks.Where(item => item.ApplicationUserId.Equals(uID))
-                .ToList();*/
 
             IQueryable<ApplicationOrganisations> AO = from q in adc.UserOrganisationLinks
                                                       where q.ApplicationUserId == uID
@@ -359,33 +358,28 @@ namespace IdentityRight.Controllers
 
             List<ApplicationOrganisations> rowList = AO.ToList();
 
-            //List<ApplicationOrganisations> orgList = new List<ApplicationOrganisations>();
-
-            //List<ApplicationOrganisations> lao = adc.ApplicationOrganisations.ToList();
-
-            //return View("ViewOrganisations");
-            //return View(adc.ApplicationOrganisations.ToList());
             return View(rowList);
         }
 
 
-        // GET: /Identity/Organisations
-        [HttpGet]
-        public IActionResult LinkOrganisations()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SetLinks(OrganisationsViewModel ovm)
         {
+
             ApplicationDbContext adc = new ApplicationDbContext();
 
+            //Get the ID of the current user
             var uID = User.GetUserId();
 
-            /*List<UserOrganisationLinks> rowList = adc.UserOrganisationLinks.Where(item => item.ApplicationUserId.Equals(uID))
-                .ToList();*/
-
+            //Get a list of all linked orgs for that user ID
             IQueryable<ApplicationOrganisations> AOL = from q in adc.UserOrganisationLinks
-                                                      where q.ApplicationUserId == uID
-                                                      select q.ApplicationOrganisation;
+                                                       where q.ApplicationUserId == uID
+                                                       select q.ApplicationOrganisation;
 
-            List<ApplicationOrganisations> linked = AOL.ToList();
+            List<ApplicationOrganisations> linked = AOL.ToList(); //Convert to list
 
+            //Fill a list with all the IDs of the currently linked orgs
             List<long> linkedIDs = new List<long>(linked.Count);
 
             foreach (ApplicationOrganisations ao in linked)
@@ -393,6 +387,54 @@ namespace IdentityRight.Controllers
                 linkedIDs.Add(ao.Id);
             }
 
+            IEnumerable<long> removedDoubles = from q in ovm.ReturnedIDs
+                                        where !linkedIDs.Contains(q)
+                                        select q;
+
+
+
+            foreach (long id in removedDoubles)
+            {
+                UserOrganisationLinks uol = new UserOrganisationLinks();
+
+                uol.ApplicationUserId = uID;
+                uol.ApplicationOrganisationsId = (int)id;
+
+
+                adc.UserOrganisationLinks.Add(uol);
+            }
+
+            adc.SaveChanges();
+
+            return RedirectToAction("LinkOrganisations");
+        }
+
+        // GET: /Identity/Organisations
+        [HttpGet]
+        public IActionResult LinkOrganisations()
+        {
+            ApplicationDbContext adc = new ApplicationDbContext();
+
+            //Get the ID of the current user
+            var uID = User.GetUserId();
+
+            //Get a list of all linked orgs for that user ID
+            IQueryable<ApplicationOrganisations> AOL = from q in adc.UserOrganisationLinks
+                                                      where q.ApplicationUserId == uID
+                                                      select q.ApplicationOrganisation;
+
+            List<ApplicationOrganisations> linked = AOL.ToList(); //Convert to list
+
+            //Fill a list with all the IDs of the currently linked orgs
+            List<long> linkedIDs = new List<long>(linked.Count);
+
+            foreach (ApplicationOrganisations ao in linked)
+            {
+                linkedIDs.Add(ao.Id);
+            }
+
+
+            //Get a list of currently available orgs for linking - by excluding those with IDs listed in linkedIds
             IQueryable<ApplicationOrganisations> AOUL = from q in adc.ApplicationOrganisations
                                                         where !linkedIDs.Contains(q.Id)
                                                         select q;
@@ -400,19 +442,21 @@ namespace IdentityRight.Controllers
             List<ApplicationOrganisations> unlinked = AOUL.ToList();
 
 
+            //Create a new view model and assign the linked and unlinked orgs
             OrganisationsViewModel OVM = new OrganisationsViewModel();
 
-            OVM.LinkedOrgs = linked;
+            //OVM.LinkedOrgs = linked;
+            List<SelectListItem> SLI = new List<SelectListItem>();
+            foreach(ApplicationOrganisations ao in linked)
+            {
+                SLI.Add(new SelectListItem { Text = ao.organisationName, Value = ao.Id.ToString() });
+            }
+
+
+            OVM.LinkedOrgs = SLI;
             OVM.UnlinkedOrgs = unlinked;
-            //List<ApplicationOrganisations> orgList = new List<ApplicationOrganisations>();
 
-            //List<ApplicationOrganisations> lao = adc.ApplicationOrganisations.ToList();
-
-            //return View("ViewOrganisations");
-            //return View(adc.ApplicationOrganisations.ToList());
-
-
-
+            //Pass the linked/unlinked orgs to the view
             return View(OVM);
         }
 
