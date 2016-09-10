@@ -20,6 +20,7 @@ namespace IdentityRight.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly AddressProvider _addressProvider;
         private readonly ApplicationDbContext _dbContext;
 
         public IdentityController(
@@ -34,6 +35,7 @@ namespace IdentityRight.Controllers
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<IdentityController>();
+            _addressProvider = new AddressProvider();
             _dbContext = new ApplicationDbContext();
         }
 
@@ -332,61 +334,46 @@ namespace IdentityRight.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddAddress(AddAddressViewModel model)
         {
-           // _dbContext.Region.Add(new Regions { regionDescription = "Australia and Nz", regionName = "Oceania" });
-            //_dbContext.SaveChanges();
+
             ///Add the address to the user.
             var user = await GetCurrentUserAsync();
-
-            //Check if Country Exist
-            var countryExist = from c in _dbContext.Country
-                               where c.countryName.Contains(model.country)
-                               select c;
+            Countries country = new Countries { countryName = model.country, RegionsId = 1 };
+            var countryExist = _addressProvider.checkIfCountryExists(country);
             //If there is no country add it to the db
-            if (countryExist.Count() == 0)
+            if (!countryExist)
             {
-                //Region id can stay as 1 for now for first prototype
-                _dbContext.Country.Add(new Countries { countryName = model.country, RegionsId = 1 });
-                _dbContext.SaveChanges();
+                //Region Id can stay as 1 for now.
+                _addressProvider.addCountry(country);
             }
             //get Country ID
-            var country = from c in _dbContext.Country
-                            where c.countryName.Contains(model.country)
-                            select c;
+            //var country = from c in _dbContext.Country
+            //                where c.countryName.Contains(model.country)
+            //                select c;
+            //var country = _addressProvider.checkIfCountryExists(model.country);
 
             //convert postcode to int
             int postcode;
             bool result = int.TryParse(model.postal_code, out postcode);
             //Check if location exists 
-            var location = from loc in _dbContext.Location
-                                 where loc.CountriesId == country.First().Id
-                                 where loc.postcode == postcode
-                                 where loc.state == model.administrative_area_level_1
-                                 where loc.streetName == model.route
-                                 where loc.streetNumber == model.street_number
-                                 where loc.suburb == model.locality
-                                 where (loc.unitNumber == model.subpremise || loc.unitNumber == null)
-                                 select loc;
-            //If location does not exist create it
-            if (location.Count() == 0)
-            {
-                //Create location object
-                _dbContext.Location.Add(new Locations { CountriesId = country.First().Id, postcode = postcode, state = model.administrative_area_level_1, streetName = model.route, streetNumber = model.street_number, suburb = model.locality, unitNumber = model.subpremise });
-                _dbContext.SaveChanges();
-            }
-            //Find the location
-            var locationExists = from loc in _dbContext.Location
-                           where loc.CountriesId == country.First().Id
-                           where loc.postcode == postcode
-                           where loc.state == model.administrative_area_level_1
-                           where loc.streetName == model.route
-                           where loc.streetNumber == model.street_number
-                           where loc.suburb == model.locality
-                           where (loc.unitNumber == model.subpremise || loc.unitNumber == null)
-                           select loc;
 
+            Locations location = new Locations
+            {
+                CountriesId = country.Id,
+                postcode = postcode,
+                state = model.administrative_area_level_1,
+                streetName = model.route,
+                streetNumber = model.street_number,
+                suburb = model.locality,
+                unitNumber = model.subpremise
+            };
+            var locationExist =_addressProvider.checkIfLocationExists(location);         
+            //If location does not exist create it
+            if (!locationExist)
+            {
+                _addressProvider.addLocation(location);
+            }
             //Create a user address
-            _dbContext.UserAddress.Add(new UserAddresses { LocationsId = locationExists.First().Id, AddressType = model.addressType, ApplicationUserId = user.Id });
-            _dbContext.SaveChanges();
+            _addressProvider.addUserAddress((new UserAddresses { LocationsId = location.Id, AddressType = model.addressType, ApplicationUserId = user.Id }));
             return RedirectToAction(nameof(Index));
 
         }
