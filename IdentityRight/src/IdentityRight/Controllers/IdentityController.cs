@@ -327,43 +327,62 @@ namespace IdentityRight.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddAddress(AddAddressViewModel model)
         {
+           // _dbContext.Region.Add(new Regions { regionDescription = "Australia and Nz", regionName = "Oceania" });
+            //_dbContext.SaveChanges();
             ///Add the address to the user.
             var user = await GetCurrentUserAsync();
+
             //Check if Country Exist
             var countryExist = from c in _dbContext.Country
-                               where c.countryName == model.country
+                               where c.countryName.Contains(model.country)
                                select c;
             //If there is no country add it to the db
-            if (countryExist == null)
+            if (countryExist.Count() == 0)
             {
-                //Reginoo id can stay as 1 for now for first prototype
+                //Region id can stay as 1 for now for first prototype
                 _dbContext.Country.Add(new Countries { countryName = model.country, RegionsId = 1 });
+                _dbContext.SaveChanges();
             }
             //get Country ID
-            var countryID = from country in _dbContext.Country
-                            where country.countryName == model.country
-                            select country.Id;
+            var country = from c in _dbContext.Country
+                            where c.countryName.Contains(model.country)
+                            select c;
+
             //convert postcode to int
             int postcode;
             bool result = int.TryParse(model.postal_code, out postcode);
             //Check if location exists 
-            var locationExists = from loc in _dbContext.Location
-                                 where loc.CountriesId == countryID.First()
+            var location = from loc in _dbContext.Location
+                                 where loc.CountriesId == country.First().Id
                                  where loc.postcode == postcode
                                  where loc.state == model.administrative_area_level_1
                                  where loc.streetName == model.route
                                  where loc.streetNumber == model.street_number
                                  where loc.suburb == model.locality
+                                 where (loc.unitNumber == model.subpremise || loc.unitNumber == null)
                                  select loc;
-            if (locationExists == null)
+            //If location does not exist create it
+            if (location.Count() == 0)
             {
                 //Create location object
-                _dbContext.Location.Add(new Locations { CountriesId = countryID.First(), postcode = postcode, state = model.administrative_area_level_1, streetName = model.route, streetNumber = model.street_number, suburb = model.locality, unitNumber = model.subpremise });
+                _dbContext.Location.Add(new Locations { CountriesId = country.First().Id, postcode = postcode, state = model.administrative_area_level_1, streetName = model.route, streetNumber = model.street_number, suburb = model.locality, unitNumber = model.subpremise });
+                _dbContext.SaveChanges();
             }
+            //Find the location
+            var locationExists = from loc in _dbContext.Location
+                           where loc.CountriesId == country.First().Id
+                           where loc.postcode == postcode
+                           where loc.state == model.administrative_area_level_1
+                           where loc.streetName == model.route
+                           where loc.streetNumber == model.street_number
+                           where loc.suburb == model.locality
+                           where (loc.unitNumber == model.subpremise || loc.unitNumber == null)
+                           select loc;
 
             //Create a user address
-            _dbContext.UserAddress.Add(new UserAddresses { LocationsId = locationExists.First().Id, AddressType = model.addressType, ApplicationUserId = user.IRID });
-            return View("Index");
+            _dbContext.UserAddress.Add(new UserAddresses { LocationsId = locationExists.First().Id, AddressType = model.addressType, ApplicationUserId = user.Id });
+            _dbContext.SaveChanges();
+            return RedirectToAction(nameof(Index));
 
         }
 
