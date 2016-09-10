@@ -1,5 +1,6 @@
 ﻿using IdentityRight.Models;
 using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace IdentityRight.ViewModels.Identity
 {
@@ -30,6 +31,12 @@ namespace IdentityRight.ViewModels.Identity
 
         [Display(Name ="Country")]
         public string country { get; set; }
+
+        [Display(Name = "Start Date")]
+        public DateTime startDate { get; set; }
+
+        [Display(Name = "End date")]
+        public DateTime endDate { get; set; }
 
     }
 }
