@@ -57,8 +57,9 @@ namespace IdentityRight.Controllers
         [HttpPost]
         [AllowAnonymous]
         //Comment this out to allow testing using Postman
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = "/Identity")//URL to manage homepage
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
@@ -515,7 +516,13 @@ namespace IdentityRight.Controllers
             //This method will send an email from identityright@gmail.com to the email the user inputted.
             await _authEmail.SendEmailAsync(model.Email, "Confirm Email", "Please confirm your account by clicking this <a href=\"" + callbackUrl + "\">link</a>");
             return RedirectToAction(nameof(HomeController.Index), "Home");
+        }
 
+        //
+        [HttpGet]
+        public IActionResult HomeSet( )
+        { 
+            return View("HomeSettings");
         }
 
         #region Helpers
