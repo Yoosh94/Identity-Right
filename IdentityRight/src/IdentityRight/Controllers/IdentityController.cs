@@ -51,6 +51,7 @@ namespace IdentityRight.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.AddAddressSuccess ? "Your address has been successfully been added."
                 : "";
 
             var user = await GetCurrentUserAsync();
@@ -373,8 +374,8 @@ namespace IdentityRight.Controllers
                 _addressProvider.addLocation(location);
             }
             //Create a user address
-            _addressProvider.addUserAddress((new UserAddresses { LocationsId = location.Id, AddressType = model.addressType, ApplicationUserId = user.Id }));
-            return RedirectToAction(nameof(Index));
+            _addressProvider.addUserAddress((new UserAddresses { LocationsId = location.Id, AddressType = model.addressType, ApplicationUserId = user.Id }));           
+            return RedirectToAction(nameof(Index), new { Message = ManageMessageId.AddAddressSuccess });
 
         }
 
@@ -397,7 +398,8 @@ namespace IdentityRight.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
-            Error
+            Error,
+            AddAddressSuccess
         }
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
