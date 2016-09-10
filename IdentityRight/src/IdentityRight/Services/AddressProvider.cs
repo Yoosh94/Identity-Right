@@ -19,11 +19,6 @@ namespace IdentityRight.Services
 
         public bool checkIfCountryExists(Countries country)
         {
-            //Check if Country Exist
-            //return from c in _dbContext.Country
-            //                    where c.countryName.Contains(CountryName)
-            //                    select c).ToList();
-            //return _dbContext.Country.Where(x => x.countryName == CountryName).ToList();
             return _dbContext.Country.Contains(country);
         }
 
@@ -39,15 +34,6 @@ namespace IdentityRight.Services
 
         public bool checkIfLocationExists(Locations loc)
         {
-            //var location = from loc in _dbContext.Location
-            //               where loc.CountriesId == country.First().Id
-            //               where loc.postcode == postcode
-            //               where loc.state == model.administrative_area_level_1
-            //               where loc.streetName == model.route
-            //               where loc.streetNumber == model.street_number
-            //               where loc.suburb == model.locality
-            //               where (loc.unitNumber == model.subpremise || loc.unitNumber == null)
-            //               select loc;
             return _dbContext.Location.Contains(loc);
         }
 
@@ -61,6 +47,11 @@ namespace IdentityRight.Services
         {
             _dbContext.UserAddress.Add(ua);
             _dbContext.SaveChangesAsync();
+        }
+
+        public bool checkUserAddress(UserAddresses userAddress)
+        {
+            return _dbContext.UserAddress.Contains(userAddress);
         }
     }
 }
