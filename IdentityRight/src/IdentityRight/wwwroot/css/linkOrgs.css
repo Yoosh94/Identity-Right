@@ -22,12 +22,15 @@ h3{
 
 #leftSelect{
     min-width: 100%;
+    min-height: 200px;
 }
 
 #rightSelect{
     min-width: 100%;
+    min-height:2000px;
 }
 
 .orgsOption{
+    padding:1%;
  
 }

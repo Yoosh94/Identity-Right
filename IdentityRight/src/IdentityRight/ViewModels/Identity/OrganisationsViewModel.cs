@@ -9,7 +9,7 @@ namespace IdentityRight.ViewModels.Identity
     public class OrganisationsViewModel
     {
         //public string organisationName { get; set; }
-        List<ApplicationOrganisations> LinkedOrgs { get; set; }
-        List<ApplicationOrganisations> UnlinkedOrgs { get; set; }
+        public List<ApplicationOrganisations> LinkedOrgs { get; set; }
+        public List<ApplicationOrganisations> UnlinkedOrgs { get; set; }
     }
 }

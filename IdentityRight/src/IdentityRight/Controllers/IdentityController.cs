@@ -380,12 +380,30 @@ namespace IdentityRight.Controllers
             /*List<UserOrganisationLinks> rowList = adc.UserOrganisationLinks.Where(item => item.ApplicationUserId.Equals(uID))
                 .ToList();*/
 
-            IQueryable<ApplicationOrganisations> AO = from q in adc.UserOrganisationLinks
+            IQueryable<ApplicationOrganisations> AOL = from q in adc.UserOrganisationLinks
                                                       where q.ApplicationUserId == uID
                                                       select q.ApplicationOrganisation;
 
-            List<ApplicationOrganisations> rowList = AO.ToList();
+            List<ApplicationOrganisations> linked = AOL.ToList();
 
+            List<long> linkedIDs = new List<long>(linked.Count);
+
+            foreach (ApplicationOrganisations ao in linked)
+            {
+                linkedIDs.Add(ao.Id);
+            }
+
+            IQueryable<ApplicationOrganisations> AOUL = from q in adc.ApplicationOrganisations
+                                                        where !linkedIDs.Contains(q.Id)
+                                                        select q;
+
+            List<ApplicationOrganisations> unlinked = AOUL.ToList();
+
+
+            OrganisationsViewModel OVM = new OrganisationsViewModel();
+
+            OVM.LinkedOrgs = linked;
+            OVM.UnlinkedOrgs = unlinked;
             //List<ApplicationOrganisations> orgList = new List<ApplicationOrganisations>();
 
             //List<ApplicationOrganisations> lao = adc.ApplicationOrganisations.ToList();
@@ -395,7 +413,7 @@ namespace IdentityRight.Controllers
 
 
 
-            return View(rowList);
+            return View(OVM);
         }
 
         #endregion
