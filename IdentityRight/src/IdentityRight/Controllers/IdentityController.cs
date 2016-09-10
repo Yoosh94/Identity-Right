@@ -20,6 +20,8 @@ namespace IdentityRight.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly AddressProvider _addressProvider;
+        private readonly ApplicationDbContext _dbContext;
 
         public IdentityController(
         UserManager<ApplicationUser> userManager,
@@ -33,6 +35,8 @@ namespace IdentityRight.Controllers
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<IdentityController>();
+            _addressProvider = new AddressProvider();
+            _dbContext = new ApplicationDbContext();
         }
 
         //
@@ -317,6 +321,61 @@ namespace IdentityRight.Controllers
             var result = await _userManager.AddLoginAsync(user, info);
             var message = result.Succeeded ? ManageMessageId.AddLoginSuccess : ManageMessageId.Error;
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
+        }
+
+        // GET: /Identity/AddAddress
+        [HttpGet]
+        public IActionResult AddAddress()
+        {
+            return View("ManageAddressView");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddAddress(AddAddressViewModel model)
+        {
+
+            ///Add the address to the user.
+            var user = await GetCurrentUserAsync();
+            Countries country = new Countries { countryName = model.country, RegionsId = 1 };
+            var countryExist = _addressProvider.checkIfCountryExists(country);
+            //If there is no country add it to the db
+            if (!countryExist)
+            {
+                //Region Id can stay as 1 for now.
+                _addressProvider.addCountry(country);
+            }
+            //get Country ID
+            //var country = from c in _dbContext.Country
+            //                where c.countryName.Contains(model.country)
+            //                select c;
+            //var country = _addressProvider.checkIfCountryExists(model.country);
+
+            //convert postcode to int
+            int postcode;
+            bool result = int.TryParse(model.postal_code, out postcode);
+            //Check if location exists 
+
+            Locations location = new Locations
+            {
+                CountriesId = country.Id,
+                postcode = postcode,
+                state = model.administrative_area_level_1,
+                streetName = model.route,
+                streetNumber = model.street_number,
+                suburb = model.locality,
+                unitNumber = model.subpremise
+            };
+            var locationExist =_addressProvider.checkIfLocationExists(location);         
+            //If location does not exist create it
+            if (!locationExist)
+            {
+                _addressProvider.addLocation(location);
+            }
+            //Create a user address
+            _addressProvider.addUserAddress((new UserAddresses { LocationsId = location.Id, AddressType = model.addressType, ApplicationUserId = user.Id }));
+            return RedirectToAction(nameof(Index));
+
         }
 
         #region Helpers
