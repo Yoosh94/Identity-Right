@@ -22,6 +22,12 @@ namespace IdentityRight.Models
         public DbSet<Branches> Branch { get; set; }
         public DbSet<Departments> Department { get; set; }
         public DbSet<BranchDepartmentConnection> BranchDepartmentConnection { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            options.UseSqlServer(@"Server=tcp:sit302db.database.windows.net,1433;Initial Catalog=IRDB;Persist Security Info=False;User ID=sit302;Password=IdentityRightP@ssword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
