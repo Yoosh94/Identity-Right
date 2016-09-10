@@ -14,41 +14,76 @@
         <dd>
             @if (Model.HasPassword)
             {
-                <text>[&nbsp;&nbsp;<a asp-controller="Identity" asp-action="ChangePassword">Change Password</a>&nbsp;&nbsp;]</text>
+                <a asp-controller="Identity" asp-action="ChangePassword">Change Password</a>
             }
         </dd>
         <dt>Phone Number:</dt>
         <dd>
-            <p>We use phone numbers as a second factor of verification.</p>
+            We use phone numbers as a second factor of verification.
+            <br/>
             Phone Number:
             @(Model.PhoneNumber ?? "No Phone Number Added")
-                @if (Model.PhoneNumber != null)
-                {
-                    <br />
-                    <form asp-controller="Identity" asp-action="RemovePhoneNumber" method="post" role="form">
-                        [<button type="submit" class="btn-link">Remove Phone Number</button>]
-                    </form>
-                }
-                else
-                {
-                    <text>[&nbsp;&nbsp;<a asp-controller="Identity" asp-action="AddPhoneNumber">Add Phone Number</a>&nbsp;&nbsp;]</text>
-                }
+            @if (Model.PhoneNumber != null)
+            {
+                <form asp-controller="Identity" asp-action="RemovePhoneNumber" method="post" role="form"><button type="submit" class="btn-link">
+                    Remove Phone Number
+                </button></form>
+            }
+            else
+            {
+                <a asp-controller="Identity" asp-action="AddPhoneNumber">Add Phone Number</a>
+            }
         </dd>
 
         <dt>Two-Factor Authentication:</dt>
         <dd>
             @if (Model.TwoFactor)
-                {
-                    <form asp-controller="Identity" asp-action="DisableTwoFactorAuthentication" method="post" class="form-horizontal" role="form">
-                        Two-Factor Authentication Enabled [<button type="submit" class="btn-link">Disable Two-Factor Authentication</button>]
-                    </form>
-                }
-                else
-                {
-                    <form asp-controller="Identity" asp-action="EnableTwoFactorAuthentication" method="post" class="form-horizontal" role="form">
-                        [<button type="submit" class="btn-link">Enable Two-Factor Authentication</button>] Two-Factor Authentication Disabled
-                    </form>
-                }
+            {
+                <form asp-controller="Identity" asp-action="DisableTwoFactorAuthentication" method="post" class="form-horizontal" role="form">
+                    Current Status: Enabled <button type="submit" class="btn-link">Disable</button>
+                </form>
+            }
+            else
+            {
+                <form asp-controller="Identity" asp-action="EnableTwoFactorAuthentication" method="post" class="form-horizontal" role="form">
+                    Current Status: Disabled <button type="submit" class="btn-link">Enable</button>
+                </form>
+            }
         </dd>
     </dl>
+    <hr/>
+
+    @if (Model.Organisations.Count != 1)
+    {
+        <h4>@Model.Organisations.Count Linked Organisations</h4>
+    }
+    else
+    {
+        <h4>@Model.Organisations.Count Linked Organisation</h4>
+    }
+
+    @if (Model.Organisations.Count > 0)
+    {
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Organisation Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var organisation in Model.Organisations)
+                {
+                    <tr>
+                        <td>@organisation.organisationName</td>
+                        <td>@Html.ActionLink("View Organisation Profile", "Organisation", "Organisations", new { organisationId = organisation.Id })</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>You are not linked to any organisations</p>
+    }
 </div>
