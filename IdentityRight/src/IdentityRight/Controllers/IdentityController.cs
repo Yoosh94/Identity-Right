@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using Microsoft.AspNet.Authorization;
@@ -35,7 +36,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // GET: /Manage/Index
+        // GET: /Identity/Index
         [HttpGet]
         public async Task<IActionResult> Index(ManageMessageId? message = null)
         {
@@ -49,19 +50,23 @@ namespace IdentityRight.Controllers
                 : "";
 
             var user = await GetCurrentUserAsync();
+
+            var orgRepo = new OrganisationProvider();
+
             var model = new IndexViewModel
             {
                 HasPassword = await _userManager.HasPasswordAsync(user),
                 PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
                 TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
                 Logins = await _userManager.GetLoginsAsync(user),
-                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user)
+                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user),
+                Organisations = orgRepo.GetOrganisationsForUser(user)
             };
             return View(model);
         }
 
         //
-        // POST: /Manage/RemoveLogin
+        // POST: /Identity/RemoveLogin
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveLogin(RemoveLoginViewModel account)
@@ -81,14 +86,14 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // GET: /Manage/AddPhoneNumber
+        // GET: /Identity/AddPhoneNumber
         public IActionResult AddPhoneNumber()
         {
             return View();
         }
 
         //
-        // POST: /Manage/AddPhoneNumber
+        // POST: /Identity/AddPhoneNumber
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
@@ -105,7 +110,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // POST: /Manage/EnableTwoFactorAuthentication
+        // POST: /Identity/EnableTwoFactorAuthentication
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EnableTwoFactorAuthentication()
@@ -121,7 +126,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // POST: /Manage/DisableTwoFactorAuthentication
+        // POST: /Identity/DisableTwoFactorAuthentication
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DisableTwoFactorAuthentication()
@@ -137,7 +142,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // GET: /Manage/VerifyPhoneNumber
+        // GET: /Identity/VerifyPhoneNumber
         [HttpGet]
         public async Task<IActionResult> VerifyPhoneNumber(string phoneNumber)
         {
@@ -147,7 +152,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // POST: /Manage/VerifyPhoneNumber
+        // POST: /Identity/VerifyPhoneNumber
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
@@ -172,7 +177,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // POST: /Manage/RemovePhoneNumber
+        // POST: /Identity/RemovePhoneNumber
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemovePhoneNumber()
@@ -191,7 +196,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // GET: /Manage/ChangePassword
+        // GET: /Identity/ChangePassword
         [HttpGet]
         public IActionResult ChangePassword()
         {
@@ -199,7 +204,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // POST: /Manage/ChangePassword
+        // POST: /Identity/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
@@ -225,7 +230,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // GET: /Manage/SetPassword
+        // GET: /Identity/SetPassword
         [HttpGet]
         public IActionResult SetPassword()
         {
@@ -233,7 +238,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // POST: /Manage/SetPassword
+        // POST: /Identity/SetPassword
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetPassword(SetPasswordViewModel model)
@@ -258,7 +263,7 @@ namespace IdentityRight.Controllers
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
 
-        //GET: /Manage/ManageLogins
+        //GET: /Identity/ManageLogins
         [HttpGet]
         public async Task<IActionResult> ManageLogins(ManageMessageId? message = null)
         {
@@ -283,7 +288,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // POST: /Manage/LinkLogin
+        // POST: /Identity/LinkLogin
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult LinkLogin(string provider)
@@ -295,7 +300,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // GET: /Manage/LinkLoginCallback
+        // GET: /Identity/LinkLoginCallback
         [HttpGet]
         public async Task<ActionResult> LinkLoginCallback()
         {

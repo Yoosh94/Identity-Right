@@ -64,31 +64,34 @@ namespace IdentityRight.Controllers
             if (ModelState.IsValid)
             {
                 var userId = _userManager.FindByEmailAsync(model.Email).Result;
-                var isEmailConfirmed = await _userManager.IsEmailConfirmedAsync(userId);
-                if (!isEmailConfirmed)
+                if (userId != null)
                 {
-                    return View("EmailNotConfirmed");
-                }
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);        
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation(1, "User logged in.");
-                    return RedirectToLocal(returnUrl);
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning(2, "User account locked out.");
-                    return View("Lockout");
+                    var isEmailConfirmed = await _userManager.IsEmailConfirmedAsync(userId);
+                    if (!isEmailConfirmed)
+                    {
+                        return View("EmailNotConfirmed");
+                    }
+                    // This doesn't count login failures towards account lockout
+                    // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                    var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);        
+                    if (result.Succeeded)
+                    {
+                        _logger.LogInformation(1, "User logged in.");
+                        return RedirectToLocal(returnUrl);
+                    }
+                    if (result.RequiresTwoFactor)
+                    {
+                        return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl, model.RememberMe });
+                    }
+                    if (result.IsLockedOut)
+                    {
+                        _logger.LogWarning(2, "User account locked out.");
+                        return View("Lockout");
+                    }
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    AddErrors(IdentityResult.Failed());
                     return View(model);
                 }
             }
@@ -428,13 +431,14 @@ namespace IdentityRight.Controllers
             }
 
             var message = "Your security code is: " + code;
-            if (model.SelectedProvider == "Email")
+            switch (model.SelectedProvider)
             {
-                await _emailSender.SendEmailAsync(await _userManager.GetEmailAsync(user), "Security Code", message);
-            }
-            else if (model.SelectedProvider == "Phone")
-            {
-                await _smsSender.SendSmsAsync(await _userManager.GetPhoneNumberAsync(user), message);
+                case "Email":
+                    await _emailSender.SendEmailAsync(await _userManager.GetEmailAsync(user), "Security Code", message);
+                    break;
+                case "Phone":
+                    await _smsSender.SendSmsAsync(await _userManager.GetPhoneNumberAsync(user), message);
+                    break;
             }
 
             return RedirectToAction(nameof(VerifyCode), new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
@@ -542,10 +546,7 @@ namespace IdentityRight.Controllers
             {
                 return Redirect(returnUrl);
             }
-            else
-            {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
-            }
+            return RedirectToAction(nameof(IdentityController.Index), "Identity");
         }
 
         #endregion
