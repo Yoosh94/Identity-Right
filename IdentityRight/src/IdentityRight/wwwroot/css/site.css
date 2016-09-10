@@ -90,6 +90,14 @@ textarea {
 
 }
 
-.banner{
-    width:100%;
+.banner {
+    width: 100%;
+}
+@media (min-width: 768px) {
+  .dl-horizontal dt {
+    width: 250px;
+  }
+  .dl-horizontal dd {
+    margin-left: 300px;
+  }
 }

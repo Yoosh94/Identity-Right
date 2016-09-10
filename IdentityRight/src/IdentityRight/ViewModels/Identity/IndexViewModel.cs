@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using IdentityRight.Models;
 using Microsoft.AspNet.Identity;
 
 namespace IdentityRight.ViewModels.Identity
@@ -14,5 +15,7 @@ namespace IdentityRight.ViewModels.Identity
         public bool TwoFactor { get; set; }
 
         public bool BrowserRemembered { get; set; }
+
+        public List<ApplicationOrganisations> Organisations { get; set; }
     }
 }

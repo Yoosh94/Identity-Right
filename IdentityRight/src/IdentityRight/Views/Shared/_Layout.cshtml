@@ -54,6 +54,7 @@ else
 {
     //If user is not logged in redirect to Home/Index//
                         <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li>@Html.ActionLink("Organisations", "Index", "Organisations", new { }, null)</li>
                         <li><a asp-controller="Home" asp-action="About">About</a></li>
                         <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
                         <li><a asp-controller="#" asp-action="Contact">API</a></li>
@@ -65,7 +66,7 @@ else
             </div>
         </div>
         <div class="container body-content">
-            @RenderBody()<!--IdentityRight-3\Identity-Right\IdentityRight\src\IdentityRight\Views\Home\Index.cshtml-->
+            @RenderBody()
             <hr />
             <footer>
                 <p>&copy; 2016 - IdentityRight</p>
