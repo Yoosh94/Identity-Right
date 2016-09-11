@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using Microsoft.AspNet.Authorization;
@@ -20,7 +19,6 @@ namespace IdentityRight.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
-        private readonly AddressProvider _addressProvider;
         private readonly ApplicationDbContext _dbContext;
 
         public IdentityController(
@@ -35,12 +33,11 @@ namespace IdentityRight.Controllers
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<IdentityController>();
-            _addressProvider = new AddressProvider();
             _dbContext = new ApplicationDbContext();
         }
 
         //
-        // GET: /Identity/Index
+        // GET: /Manage/Index
         [HttpGet]
         public async Task<IActionResult> Index(ManageMessageId? message = null)
         {
@@ -51,28 +48,22 @@ namespace IdentityRight.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
-                : message == ManageMessageId.AddAddressSuccess ? "Your address has been successfully been added."
-                :message == ManageMessageId.AddAddressFail ? "Your address was not added. Please try again."
                 : "";
 
             var user = await GetCurrentUserAsync();
-
-            var orgRepo = new OrganisationProvider();
-
             var model = new IndexViewModel
             {
                 HasPassword = await _userManager.HasPasswordAsync(user),
                 PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
                 TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
                 Logins = await _userManager.GetLoginsAsync(user),
-                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user),
-                Organisations = orgRepo.GetOrganisationsForUser(user)
+                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user)
             };
             return View(model);
         }
 
         //
-        // POST: /Identity/RemoveLogin
+        // POST: /Manage/RemoveLogin
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveLogin(RemoveLoginViewModel account)
@@ -92,14 +83,14 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // GET: /Identity/AddPhoneNumber
+        // GET: /Manage/AddPhoneNumber
         public IActionResult AddPhoneNumber()
         {
             return View();
         }
 
         //
-        // POST: /Identity/AddPhoneNumber
+        // POST: /Manage/AddPhoneNumber
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
@@ -116,7 +107,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // POST: /Identity/EnableTwoFactorAuthentication
+        // POST: /Manage/EnableTwoFactorAuthentication
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EnableTwoFactorAuthentication()
@@ -132,7 +123,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // POST: /Identity/DisableTwoFactorAuthentication
+        // POST: /Manage/DisableTwoFactorAuthentication
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DisableTwoFactorAuthentication()
@@ -148,7 +139,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // GET: /Identity/VerifyPhoneNumber
+        // GET: /Manage/VerifyPhoneNumber
         [HttpGet]
         public async Task<IActionResult> VerifyPhoneNumber(string phoneNumber)
         {
@@ -158,7 +149,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // POST: /Identity/VerifyPhoneNumber
+        // POST: /Manage/VerifyPhoneNumber
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
@@ -183,7 +174,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // POST: /Identity/RemovePhoneNumber
+        // POST: /Manage/RemovePhoneNumber
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemovePhoneNumber()
@@ -202,7 +193,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // GET: /Identity/ChangePassword
+        // GET: /Manage/ChangePassword
         [HttpGet]
         public IActionResult ChangePassword()
         {
@@ -210,7 +201,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // POST: /Identity/ChangePassword
+        // POST: /Manage/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
@@ -236,7 +227,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // GET: /Identity/SetPassword
+        // GET: /Manage/SetPassword
         [HttpGet]
         public IActionResult SetPassword()
         {
@@ -244,7 +235,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // POST: /Identity/SetPassword
+        // POST: /Manage/SetPassword
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetPassword(SetPasswordViewModel model)
@@ -269,7 +260,7 @@ namespace IdentityRight.Controllers
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
 
-        //GET: /Identity/ManageLogins
+        //GET: /Manage/ManageLogins
         [HttpGet]
         public async Task<IActionResult> ManageLogins(ManageMessageId? message = null)
         {
@@ -294,7 +285,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // POST: /Identity/LinkLogin
+        // POST: /Manage/LinkLogin
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult LinkLogin(string provider)
@@ -306,7 +297,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // GET: /Identity/LinkLoginCallback
+        // GET: /Manage/LinkLoginCallback
         [HttpGet]
         public async Task<ActionResult> LinkLoginCallback()
         {
@@ -325,70 +316,62 @@ namespace IdentityRight.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
-        // GET: /Identity/AddAddress
+        //This method will open the search org page
+        // GET: /Identity/searchorganisation
         [HttpGet]
-        public IActionResult AddAddress()
+        public IActionResult SearchOrg()
         {
-            return View("ManageAddressView");
+           return View("SearchOrganisation");
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddAddress(AddAddressViewModel model)
+        //This method will open the search org page
+        // GET: /Identity/SubscribedOrganisation
+        [HttpGet]
+        public IActionResult SubscribedOrg()
         {
-            //Get the current user
-            var user = await GetCurrentUserAsync();
-            //Create a country object from the form the user has submitted. Region id will be set to 1 for now.
-            Countries country = new Countries { countryName = model.country, RegionsId = 1 };
-            //Check if the country exists
-            var countryExist = _addressProvider.checkIfCountryExists(country);
-            //If there is no country add it to the db
-            if (!countryExist)
-            {
-                //Add the country to the db
-                _addressProvider.addCountry(country);
-            }
-            //Parse the postcode as an int
-            int postcode;
-            bool result = int.TryParse(model.postal_code, out postcode);
-            //Create a location object
-            Locations location = new Locations
-            {
-                CountriesId = country.Id,
-                postcode = postcode,
-                state = model.administrative_area_level_1,
-                streetName = model.route,
-                streetNumber = model.street_number,
-                suburb = model.locality,
-                unitNumber = model.subpremise
-            };
-            //Check if location exists 
-            var locationExist = _addressProvider.checkIfLocationExists(location);
-            //If location does not exist create it in the db
-            if (!locationExist)
-            {
-                _addressProvider.addLocation(location);
-            }
-            //Create userAddress object
-            UserAddresses userAddress = new UserAddresses
-            {
-                LocationsId = location.Id,
-                AddressType = model.addressType,
-                ApplicationUserId = user.Id
-            };
-            //Create a user address
-            _addressProvider.addUserAddress(userAddress);
-            //Check if the address added successfully
-            bool userAddressExists = _addressProvider.checkUserAddress(userAddress);
-            if (userAddressExists)
-            {
-                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.AddAddressSuccess });
-            }
-            else
-            {
-                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.AddAddressFail });
-            }
+            return View("SubscribedOrganisation");
+        }
 
+        //This method will open the search org page
+        // GET: /Identity/UpdatePostalAddress
+        [HttpGet]
+        public IActionResult UpdatePostal()
+        {
+            return View("UpdatePostalAddressToOrganisation");
+        }
+
+        //This method will open the search org page
+        // GET: /Identity/UpdatePhone
+        [HttpGet]
+        public IActionResult UpdatePhoneNo()
+        {
+            return View("UpdatePhoneToOrganisation");
+        }
+
+        //This method will open the search org page
+        // GET: /Identity/UpdatePhone
+        [HttpGet]
+        public IActionResult UpdateHomePhoneNo()
+        {
+            return View("UpateHomePhoneToOrganisation");
+        }
+
+        //This method will open the search org page
+        // GET: /Identity/UpateEmailToOrganisation
+        [HttpGet]
+        public IActionResult UpateEmailToOrg()
+        {
+            return View("UpateEmailToOrganisation");
+        }
+
+        [HttpGet]
+        public IActionResult searchorganisations(string userSearch)
+        {
+            var result = from c in _dbContext.ApplicationOrganisations
+                         where c.organisationName == userSearch
+                         select c;
+            ViewData["organisation"] = result.ToString();
+            return View("SearchOrganisation");
         }
 
         // GET: /Identity/showAddress
@@ -396,6 +379,25 @@ namespace IdentityRight.Controllers
         public IActionResult showAddress()
         {
             return View("DisplayAddressView");
+        }
+
+
+        //Settings:
+        //This method will open the search org page
+        // GET: /Identity/UpateEmailToOrganisation
+        [HttpGet]
+        public IActionResult SecondaryEmail()
+        {
+            return View("AddSecondaryEmail");
+        }
+
+        //Joint Account:
+        //This method will open the search org page
+        // GET: /Identity/UpateEmailToOrganisation
+        [HttpGet]
+        public IActionResult JointAcc()
+        {
+            return View("AddJointAccount");
         }
 
         #region Helpers
@@ -417,9 +419,7 @@ namespace IdentityRight.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
-            Error,
-            AddAddressSuccess,
-            AddAddressFail
+            Error
         }
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
