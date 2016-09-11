@@ -23,7 +23,6 @@ namespace IdentityRight.Controllers
         private readonly ILogger _logger;
         private readonly ApplicationDbContext _dbContext;
         private readonly AddressProvider _addressProvider;
-        private readonly OrganisationProvider _organisationProvider;
 
         public IdentityController(
         UserManager<ApplicationUser> userManager,
