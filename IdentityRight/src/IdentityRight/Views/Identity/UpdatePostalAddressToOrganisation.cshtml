@@ -26,7 +26,7 @@
 
     
     <div>
-        <form asp-action="ManageAddressView">
+        <form asp-controller="Identity" asp-action="addAddress">
             <div class="form-horizontal">
                 <h4>Add Address to your account</h4>
                 <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
@@ -119,3 +119,5 @@
         </form>
     </div>
 </div>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvN49EG4_gYq0AiYPl0B5-ZfXcg40qb6U&libraries=places" asp-append-version="true"></script>
+<script src="~/js/mapsAPI.js" asp-append-version="true"></script>
