@@ -13,6 +13,9 @@ namespace IdentityRight.ViewModels.Identity
         [Display(Name = "Unit")]
         public string subpremise { get; set; }
 
+        [Display(Name = "Organisation")]
+        public string organisation { get; set; }
+
         [Key]
         [Display(Name = "Street Number")]
         public string street_number { get; set; }
