@@ -18,12 +18,20 @@
         </div>
         <div class="col-md-3">
             <div>
+                @if (!Model.TwoFactor)
+                {
+                    <a href="@Url.Action("Organisations", "Identity")" class="thumbnail thumbnail-grid">Add/Remove Organisations link</a>
+                }
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div>
                 <a asp-controller="Identity" asp-action="SubscribedOrg" class="thumbnail thumbnail-grid">My current subscribed organisations</a>
             </div>
         </div>
         <div class="col-md-3">
             <div>
-                <a asp-controller="Identity" asp-action="UpdatePostal" class="thumbnail thumbnail-grid">Update my postal address to organisation</a>
+                <a asp-controller="Identity" asp-action="UpdatePostal" class="thumbnail thumbnail-grid">Update my address to organisation</a>
             </div>
         </div>
         <div class="col-md-3">
@@ -48,7 +56,7 @@
         </div>
         <div class="col-md-3">
             <div>
-                <a asp-controller="Identity" asp-action="JointAcc" class="thumbnail thumbnail-grid">Add joint account</a>
+                <a asp-controller="JointAccount" asp-action="JointAcc" class="thumbnail thumbnail-grid">Add joint account</a>
             </div>
         </div>
     </div>
@@ -124,13 +132,5 @@
                 </form>
             }
         </dd>
-        <dt>Organisations:</dt>
-        <dd>
-            @if (!Model.TwoFactor)
-            {
-                <a href="@Url.Action("Organisations", "Identity")">View Organisations</a>
-            }
-        </dd>
-
     </dl>
 </div>
