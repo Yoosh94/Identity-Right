@@ -57,40 +57,38 @@ namespace IdentityRight.Controllers
         [HttpPost]
         [AllowAnonymous]
         //Comment this out to allow testing using Postman
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = "/Identity")//URL to manage homepage
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var userId = _userManager.FindByEmailAsync(model.Email).Result;
-                var isEmailConfirmed = await _userManager.IsEmailConfirmedAsync(userId);
-                if (!isEmailConfirmed)
-                {
-                    return View("EmailNotConfirmed");
-                }
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);        
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
+                    var userId = _userManager.FindByEmailAsync(model.Email).Result;
+                    var isEmailConfirmed = await _userManager.IsEmailConfirmedAsync(userId);
+                    if (!isEmailConfirmed)
+                    {
+                        return View("EmailNotConfirmed");
+                    }
                     _logger.LogInformation(1, "User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {
-                    return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl, model.RememberMe });
                 }
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning(2, "User account locked out.");
                     return View("Lockout");
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View(model);
-                }
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return View(model);
             }
             // If we got this far, something failed, redisplay form
             return View(model);
@@ -518,7 +516,13 @@ namespace IdentityRight.Controllers
             //This method will send an email from identityright@gmail.com to the email the user inputted.
             await _authEmail.SendEmailAsync(model.Email, "Confirm Email", "Please confirm your account by clicking this <a href=\"" + callbackUrl + "\">link</a>");
             return RedirectToAction(nameof(HomeController.Index), "Home");
+        }
 
+        //
+        [HttpGet]
+        public IActionResult HomeSet( )
+        { 
+            return View("HomeSettings");
         }
 
         #region Helpers
@@ -542,10 +546,7 @@ namespace IdentityRight.Controllers
             {
                 return Redirect(returnUrl);
             }
-            else
-            {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
-            }
+            return RedirectToAction(nameof(IdentityController.Index), "Identity");
         }
 
         #endregion

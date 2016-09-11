@@ -2,6 +2,7 @@ using System;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
+using Microsoft.Data.Entity.Migrations;
 using IdentityRight.Models;
 
 namespace IdentityRight.Migrations
@@ -153,7 +154,11 @@ namespace IdentityRight.Migrations
 
                     b.Property<string>("streetName");
 
+                    b.Property<string>("streetNumber");
+
                     b.Property<string>("suburb");
+
+                    b.Property<string>("unitNumber");
 
                     b.HasKey("Id");
                 });
@@ -262,6 +267,27 @@ namespace IdentityRight.Migrations
                     b.Property<int>("UserPhoneNumbersId");
 
                     b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("IdentityRight.ViewModels.Identity.AddAddressViewModel", b =>
+                {
+                    b.Property<string>("street_number");
+
+                    b.Property<int>("addressType");
+
+                    b.Property<string>("administrative_area_level_1");
+
+                    b.Property<string>("country");
+
+                    b.Property<string>("locality");
+
+                    b.Property<string>("postal_code");
+
+                    b.Property<string>("route");
+
+                    b.Property<string>("subpremise");
+
+                    b.HasKey("street_number");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRole", b =>

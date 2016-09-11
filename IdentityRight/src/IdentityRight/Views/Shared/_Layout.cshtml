@@ -16,6 +16,7 @@
                   asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
             <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
         </environment>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -27,20 +28,46 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a asp-controller="Home" asp-action="Index" class="navbar-brand"><img src="~/images/IR_logo_white.png" width="120" height="35"/></a>
+@using System.Security.Claims <!--using system security-->
+@if (User.IsSignedIn())//User signed in function
+{
+                    //If user is logged in redirect to Identity/Index
+                    <a asp-controller="Identity" asp-action="Index" class="navbar-brand"><img src="~/images/IR_logo_white.png" width="120" height="35" /></a>
+}
+else
+{
+                    //If user is not logged in redirect to Home/Index//
+                    <a asp-controller="Home" asp-action="Index" class="navbar-brand"><img src="~/images/IR_logo_white.png" width="120" height="35" /></a>
+}              
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+
+@if (User.IsSignedIn())
+{
+                        //If user is logged in redirect to Identity/Index
+                        <li><a asp-controller="Identity" asp-action="Index">Home</a></li>
                         <li><a asp-controller="Home" asp-action="About">About</a></li>
                         <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                        <li><a asp-controller="#" asp-action="Contact">API</a></li>
+}
+else
+{
+    //If user is not logged in redirect to Home/Index//
+                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li>@Html.ActionLink("Organisations", "Index", "Organisations", new { }, null)</li>
+                        <li><a asp-controller="Home" asp-action="About">About</a></li>
+                        <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                        <li><a asp-controller="#" asp-action="Contact">API</a></li>
+}
+               
                     </ul>
                     @await Html.PartialAsync("_LoginPartial")
                 </div>
             </div>
         </div>
         <div class="container body-content">
-            @RenderBody()<!--IdentityRight-3\Identity-Right\IdentityRight\src\IdentityRight\Views\Home\Index.cshtml-->
+            @RenderBody()
             <hr />
             <footer>
                 <p>&copy; 2016 - IdentityRight</p>
