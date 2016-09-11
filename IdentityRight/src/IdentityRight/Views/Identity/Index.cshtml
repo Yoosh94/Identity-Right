@@ -2,8 +2,6 @@
 <div class="navbar-inverse">
     <img src="~/images/skyline.png" class="banner jumbotron" />
 </div>
-
-
 @{
     ViewData["Title"] = "Manage your identity";
 }
@@ -88,26 +86,26 @@
         <dt>Password:</dt>
         <dd>
             @if (Model.HasPassword)
-
             {
-                <a asp-controller="Identity" asp-action="ChangePassword">Change Password</a>
+                <text>[&nbsp;&nbsp;<a asp-controller="Identity" asp-action="ChangePassword">Change Password</a>&nbsp;&nbsp;]</text>
             }
         </dd>
         <dt>Phone Number:</dt>
         <dd>
-            We use phone numbers as a second factor of verification.
+            <p>We use phone numbers as a second factor of verification.</p>
             <br/>
             Phone Number:
             @(Model.PhoneNumber ?? "No Phone Number Added")
             @if (Model.PhoneNumber != null)
             {
-                <form asp-controller="Identity" asp-action="RemovePhoneNumber" method="post" role="form"><button type="submit" class="btn-link">
-                    Remove Phone Number
-                </button></form>
+                <br />
+                <form asp-controller="Identity" asp-action="RemovePhoneNumber" method="post" role="form">
+                    [<button type="submit" class="btn-link">Remove Phone Number</button>]
+                </form>
             }
             else
             {
-                <a asp-controller="Identity" asp-action="AddPhoneNumber">Add Phone Number</a>
+                <text>[&nbsp;&nbsp;<a asp-controller="Identity" asp-action="AddPhoneNumber">Add Phone Number</a>&nbsp;&nbsp;]</text>
             }
         </dd>
 
@@ -116,15 +114,13 @@
             @if (Model.TwoFactor)
             {
                 <form asp-controller="Identity" asp-action="DisableTwoFactorAuthentication" method="post" class="form-horizontal" role="form">
-
-                    Current Status: Enabled <button type="submit" class="btn-link">Disable</button>
+                    Two-Factor Authentication Enabled [<button type="submit" class="btn-link">Disable Two-Factor Authentication</button>]
                 </form>
             }
             else
             {
                 <form asp-controller="Identity" asp-action="EnableTwoFactorAuthentication" method="post" class="form-horizontal" role="form">
-
-                    Current Status: Disabled <button type="submit" class="btn-link">Enable</button>
+                    [<button type="submit" class="btn-link">Enable Two-Factor Authentication</button>] Two-Factor Authentication Disabled
                 </form>
             }
         </dd>
