@@ -88,13 +88,11 @@
         <dt>Password:</dt>
         <dd>
             @if (Model.HasPassword)
-<<<<<<< HEAD
-    {
-                <text>[&nbsp;&nbsp;<a asp-controller="Identity" asp-action="ChangePassword">Change Password</a>&nbsp;&nbsp;]</text>
-=======
+
             {
+                <text>[&nbsp;&nbsp;<a asp-controller="Identity" asp-action="ChangePassword">Change Password</a>&nbsp;&nbsp;]</text>
                 <a asp-controller="Identity" asp-action="ChangePassword">Change Password</a>
->>>>>>> 47b973c869b4a2cfedb555f4d0b6e3d800370e65
+
             }
         </dd>
         <dt>Phone Number:</dt>
@@ -105,7 +103,7 @@
             @(Model.PhoneNumber ?? "No Phone Number Added")
             @if (Model.PhoneNumber != null)
             {
-<<<<<<< HEAD
+
                 <br />
                 <form asp-controller="Identity" asp-action="RemovePhoneNumber" method="post" role="form">
                     [<button type="submit" class="btn-link">Remove Phone Number</button>]
@@ -114,7 +112,7 @@
             else
             {
                 <text>[&nbsp;&nbsp;<a asp-controller="Identity" asp-action="AddPhoneNumber">Add Phone Number</a>&nbsp;&nbsp;]</text>
-=======
+
                 <form asp-controller="Identity" asp-action="RemovePhoneNumber" method="post" role="form"><button type="submit" class="btn-link">
                     Remove Phone Number
                 </button></form>
@@ -122,7 +120,7 @@
             else
             {
                 <a asp-controller="Identity" asp-action="AddPhoneNumber">Add Phone Number</a>
->>>>>>> 47b973c869b4a2cfedb555f4d0b6e3d800370e65
+
             }
         </dd>
 
@@ -131,21 +129,21 @@
             @if (Model.TwoFactor)
             {
                 <form asp-controller="Identity" asp-action="DisableTwoFactorAuthentication" method="post" class="form-horizontal" role="form">
-<<<<<<< HEAD
+
                     Two-Factor Authentication Enabled [<button type="submit" class="btn-link">Disable Two-Factor Authentication</button>]
-=======
+
                     Current Status: Enabled <button type="submit" class="btn-link">Disable</button>
->>>>>>> 47b973c869b4a2cfedb555f4d0b6e3d800370e65
+
                 </form>
             }
             else
             {
                 <form asp-controller="Identity" asp-action="EnableTwoFactorAuthentication" method="post" class="form-horizontal" role="form">
-<<<<<<< HEAD
+
                     [<button type="submit" class="btn-link">Enable Two-Factor Authentication</button>] Two-Factor Authentication Disabled
-=======
+
                     Current Status: Disabled <button type="submit" class="btn-link">Enable</button>
->>>>>>> 47b973c869b4a2cfedb555f4d0b6e3d800370e65
+
                 </form>
             }
         </dd>
@@ -160,7 +158,7 @@
     </dl>
     <hr/>
 
-    @if (Model.Organisations.Count != 1)
+    @*@if (Model.Organisations.Count != 1)
     {
         <h4>@Model.Organisations.Count Linked Organisations</h4>
     }
@@ -192,5 +190,5 @@
     else
     {
         <p>You are not linked to any organisations</p>
-    }
+    }*@
 </div>

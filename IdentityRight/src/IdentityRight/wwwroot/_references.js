@@ -1,5 +1,6 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="../gulpfile.js" />
+/// <reference path="js/jquery.js" />
 /// <reference path="js/linkorgs.js" />
 /// <reference path="js/mapsapi.js" />
 /// <reference path="js/site.js" />
