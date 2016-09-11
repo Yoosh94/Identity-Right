@@ -1,9 +1,7 @@
 ﻿@model IndexViewModel
-<div class=" navbar-inverse">
+<div class="navbar-inverse">
     <img src="~/images/skyline.png" class="banner jumbotron" />
 </div>
-
-
 @{
     ViewData["Title"] = "Manage your identity";
 }
@@ -88,21 +86,18 @@
         <dt>Password:</dt>
         <dd>
             @if (Model.HasPassword)
-
             {
                 <text>[&nbsp;&nbsp;<a asp-controller="Identity" asp-action="ChangePassword">Change Password</a>&nbsp;&nbsp;]</text>
-
             }
         </dd>
         <dt>Phone Number:</dt>
         <dd>
-            We use phone numbers as a second factor of verification.
+            <p>We use phone numbers as a second factor of verification.</p>
             <br/>
             Phone Number:
             @(Model.PhoneNumber ?? "No Phone Number Added")
             @if (Model.PhoneNumber != null)
             {
-
                 <br />
                 <form asp-controller="Identity" asp-action="RemovePhoneNumber" method="post" role="form">
                     [<button type="submit" class="btn-link">Remove Phone Number</button>]
@@ -129,40 +124,13 @@
                 </form>
             }
         </dd>
+        <dt>Organisations:</dt>
+        <dd>
+            @if (!Model.TwoFactor)
+            {
+                <a href="@Url.Action("Organisations", "Identity")">View Organisations</a>
+            }
+        </dd>
+
     </dl>
-    <hr/>
-
-    @if (Model.Organisations.Count != 1)
-    {
-        <h4>@Model.Organisations.Count Linked Organisations</h4>
-    }
-    else
-    {
-        <h4>@Model.Organisations.Count Linked Organisation</h4>
-    }
-
-    @if (Model.Organisations.Count > 0)
-    {
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Organisation Name</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var organisation in Model.Organisations)
-                {
-                    <tr>
-                        <td>@organisation.organisationName</td>
-                        <td>@Html.ActionLink("View Organisation Profile", "Organisation", "Organisations", new { organisationId = organisation.Id })</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p>You are not linked to any organisations</p>
-    }
 </div>

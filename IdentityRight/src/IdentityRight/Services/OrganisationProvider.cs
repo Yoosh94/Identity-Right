@@ -27,11 +27,6 @@ namespace IdentityRight.Services
             return _dbContext.UserOrganisationLinks.Where(a => a.ApplicationOrganisationsId == organisationId).Select(l => l.ApplicationUser).ToList();
         }
 
-        public List<ApplicationOrganisations> GetOrganisationsForUser(ApplicationUser user)
-        {
-            return _dbContext.UserOrganisationLinks.Where(z => z.ApplicationUser.Id == user.Id).Select(z => z.ApplicationOrganisation).ToList();
-        }
-
         public OrganisationDetailsViewModel GetOrganisationDetails(int organisationId)
         {
             var org = _dbContext.ApplicationOrganisations.FirstOrDefault(z => z.Id == organisationId);

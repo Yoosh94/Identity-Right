@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using IdentityRight.Models;
 using IdentityRight.Services;
 using IdentityRight.ViewModels.Identity;
+using System.Collections.Generic;
+using Microsoft.AspNet.Mvc.Rendering;
 
 namespace IdentityRight.Controllers
 {
@@ -20,6 +22,7 @@ namespace IdentityRight.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly ApplicationDbContext _dbContext;
+        private readonly AddressProvider _addressProvider;
 
         public IdentityController(
         UserManager<ApplicationUser> userManager,
@@ -34,6 +37,7 @@ namespace IdentityRight.Controllers
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<IdentityController>();
             _dbContext = new ApplicationDbContext();
+            _addressProvider = new AddressProvider();
         }
 
         //
@@ -48,6 +52,8 @@ namespace IdentityRight.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.AddAddressSuccess ? "Your address has been successfully been added."
+                : message == ManageMessageId.AddAddressFail ? "Address already exists."
                 : "";
 
             var user = await GetCurrentUserAsync();
@@ -321,7 +327,7 @@ namespace IdentityRight.Controllers
         [HttpGet]
         public IActionResult SearchOrg()
         {
-           return View("SearchOrganisation");
+            return View("SearchOrganisation");
         }
 
         //This method will open the search org page
@@ -374,6 +380,80 @@ namespace IdentityRight.Controllers
             return View("SearchOrganisation");
         }
 
+        // GET: /Identity/AddAddress
+        [HttpGet]
+        public IActionResult AddAddress()
+        {
+            return View("ManageAddressView");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddAddress(AddAddressViewModel model)
+        {
+            //Get the current user
+            var user = await GetCurrentUserAsync();
+            //Create a country object from the form the user has submitted. Region id will be set to 1 for now.
+            Countries country = new Countries { countryName = model.country, RegionsId = 1 };
+            //Check if the country exists
+            var countryExist = _addressProvider.checkIfCountryExists(country);
+            //If there is no country add it to the db
+            if (!countryExist)
+            {
+                //Add the country to the db
+                _addressProvider.addCountry(country);
+            }
+            //Parse the postcode as an int
+            int postcode;
+            bool result = int.TryParse(model.postal_code, out postcode);
+            //Create a location object
+            Locations location = new Locations
+            {
+                CountriesId = _addressProvider.getCountryId(country),
+                postcode = postcode,
+                state = model.administrative_area_level_1,
+                streetName = model.route,
+                streetNumber = model.street_number,
+                suburb = model.locality,
+                unitNumber = model.subpremise
+            };
+            //Check if location exists 
+            var locationExist = _addressProvider.checkIfLocationExists(location);
+            //If location does not exist create it in the db
+            if (!locationExist)
+            {
+                _addressProvider.addLocation(location);
+            }
+            //Create userAddress object
+            UserAddresses userAddress = new UserAddresses
+            {
+                LocationsId = _addressProvider.getLocationId(location),
+                AddressType = model.addressType,
+                ApplicationUserId = user.Id
+            };
+            //Check if the user address already exists first
+            bool uaExists = _addressProvider.checkUserAddress(userAddress);
+            if (!uaExists)
+            {
+                //Create a user address
+                _addressProvider.addUserAddress(userAddress);
+                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.AddAddressSuccess });
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.AddAddressFail });
+            }
+
+        }
+
+        // GET: /Identity/showAddress
+        [HttpGet]
+        public IActionResult showAddress()
+        {
+            return View("DisplayAddressView");
+        }
+
+
         //Settings:
         //This method will open the search org page
         // GET: /Identity/UpateEmailToOrganisation
@@ -391,6 +471,7 @@ namespace IdentityRight.Controllers
         {
             return View("AddJointAccount");
         }
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)
@@ -410,12 +491,192 @@ namespace IdentityRight.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
-            Error
+            Error,
+            AddAddressSuccess,
+            AddAddressFail
         }
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
             return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
+        }
+
+        // GET: /Identity/Organisations
+        [HttpGet]
+        public IActionResult Organisations()
+        {
+            ApplicationDbContext adc = new ApplicationDbContext();
+
+            var uID = User.GetUserId();
+
+
+            IQueryable<ApplicationOrganisations> AO = from q in adc.UserOrganisationLinks
+                                                      where q.ApplicationUserId == uID
+                                                      select q.ApplicationOrganisation;
+
+            List<ApplicationOrganisations> rowList = AO.ToList();
+
+            return View(rowList);
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SetLinks(OrganisationsViewModel ovm)
+        {
+
+            ApplicationDbContext adc = new ApplicationDbContext();
+
+
+            //Get the ID of the current user
+            var uID = User.GetUserId();
+
+            //Get a list of all linked orgs for that user ID
+            IQueryable<ApplicationOrganisations> AOL = from q in adc.UserOrganisationLinks
+                                                       where q.ApplicationUserId == uID
+                                                       select q.ApplicationOrganisation;
+
+            List<ApplicationOrganisations> linked = AOL.ToList(); //Convert to list
+
+
+            IQueryable<UserOrganisationLinks> UOL = from q in adc.UserOrganisationLinks
+                                                    where q.ApplicationUserId == uID
+                                                    select q;
+
+            List<UserOrganisationLinks> UOLlinked = UOL.ToList(); //Convert to list
+
+
+            //Check if the user actually passed any new orgs links through. Either the user deleted all their links or had none when they saved
+            if (ovm.ReturnedIDs != null && ovm.ReturnedIDs.Count != 0)
+            {
+
+
+                //Fill a list with all the IDs of the currently linked orgs
+                List<long> linkedIDs = new List<long>(linked.Count);
+
+                foreach (ApplicationOrganisations ao in linked)
+                {
+                    linkedIDs.Add(ao.Id);
+                }
+
+
+                /*IEnumerable<long> removedFromDB = from q in ovm.ReturnedIDs
+                                                  where linkedIDs.Contains(q)
+                                                  select q;
+                                                  */
+
+                IEnumerable<long> removedFromDB = from q in linkedIDs
+                                                  where !ovm.ReturnedIDs.Contains(q)
+                                                  select q;
+
+                List<long> removedFromDBList = removedFromDB.ToList();
+
+
+                IEnumerable<UserOrganisationLinks> orgsToRemove = from org in adc.UserOrganisationLinks
+                                                                  where removedFromDBList.Contains(org.ApplicationOrganisationsId)
+                                                                  select org;
+
+                List<UserOrganisationLinks> orgsToRemoveList = orgsToRemove.ToList();
+
+                foreach (UserOrganisationLinks orgLink in orgsToRemoveList)
+                {
+                    adc.UserOrganisationLinks.Remove(orgLink);
+                }
+
+                //Create a collection of IDs from the newly added Orgs, by excluding those that were already there
+                IEnumerable<long> removedDoubles = from q in ovm.ReturnedIDs
+                                                   where !linkedIDs.Contains(q)
+                                                   select q;
+
+
+                //For each of this new IDs create a new link to the currently logged in User.
+                foreach (long id in removedDoubles)
+                {
+                    UserOrganisationLinks uol = new UserOrganisationLinks();
+
+                    uol.ApplicationUserId = uID;
+                    uol.ApplicationOrganisationsId = (int)id;
+
+
+                    adc.UserOrganisationLinks.Add(uol);
+                }
+
+                //Commit the DB
+                adc.SaveChanges();
+            }
+            else //Else no IDs were passed over. So either the DB was already empty or the user has deleted all their org links
+            {
+                //Check if the user has any orgLinks
+                if (linked.Count != 0)
+                {
+                    //Since they had links previously they must have removed all their links 
+                    //for the returnedID count to be zero or the list to be Null
+                    //so remove them all from the DB 
+                    foreach (UserOrganisationLinks uol in UOL)
+                    {
+                        adc.UserOrganisationLinks.Remove(uol);
+                    }
+
+                    //Commit the DB
+                    adc.SaveChanges();
+                }
+
+                //Otherwise they never had any links and they pressed 'save' so do nothing.
+            }
+
+            return RedirectToAction("LinkOrganisations");
+        }
+
+        // GET: /Identity/Organisations
+        [HttpGet]
+        public IActionResult LinkOrganisations()
+        {
+            ApplicationDbContext adc = new ApplicationDbContext();
+
+            //Get the ID of the current user
+            var uID = User.GetUserId();
+
+            //Get a list of all linked orgs for that user ID
+            IQueryable<ApplicationOrganisations> AOL = from q in adc.UserOrganisationLinks
+                                                       where q.ApplicationUserId == uID
+                                                       select q.ApplicationOrganisation;
+
+            List<ApplicationOrganisations> linked = AOL.ToList(); //Convert to list
+
+            //Fill a list with all the IDs of the currently linked orgs
+            List<long> linkedIDs = new List<long>(linked.Count);
+
+            foreach (ApplicationOrganisations ao in linked)
+            {
+                linkedIDs.Add(ao.Id);
+            }
+
+
+            //Get a list of currently available orgs for linking - by excluding those with IDs listed in linkedIds
+            IQueryable<ApplicationOrganisations> AOUL = from q in adc.ApplicationOrganisations
+                                                        where !linkedIDs.Contains(q.Id)
+                                                        select q;
+
+            List<ApplicationOrganisations> unlinked = AOUL.ToList();
+
+
+            //Create a new view model and assign the linked and unlinked orgs
+            OrganisationsViewModel OVM = new OrganisationsViewModel();
+
+            //OVM.LinkedOrgs = linked;
+            List<SelectListItem> SLI = new List<SelectListItem>();
+            foreach (ApplicationOrganisations ao in linked)
+            {
+                SLI.Add(new SelectListItem { Text = ao.organisationName, Value = ao.Id.ToString() });
+            }
+
+
+            OVM.LinkedOrgs = SLI;
+            OVM.UnlinkedOrgs = unlinked;
+
+            //Pass the linked/unlinked orgs to the view
+            return View(OVM);
         }
 
         #endregion
