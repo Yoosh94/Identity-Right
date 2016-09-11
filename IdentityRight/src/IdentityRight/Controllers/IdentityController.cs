@@ -391,6 +391,13 @@ namespace IdentityRight.Controllers
 
         }
 
+        // GET: /Identity/showAddress
+        [HttpGet]
+        public IActionResult showAddress()
+        {
+            return View("DisplayAddressView");
+        }
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)
