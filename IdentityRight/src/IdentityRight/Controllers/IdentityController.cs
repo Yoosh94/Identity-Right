@@ -448,9 +448,21 @@ namespace IdentityRight.Controllers
 
         // GET: /Identity/showAddress
         [HttpGet]
-        public IActionResult showAddress()
+        public async Task<IActionResult> showAddress()
         {
-            return View("DisplayAddressView");
+            var user = await GetCurrentUserAsync();
+            DisplayAddressViewModel displayAddressViewModel = new DisplayAddressViewModel();
+             var userAddress = _addressProvider.getAllAddresses(user);
+            var userLocation = _addressProvider.getAllLocations(user);
+            foreach (UserAddresses address in userAddress)
+            {
+                displayAddressViewModel.userAddress.Add(address);
+            }
+            foreach (Locations location in userLocation)
+            {
+                displayAddressViewModel.location.Add(location);
+            }
+            return View("DisplayAddressView",displayAddressViewModel);
         }
 
 
