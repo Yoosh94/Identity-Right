@@ -22,6 +22,7 @@ namespace IdentityRight.Models
         public DbSet<Branches> Branch { get; set; }
         public DbSet<Departments> Department { get; set; }
         public DbSet<BranchDepartmentConnection> BranchDepartmentConnection { get; set; }
+        public DbSet<AddAddressViewModel> AddAddressViewModel { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
@@ -45,6 +46,6 @@ namespace IdentityRight.Models
 
         }
 
-        public DbSet<AddAddressViewModel> AddAddressViewModel { get; set; }
+        
     }
 }

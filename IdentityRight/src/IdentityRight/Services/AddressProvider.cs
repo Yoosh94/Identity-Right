@@ -124,6 +124,23 @@ namespace IdentityRight.Services
                 .Where(x => x.unitNumber == loc.unitNumber)
                 .Select(x => x.Id).First();
         }
+
+        
+        public List<UserAddresses> getAllAddresses(ApplicationUser user)
+        {
+            return _dbContext.UserAddress.Where(x => x.ApplicationUserId == user.Id).ToList();
+        }
+
+        public List<Locations> getAllLocations(ApplicationUser user)
+        {
+            List<Locations> loc = new List<Locations>();
+            var listOfAddress = getAllAddresses(user);
+            foreach(UserAddresses address in listOfAddress)
+            {
+                loc.Add(_dbContext.Location.Where(x => x.Id == address.LocationsId).First());
+            }
+            return loc;
+        }
         #endregion
 
         #region Update Operations
