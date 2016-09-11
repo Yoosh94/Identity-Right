@@ -25,7 +25,7 @@ namespace IdentityRight.Services
         public void addCountry(Countries country)
         {
             _dbContext.Add(country);
-            _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace IdentityRight.Services
         public void addLocation(Locations location)
         {
             _dbContext.Location.Add(location);
-            _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace IdentityRight.Services
         public void addUserAddress(UserAddresses ua)
         {
             _dbContext.UserAddress.Add(ua);
-            _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
         }
         #endregion
 
@@ -57,7 +57,13 @@ namespace IdentityRight.Services
         /// <returns>True if the object exists or false if the object does not exist</returns>
         public bool checkIfCountryExists(Countries country)
         {
-            return _dbContext.Country.Contains(country);
+            int count = _dbContext.Country.Where(x => x.countryName == country.countryName).Count();
+            if (count == 1)
+            {
+                return true;
+            }
+            return false;
+
         }
 
         /// <summary>
@@ -67,7 +73,20 @@ namespace IdentityRight.Services
         /// <returns>True if the object exists or false if the object does not exist</returns>
         public bool checkIfLocationExists(Locations loc)
         {
-            return _dbContext.Location.Contains(loc);
+            //return _dbContext.Location.Contains(loc);
+            int count = _dbContext.Location.Where(x => x.CountriesId == loc.CountriesId)
+                .Where(x => x.postcode == loc.postcode)
+                .Where(x => x.state == loc.state)
+                .Where(x => x.streetName == loc.streetName)
+                .Where(x => x.streetNumber == loc.streetNumber)
+                .Where(x => x.suburb == loc.suburb)
+                .Where(x => x.unitNumber == loc.unitNumber)
+                .Count();
+            if (count == 1)
+            {
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -77,7 +96,33 @@ namespace IdentityRight.Services
         /// <returns>True if the object exists or false if the object does not exist</returns>
         public bool checkUserAddress(UserAddresses userAddress)
         {
-            return _dbContext.UserAddress.Contains(userAddress);
+            int count = _dbContext.UserAddress.Where(x => x.AddressType == userAddress.AddressType)
+                .Where(x => x.ApplicationUserId == userAddress.ApplicationUserId)
+                .Where(x => x.LocationsId == userAddress.LocationsId)
+                .Count();
+            if (count == 1)
+            {
+                return true;
+            }
+            return false;
+
+        }
+
+        public int getCountryId(Countries country)
+        {
+            return _dbContext.Country.Where(x => x.countryName == country.countryName).Where(x => x.RegionsId == country.RegionsId).Select(x => x.Id).First();
+        }
+
+        public int getLocationId(Locations loc)
+        {
+            return _dbContext.Location.Where(x => x.CountriesId == loc.CountriesId)
+                .Where(x => x.postcode == loc.postcode)
+                .Where(x => x.state == loc.state)
+                .Where(x => x.streetName == loc.streetName)
+                .Where(x => x.streetNumber == loc.streetNumber)
+                .Where(x => x.suburb == loc.suburb)
+                .Where(x => x.unitNumber == loc.unitNumber)
+                .Select(x => x.Id).First();
         }
         #endregion
 
