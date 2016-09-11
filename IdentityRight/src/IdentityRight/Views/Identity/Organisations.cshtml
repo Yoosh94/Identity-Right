@@ -1,0 +1,18 @@
+﻿@model IEnumerable<IdentityRight.Models.ApplicationOrganisations>
+@{
+    ViewData["Title"] = "Linked Organisations";
+}
+
+
+<h2>@ViewData["Title"].</h2>
+<br />
+<a href="@Url.Action("LinkOrganisations", "Identity")">Add/Remove Links</a>
+<ul>
+@foreach (var item in Model)
+{
+   <li>@Html.DisplayFor(modelItem => item.organisationName)</li>
+}
+</ul>
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

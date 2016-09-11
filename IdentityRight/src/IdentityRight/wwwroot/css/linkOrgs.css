@@ -1,0 +1,54 @@
+﻿body {
+}
+
+.splitView{
+    width:49%;
+    border-style:solid;
+    margin:0.5%;
+}
+
+h3{
+    margin-left: 1%;
+    margin-bottom:2%;
+}
+
+#right-window{
+    float:right;
+}
+
+#left-window{
+    float:left;
+}
+
+#leftSelect{
+    min-width: 100%;
+    min-height: 1000px;
+}
+
+#rightSelect{
+    min-width: 100%;
+    min-height:1000px;
+}
+
+.orgsOption{
+    padding:1%;
+ 
+}
+
+#leftSelect option{
+    padding: 1%;
+}
+
+#buttonsDiv{
+    margin-left:37%;
+    margin-right:49%;
+    width: 30%;
+}
+
+#buttonsDiv button{
+    min-width: 40%;
+    min-height: 50px;
+    font-size: 1vw;
+    margin:1%;
+    font-weight:bolder;
+}
