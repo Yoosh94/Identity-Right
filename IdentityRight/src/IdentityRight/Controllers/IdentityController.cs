@@ -361,6 +361,7 @@ namespace IdentityRight.Controllers
             return View(rowList);
         }
 
+        
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -368,6 +369,7 @@ namespace IdentityRight.Controllers
         {
 
             ApplicationDbContext adc = new ApplicationDbContext();
+
 
             //Get the ID of the current user
             var uID = User.GetUserId();
@@ -379,32 +381,91 @@ namespace IdentityRight.Controllers
 
             List<ApplicationOrganisations> linked = AOL.ToList(); //Convert to list
 
-            //Fill a list with all the IDs of the currently linked orgs
-            List<long> linkedIDs = new List<long>(linked.Count);
 
-            foreach (ApplicationOrganisations ao in linked)
+            IQueryable<UserOrganisationLinks> UOL = from q in adc.UserOrganisationLinks
+                                                    where q.ApplicationUserId == uID
+                                                    select q;
+
+            List<UserOrganisationLinks> UOLlinked = UOL.ToList(); //Convert to list
+
+
+            //Check if the user actually passed any new orgs links through. Either the user deleted all their links or had none when they saved
+            if (ovm.ReturnedIDs != null && ovm.ReturnedIDs.Count != 0)
             {
-                linkedIDs.Add(ao.Id);
+
+
+                //Fill a list with all the IDs of the currently linked orgs
+                List<long> linkedIDs = new List<long>(linked.Count);
+
+                foreach (ApplicationOrganisations ao in linked)
+                {
+                    linkedIDs.Add(ao.Id);
+                }
+
+
+                /*IEnumerable<long> removedFromDB = from q in ovm.ReturnedIDs
+                                                  where linkedIDs.Contains(q)
+                                                  select q;
+                                                  */
+
+                IEnumerable<long> removedFromDB = from q in linkedIDs
+                                                  where !ovm.ReturnedIDs.Contains(q)
+                                                  select q;
+
+                List<long> removedFromDBList = removedFromDB.ToList();
+
+
+                IEnumerable<UserOrganisationLinks> orgsToRemove = from org in adc.UserOrganisationLinks
+                                                                  where removedFromDBList.Contains(org.ApplicationOrganisationsId)
+                                                                  select org;
+
+                List<UserOrganisationLinks> orgsToRemoveList = orgsToRemove.ToList();
+
+                foreach (UserOrganisationLinks orgLink in orgsToRemoveList)
+                {
+                    adc.UserOrganisationLinks.Remove(orgLink);
+                }
+
+                //Create a collection of IDs from the newly added Orgs, by excluding those that were already there
+                IEnumerable<long> removedDoubles = from q in ovm.ReturnedIDs
+                                                   where !linkedIDs.Contains(q)
+                                                   select q;
+
+
+                //For each of this new IDs create a new link to the currently logged in User.
+                foreach (long id in removedDoubles)
+                {
+                    UserOrganisationLinks uol = new UserOrganisationLinks();
+
+                    uol.ApplicationUserId = uID;
+                    uol.ApplicationOrganisationsId = (int)id;
+
+
+                    adc.UserOrganisationLinks.Add(uol);
+                }
+
+                //Commit the DB
+                adc.SaveChanges(); 
             }
-
-            IEnumerable<long> removedDoubles = from q in ovm.ReturnedIDs
-                                        where !linkedIDs.Contains(q)
-                                        select q;
-
-
-
-            foreach (long id in removedDoubles)
+            else //Else no IDs were passed over. So either the DB was already empty or the user has deleted all their org links
             {
-                UserOrganisationLinks uol = new UserOrganisationLinks();
+                //Check if the user has any orgLinks
+                if(linked.Count != 0)
+                {
+                    //Since they had links previously they must have removed all their links 
+                    //for the returnedID count to be zero or the list to be Null
+                    //so remove them all from the DB 
+                    foreach (UserOrganisationLinks uol in UOL)
+                    {
+                        adc.UserOrganisationLinks.Remove(uol);
+                    }
 
-                uol.ApplicationUserId = uID;
-                uol.ApplicationOrganisationsId = (int)id;
+                    //Commit the DB
+                    adc.SaveChanges(); 
+                }
 
-
-                adc.UserOrganisationLinks.Add(uol);
+                //Otherwise they never had any links and they pressed 'save' so do nothing.
             }
-
-            adc.SaveChanges();
 
             return RedirectToAction("LinkOrganisations");
         }
