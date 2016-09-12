@@ -1,11 +1,11 @@
 @model IdentityRight.ViewModels.Identity.AddAddressViewModel
 
 @{
-    ViewData["Title"] = "ManageAddressView";
+    ViewData["Title"] = "Manage your address.";
 }
 
-<h2>ManageAddressView</h2>
-
+<h2>@ViewData["Title"]</h2>
+<p class="text-success">@ViewData["StatusMessage"]</p>
 <form asp-action="ManageAddressView">
     <div class="form-horizontal">
         <h4>AddAddressViewModel</h4>
