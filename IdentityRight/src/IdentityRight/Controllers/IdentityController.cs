@@ -51,9 +51,7 @@ namespace IdentityRight.Controllers
                 : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
-                : message == ManageMessageId.AddAddressSuccess ? "Your address has been successfully been added."
-                : message == ManageMessageId.AddAddressFail ? "Address already exists."
+                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."         
                 : "";
 
             var user = await GetCurrentUserAsync();
@@ -382,8 +380,12 @@ namespace IdentityRight.Controllers
 
         // GET: /Identity/AddAddress
         [HttpGet]
-        public IActionResult AddAddress()
+        public IActionResult AddAddress(ManageMessageId? message = null)
         {
+            ViewData["StatusMessage"] =
+                  message == ManageMessageId.AddAddressSuccess ? "Your address has been successfully added."
+                : message == ManageMessageId.AddAddressFail ? "Address already exists."
+                : "";
             return View("ManageAddressView");
         }
 
@@ -437,11 +439,11 @@ namespace IdentityRight.Controllers
             {
                 //Create a user address
                 _addressProvider.addUserAddress(userAddress);
-                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.AddAddressSuccess });
+                return RedirectToAction(nameof(AddAddress), new { Message = ManageMessageId.AddAddressSuccess });
             }
             else
             {
-                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.AddAddressFail });
+                return RedirectToAction(nameof(AddAddress), new { Message = ManageMessageId.AddAddressFail });
             }
 
         }
@@ -535,14 +537,15 @@ namespace IdentityRight.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SetLinks(OrganisationsViewModel ovm)
+        public async Task<IActionResult> SetLinks(OrganisationsViewModel ovm)
         {
 
             ApplicationDbContext adc = new ApplicationDbContext();
 
 
             //Get the ID of the current user
-            var uID = User.GetUserId();
+            var user = await GetCurrentUserAsync();
+            var uID = user.Id;
 
             //Get a list of all linked orgs for that user ID
             IQueryable<ApplicationOrganisations> AOL = from q in adc.UserOrganisationLinks
@@ -642,13 +645,13 @@ namespace IdentityRight.Controllers
 
         // GET: /Identity/Organisations
         [HttpGet]
-        public IActionResult LinkOrganisations()
+        public async Task<IActionResult> LinkOrganisations()
         {
             ApplicationDbContext adc = new ApplicationDbContext();
 
-            //Get the ID of the current user
-            var uID = User.GetUserId();
-
+            //Get the ID of the current user   
+            var user = await GetCurrentUserAsync();
+            var uID = user.Id;
             //Get a list of all linked orgs for that user ID
             IQueryable<ApplicationOrganisations> AOL = from q in adc.UserOrganisationLinks
                                                        where q.ApplicationUserId == uID
