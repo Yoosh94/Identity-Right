@@ -51,7 +51,7 @@ namespace IdentityRight.Controllers
                 : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."         
+                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : "";
 
             var user = await GetCurrentUserAsync();
@@ -339,9 +339,9 @@ namespace IdentityRight.Controllers
         //This method will open the search org page
         // GET: /Identity/UpdatePostalAddress
         [HttpGet]
-        public IActionResult UpdatePostal()
+        public IActionResult ManageAddresses()
         {
-            return View("UpdatePostalAddressToOrganisation");
+            return View("ManageAddressView");
         }
 
         //This method will open the search org page
@@ -439,11 +439,11 @@ namespace IdentityRight.Controllers
             {
                 //Create a user address
                 _addressProvider.addUserAddress(userAddress);
-                return RedirectToAction(nameof(AddAddress), new { Message = ManageMessageId.AddAddressSuccess });
+                return RedirectToAction("AddAddress", new { Message = ManageMessageId.AddAddressSuccess });
             }
             else
             {
-                return RedirectToAction(nameof(AddAddress), new { Message = ManageMessageId.AddAddressFail });
+                return RedirectToAction("AddAddress", new { Message = ManageMessageId.AddAddressFail });
             }
 
         }
@@ -454,7 +454,7 @@ namespace IdentityRight.Controllers
         {
             var user = await GetCurrentUserAsync();
             DisplayAddressViewModel displayAddressViewModel = new DisplayAddressViewModel();
-             var userAddress = _addressProvider.getAllAddresses(user);
+            var userAddress = _addressProvider.getAllAddresses(user);
             var userLocation = _addressProvider.getAllLocations(user);
             foreach (UserAddresses address in userAddress)
             {
@@ -464,7 +464,7 @@ namespace IdentityRight.Controllers
             {
                 displayAddressViewModel.location.Add(location);
             }
-            return View("DisplayAddressView",displayAddressViewModel);
+            return View("DisplayAddressView", displayAddressViewModel);
         }
 
 
