@@ -336,7 +336,7 @@ namespace IdentityRight.Controllers
             return View("SubscribedOrganisation");
         }
 
-        //This method will open the search org page
+        //This method will open the page that allows users to manage their 
         // GET: /Identity/UpdatePostalAddress
         [HttpGet]
         public IActionResult ManageAddresses()

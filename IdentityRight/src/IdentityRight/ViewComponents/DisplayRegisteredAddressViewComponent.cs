@@ -19,9 +19,13 @@ namespace IdentityRight.ViewComponents
         {
             _addressProvider = new AddressProvider();
             userManager = UserManager;
-
         }
 
+        /// <summary>
+        /// This method id run from Razor html files. It will get the addresses for the user and put them into a model.
+        /// </summary>
+        /// <param name="claimUser">User object from Razor file</param>
+        /// <returns>A partial view to the page.</returns>
         public async Task<IViewComponentResult> InvokeAsync(ClaimsPrincipal claimUser)
         {
             var id = claimUser.GetUserId();
