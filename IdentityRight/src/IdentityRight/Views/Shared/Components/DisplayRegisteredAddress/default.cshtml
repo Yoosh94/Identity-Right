@@ -6,7 +6,7 @@
             Address Type
         </th>
         <th>
-             Address
+            Address
         </th>
     </tr>
     @foreach (var address in Model.location)
@@ -19,14 +19,10 @@
                 @address.unitNumber @address.streetNumber @address.streetName  @address.suburb  @address.state  @address.postcode
             </td>
             <td>
-                @Html.ActionLink("Edit", "editAddress",@Model) |
-                @Html.ActionLink("Delete","deleteAddress",@Model) |
-                @Html.ActionLink("Manage links to Organisation","manageOrglinks",Model)
+                @Html.ActionLink("Edit", "editAddress", @Model) |
+                @Html.ActionLink("Delete", "deleteAddress", @Model) |
+                @Html.ActionLink("Manage links to Organisation", "manageOrglinks", Model)
             </td>
-
         </tr>
-
     }
-
-
 </table>
