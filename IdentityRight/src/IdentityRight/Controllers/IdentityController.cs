@@ -10,6 +10,8 @@ using IdentityRight.Services;
 using IdentityRight.ViewModels.Identity;
 using System.Collections.Generic;
 using Microsoft.AspNet.Mvc.Rendering;
+using IdentityRight.ViewModels;
+using IdentityRight.ViewModels.EditDetails;
 
 namespace IdentityRight.Controllers
 {
@@ -467,6 +469,14 @@ namespace IdentityRight.Controllers
             return View("DisplayAddressView", displayAddressViewModel);
         }
 
+        [HttpGet("editAddress/{id}")]
+        public async Task<IActionResult> updateAddress(Locations loc)
+        {
+            var user = await GetCurrentUserAsync();
+            UserAddresses userAddress = _addressProvider.getAddressByLocation(user, loc.Id);
+            ViewBag.EditType = "address";
+            return View("UpdateDetails", new UpdateAddressViewModel { location = loc, userAddress = userAddress });
+        }
 
         //Settings:
         //This method will open the search org page

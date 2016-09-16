@@ -125,7 +125,7 @@ namespace IdentityRight.Services
                 .Select(x => x.Id).First();
         }
 
-        
+
         public List<UserAddresses> getAllAddresses(ApplicationUser user)
         {
             return _dbContext.UserAddress.Where(x => x.ApplicationUserId == user.Id).ToList();
@@ -135,12 +135,23 @@ namespace IdentityRight.Services
         {
             List<Locations> loc = new List<Locations>();
             var listOfAddress = getAllAddresses(user);
-            foreach(UserAddresses address in listOfAddress)
+            foreach (UserAddresses address in listOfAddress)
             {
                 loc.Add(_dbContext.Location.Where(x => x.Id == address.LocationsId).First());
             }
             return loc;
         }
+
+        public UserAddresses getAddressByLocation(ApplicationUser user, int id )
+        {
+            //Find userAddress with the ID of the location passed in by the parameter
+            
+            var singleUserAddress = _dbContext.UserAddress.Where(x => x.ApplicationUserId == user.Id)
+                .Where(z => z.LocationsId == id)
+                .First();
+            return singleUserAddress;
+        }
+
         #endregion
 
         #region Update Operations

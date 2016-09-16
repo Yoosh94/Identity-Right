@@ -1,0 +1,106 @@
+﻿@{
+    ViewData["Title"] = "Update your current details";
+}
+
+<h2>@ViewData["Title"].</h2>
+@{
+    if (ViewBag.EditType == "address")
+    {
+        @model IdentityRight.ViewModels.EditDetails.UpdateAddressViewModel
+        <div class="row">
+            <div>
+                <form asp-controller="Identity" asp-action="">
+                    <div class="form-horizontal">
+                        <h4>Update Address</h4>
+                        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="@Model.userAddress.AddressType" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                <select asp-for="@Model.userAddress.AddressType" asp-items="Html.GetEnumSelectList<AddressType>()" class="form-control"></select>
+                                <span asp-validation-for="@Model.userAddress.AddressType" class="text-danger" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Address</label>
+                            <div class="col-md-10">
+                                <input id="address" class="form-control">
+                            </div>
+                        </div>
+                        @*Start and End Date will be added in later versions*@
+
+
+                        @*<div class="form-group">
+                                <label asp-for="startDate" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <input asp-for="startDate" class="form-control" />
+                                    <span asp-validation-for="startDate" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="endDate" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    <input asp-for="endDate" class="form-control" />
+                                    <span asp-validation-for="endDate" class="text-danger" />
+                                </div>
+                            </div>*@
+                        <div class="form-group">
+                            <label asp-for="@Model.location.unitNumber" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                <input asp-for="@Model.location.unitNumber" class="form-control" disabled="disabled" />
+                                <span asp-validation-for="@Model.location.unitNumber" class="text-danger" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.location.streetNumber" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                <input asp-for="@Model.location.streetNumber" class="form-control" disabled="disabled" />
+                                <span asp-validation-for="@Model.location.streetNumber" class="text-danger" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.location.streetName" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                <input asp-for="@Model.location.streetName" class="form-control" disabled="disabled" />
+                                <span asp-validation-for="@Model.location.streetName" class="text-danger" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.location.suburb" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                <input asp-for="@Model.location.suburb" class="form-control" disabled="disabled" />
+                                <span asp-validation-for="@Model.location.suburb" class="text-danger" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.location.postcode" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                <input asp-for="@Model.location.postcode" class="form-control" disabled="disabled" />
+                                <span asp-validation-for="@Model.location.postcode" class="text-danger" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.location.state" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                <input asp-for="@Model.location.state" class="form-control" disabled="disabled" />
+                                <span asp-validation-for="@Model.location.state" class="text-danger" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.location.Countries.countryName" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                <input asp-for="@Model.location.Countries.countryName" class="form-control" disabled="disabled" />
+                                <span asp-validation-for="@Model.location.Countries.countryName" class="text-danger" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Update" class="btn btn-default" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+}
