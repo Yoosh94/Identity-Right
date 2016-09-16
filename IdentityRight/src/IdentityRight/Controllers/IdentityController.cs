@@ -398,7 +398,7 @@ namespace IdentityRight.Controllers
             //Get the current user
             var user = await GetCurrentUserAsync();
             //Create a country object from the form the user has submitted. Region id will be set to 1 for now.
-            Countries country = new Countries { countryName = model.country, RegionsId = 1 };
+            Countries country = new Countries { countryName = model.countryName, RegionsId = 1 };
             //Check if the country exists
             var countryExist = _addressProvider.checkIfCountryExists(country);
             //If there is no country add it to the db
@@ -409,17 +409,17 @@ namespace IdentityRight.Controllers
             }
             //Parse the postcode as an int
             int postcode;
-            bool result = int.TryParse(model.postal_code, out postcode);
+            bool result = int.TryParse(model.postcode, out postcode);
             //Create a location object
             Locations location = new Locations
             {
                 CountriesId = _addressProvider.getCountryId(country),
                 postcode = postcode,
-                state = model.administrative_area_level_1,
-                streetName = model.route,
-                streetNumber = model.street_number,
-                suburb = model.locality,
-                unitNumber = model.subpremise
+                state = model.state,
+                streetName = model.streetName,
+                streetNumber = model.streetNumber,
+                suburb = model.suburb,
+                unitNumber = model.unitNumber
             };
             //Check if location exists 
             var locationExist = _addressProvider.checkIfLocationExists(location);

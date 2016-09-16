@@ -11,29 +11,26 @@ namespace IdentityRight.ViewModels.Identity
         public AddressType addressType { get; set; }
 
         [Display(Name = "Unit")]
-        public string subpremise { get; set; }
-
-        [Display(Name = "Organisation")]
-        public string organisation { get; set; }
+        public string unitNumber { get; set; }
 
         [Key]
         [Display(Name = "Street Number")]
-        public string street_number { get; set; }
+        public string streetNumber { get; set; }
 
         [Display(Name ="Street Address")]
-        public string route { get; set; }
+        public string streetName { get; set; }
 
         [Display(Name ="City")]
-        public string locality { get; set; }
+        public string suburb { get; set; }
 
         [Display(Name ="State")]
-        public string administrative_area_level_1 { get; set; }
+        public string state { get; set; }
 
         [Display(Name ="Postcode")]
-        public string postal_code { get; set; }
+        public string postcode { get; set; }
 
         [Display(Name ="Country")]
-        public string country { get; set; }
+        public string countryName { get; set; }
 
         [Display(Name = "Start Date")]
         public DateTime startDate { get; set; }

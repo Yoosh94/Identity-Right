@@ -14,6 +14,7 @@
                         <h4>Update Address</h4>
                         <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
                         <div class="form-group">
+                            
                             <label asp-for="@Model.userAddress.AddressType" class="col-md-2 control-label"></label>
                             <div class="col-md-10">
                                 <select asp-for="@Model.userAddress.AddressType" asp-items="Html.GetEnumSelectList<AddressType>()" class="form-control"></select>
@@ -46,49 +47,50 @@
                         <div class="form-group">
                             <label asp-for="@Model.location.unitNumber" class="col-md-2 control-label"></label>
                             <div class="col-md-10">
-                                <input asp-for="@Model.location.unitNumber" class="form-control" disabled="disabled" />
+                                @Html.TextBox("unitNumber", null, new { @class = "form-control", disabled = "true" })
+                                
                                 <span asp-validation-for="@Model.location.unitNumber" class="text-danger" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label asp-for="@Model.location.streetNumber" class="col-md-2 control-label"></label>
                             <div class="col-md-10">
-                                <input asp-for="@Model.location.streetNumber" class="form-control" disabled="disabled" />
+                                @Html.TextBox("streetNumber", null, new { @class = "form-control", disabled = "true" })
                                 <span asp-validation-for="@Model.location.streetNumber" class="text-danger" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label asp-for="@Model.location.streetName" class="col-md-2 control-label"></label>
                             <div class="col-md-10">
-                                <input asp-for="@Model.location.streetName" class="form-control" disabled="disabled" />
+                                @Html.TextBox("streetName", null, new { @class = "form-control", disabled = "true" })
                                 <span asp-validation-for="@Model.location.streetName" class="text-danger" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label asp-for="@Model.location.suburb" class="col-md-2 control-label"></label>
                             <div class="col-md-10">
-                                <input asp-for="@Model.location.suburb" class="form-control" disabled="disabled" />
+                                @Html.TextBox("suburb", null, new { @class = "form-control", disabled = "true" })
                                 <span asp-validation-for="@Model.location.suburb" class="text-danger" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label asp-for="@Model.location.postcode" class="col-md-2 control-label"></label>
                             <div class="col-md-10">
-                                <input asp-for="@Model.location.postcode" class="form-control" disabled="disabled" />
+                                @Html.TextBox("postcode", null, new { @class = "form-control", disabled = "true" })
                                 <span asp-validation-for="@Model.location.postcode" class="text-danger" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label asp-for="@Model.location.state" class="col-md-2 control-label"></label>
                             <div class="col-md-10">
-                                <input asp-for="@Model.location.state" class="form-control" disabled="disabled" />
+                                @Html.TextBox("state", null, new { @class = "form-control", disabled = "true" })
                                 <span asp-validation-for="@Model.location.state" class="text-danger" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label asp-for="@Model.location.Countries.countryName" class="col-md-2 control-label"></label>
                             <div class="col-md-10">
-                                <input asp-for="@Model.location.Countries.countryName" class="form-control" disabled="disabled" />
+                                @Html.TextBox("countryName", null, new { @class = "form-control", disabled = "true" })
                                 <span asp-validation-for="@Model.location.Countries.countryName" class="text-danger" />
                             </div>
                         </div>
