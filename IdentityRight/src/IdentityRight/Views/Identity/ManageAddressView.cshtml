@@ -1,109 +1,143 @@
-@model IdentityRight.ViewModels.Identity.AddAddressViewModel
-
+﻿@model AddAddressViewModel
 @{
-    ViewData["Title"] = "ManageAddressView";
+    ViewData["Title"] = "Manage your address";
 }
 
-<h2>ManageAddressView</h2>
-
-<form asp-action="ManageAddressView">
-    <div class="form-horizontal">
-        <h4>AddAddressViewModel</h4>
-        <hr />
-        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="addressType" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="addressType" asp-items="Html.GetEnumSelectList<AddressType>()" class="form-control"></select>
-                <span asp-validation-for="addressType" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-2 control-label">Address</label>
-            <div class="col-md-10">
-                <input id="address" class="form-control">
-            </div>
-        </div>
-        @*Start and End Date will be added in later versions*@
-
-
-        @*<div class="form-group">
-            <label asp-for="startDate" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="startDate" class="form-control" />
-                <span asp-validation-for="startDate" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="endDate" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="endDate" class="form-control" />
-                <span asp-validation-for="endDate" class="text-danger" />
-            </div>
-        </div>*@
-        <div class="form-group">
-            <label asp-for="subpremise" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="subpremise" class="form-control" disabled="disabled"/>
-                <span asp-validation-for="subpremise" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="street_number" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="street_number" class="form-control" disabled="disabled" />
-                <span asp-validation-for="street_number" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="route" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="route" class="form-control" disabled="disabled"/>
-                <span asp-validation-for="route" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="locality" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="locality" class="form-control" disabled="disabled"/>
-                <span asp-validation-for="locality" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="postal_code" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="postal_code" class="form-control" disabled="disabled"/>
-                <span asp-validation-for="postal_code" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="administrative_area_level_1" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="administrative_area_level_1" class="form-control" disabled="disabled" />
-                <span asp-validation-for="administrative_area_level_1" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="country" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="country" class="form-control" disabled="disabled"/>
-                <span asp-validation-for="country" class="text-danger" />
-            </div>
-        </div>
+<h2>@ViewData["Title"].</h2>
+<div class="row">
+    <div>
+        <form asp-controller="Identity" asp-action="addAddress">
+            <div class="form-horizontal">
+                
+                <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="addressType" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <select asp-for="addressType" asp-items="Html.GetEnumSelectList<AddressType>()" class="form-control"></select>
+                        <span asp-validation-for="addressType" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Address</label>
+                    <div class="col-md-10">
+                        <input id="address" class="form-control">
+                    </div>
+                </div>
+                @*Start and End Date will be added in later versions*@
 
 
-        
-        
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                @*<div class="form-group">
+                    <label asp-for="startDate" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="startDate" class="form-control" />
+                        <span asp-validation-for="startDate" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="endDate" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="endDate" class="form-control" />
+                        <span asp-validation-for="endDate" class="text-danger" />
+                    </div>
+                </div>*@
+                <div class="form-group">
+                    <label asp-for="subpremise" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="subpremise" class="form-control" disabled="disabled" />
+                        <span asp-validation-for="subpremise" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="street_number" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="street_number" class="form-control" disabled="disabled" />
+                        <span asp-validation-for="street_number" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="route" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="route" class="form-control" disabled="disabled" />
+                        <span asp-validation-for="route" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="locality" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="locality" class="form-control" disabled="disabled" />
+                        <span asp-validation-for="locality" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="postal_code" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="postal_code" class="form-control" disabled="disabled" />
+                        <span asp-validation-for="postal_code" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="administrative_area_level_1" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="administrative_area_level_1" class="form-control" disabled="disabled" />
+                        <span asp-validation-for="administrative_area_level_1" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="country" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="country" class="form-control" disabled="disabled" />
+                        <span asp-validation-for="country" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>
+                </div>
             </div>
+        </form>
+    </div>
+</div>
+
+<hr />
+<div class="row">
+    <form asp-controller="" asp-action="">
+        <div class="form-horizontal">
+            <h4>Manage Address to organisation</h4>
+            <div class="form-group">
+                <label asp-for="organisation" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <select class="form-control">
+                        <option value="">Select organisation</option>
+                        <option value="">My current linked organisations</option>
+                        <option value="">Organisation a</option>
+                        <option value="">Organisation b</option>
+                        <option value="">Organisation c</option>
+                        <option value="">Organisation e</option>
+                        <option value="">Organisation f</option>
+                        <option value="">Organisation g</option>
+                    </select><span> or </span>
+                    <span asp-validation-for="organisation" class="text-danger" />
+                    <input placeholder="Search organisation/company" size="150" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Upate" class="btn btn-default" />
+                </div>
+            </div>
+            <small style="float:right;display:block;"> Status: <span style="color:lightgrey;"></span></small><br />
+            <button id="btn" style="float:right;display:block;" class="btn btn-default">Cancel update</button>
+        </div>
+    </form>
+
+    <div>
+        <div>
+            @*Create new partial view which will display all the addresses rendered to the user*@
+            @await Component.InvokeAsync("DisplayRegisteredAddress", User)
         </div>
     </div>
-</form>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvN49EG4_gYq0AiYPl0B5-ZfXcg40qb6U&libraries=places" asp-append-version="true"></script>

@@ -1,0 +1,28 @@
+﻿@model DisplayAddressViewModel
+
+<table>
+    <tr>
+        <th>
+            Address Type
+        </th>
+        <th>
+            Address
+        </th>
+    </tr>
+    @foreach (var address in Model.location)
+    {
+        <tr>
+            <td>
+                @address.UserAddresses.First().AddressType
+            </td>
+            <td>
+                @address.unitNumber @address.streetNumber @address.streetName  @address.suburb  @address.state  @address.postcode
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "editAddress", @Model) |
+                @Html.ActionLink("Delete", "deleteAddress", @Model) |
+                @Html.ActionLink("Manage links to Organisation", "manageOrglinks", Model)
+            </td>
+        </tr>
+    }
+</table>
