@@ -95,7 +95,7 @@
         </dd>
         <dt>Phone Number:</dt>
         <dd>
-            We use phone numbers as a second factor of verification.
+            We use mobile phone numbers as a second factor of verification.
             <br/>
             Phone Number:
             @(Model.PhoneNumber ?? "No Phone Number Added")
@@ -104,6 +104,12 @@
                 <form asp-controller="Identity" asp-action="RemovePhoneNumber" method="post" role="form"><button type="submit" class="btn-link">
                     Remove Phone Number
                 </button></form>
+
+                <form asp-controller="Identity" asp-action="UpdatePhoneNumber" method="post" role="form">
+                    <button type="submit" class="btn-link">
+                        Add or Update Phone Numbers
+                    </button>
+                </form>
             }
             else
             {
@@ -130,9 +136,14 @@
         </dd>
         <dt>Organisations:</dt>
         <dd>
-            @if (!Model.TwoFactor)
+            @if (Model.TwoFactor)
             {
                 <a href="@Url.Action("Organisations", "Identity")">View Organisations</a>
+            }
+            else
+            {
+                <span>You need to enable Two Factor Authentication before you can link Organisations.</span>
+
             }
         </dd>
 

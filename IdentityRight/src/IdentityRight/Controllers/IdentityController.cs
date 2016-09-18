@@ -95,6 +95,19 @@ namespace IdentityRight.Controllers
             return View();
         }
 
+        public async Task<IActionResult> UpdatePhoneNumber()
+        {
+
+            var user = await GetCurrentUserAsync();
+            string uPhNum = user.PhoneNumber;
+
+            AddPhoneNumberViewModel aphVM = new AddPhoneNumberViewModel();
+
+            aphVM.PhoneNumber = uPhNum;
+
+            return View(aphVM);
+        }
+
         //
         // POST: /Manage/AddPhoneNumber
         [HttpPost]
