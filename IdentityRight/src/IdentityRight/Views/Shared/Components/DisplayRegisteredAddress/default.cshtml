@@ -19,7 +19,7 @@
                 @address.unitNumber @address.streetNumber @address.streetName  @address.suburb  @address.state  @address.postcode
             </td>
             <td>
-                @Html.ActionLink("Edit", "editAddress", @Model) |
+                @Html.ActionLink("Edit", "updateAddress", "Identity", address) |
                 @Html.ActionLink("Delete", "deleteAddress", @Model) |
                 @Html.ActionLink("Manage links to Organisation", "manageOrglinks", Model)
             </td>

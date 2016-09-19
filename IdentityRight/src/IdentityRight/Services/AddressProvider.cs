@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IdentityRight.Models;
 using IdentityRight.ViewModels.Organisations;
+using IdentityRight.ViewModels.UpdateDetails;
 
 namespace IdentityRight.Services
 {
@@ -63,7 +64,11 @@ namespace IdentityRight.Services
                 return true;
             }
             return false;
+        }
 
+        public Countries getCountryById(int id)
+        {
+            return _dbContext.Country.Where(x => x.Id == id).First();
         }
 
         /// <summary>
@@ -125,7 +130,7 @@ namespace IdentityRight.Services
                 .Select(x => x.Id).First();
         }
 
-        
+
         public List<UserAddresses> getAllAddresses(ApplicationUser user)
         {
             return _dbContext.UserAddress.Where(x => x.ApplicationUserId == user.Id).ToList();
@@ -135,15 +140,34 @@ namespace IdentityRight.Services
         {
             List<Locations> loc = new List<Locations>();
             var listOfAddress = getAllAddresses(user);
-            foreach(UserAddresses address in listOfAddress)
+            foreach (UserAddresses address in listOfAddress)
             {
                 loc.Add(_dbContext.Location.Where(x => x.Id == address.LocationsId).First());
             }
             return loc;
         }
+
+        public UserAddresses getAddressByLocation(ApplicationUser user, int id)
+        {
+            //Find userAddress with the ID of the location passed in by the parameter
+
+            var singleUserAddress = _dbContext.UserAddress.Where(x => x.ApplicationUserId == user.Id)
+                .Where(z => z.LocationsId == id)
+                .First();
+            return singleUserAddress;
+        }
+
         #endregion
 
         #region Update Operations
+        public void updateUserAddress(int UserAddressIDtoUpdate, int newLocationID, AddressType addressType)
+        {
+            var address = _dbContext.UserAddress.Where(x => x.Id == UserAddressIDtoUpdate).First();
+            address.LocationsId = newLocationID;
+            address.AddressType = addressType;
+            _dbContext.SaveChanges();
+        }
+
         #endregion
 
         #region Delete Operations
