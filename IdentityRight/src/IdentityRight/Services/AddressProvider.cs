@@ -171,6 +171,17 @@ namespace IdentityRight.Services
         #endregion
 
         #region Delete Operations
+        public void deleteUserAddressById(int id)
+        {
+            //Get all the userAddresses linked to that account.
+            var addressesFound = _dbContext.UserAddress.Where(x => x.Id == id).ToList();
+            //if there is only one address delete it.
+            if(addressesFound.Count == 1)
+            {
+                _dbContext.UserAddress.Remove(addressesFound.First());
+                _dbContext.SaveChanges();
+            }
+        }
         #endregion
 
 

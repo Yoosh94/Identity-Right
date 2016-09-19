@@ -521,6 +521,15 @@ namespace IdentityRight.Controllers
             return View("ManageAddressView");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> deleteAddress(Locations location)
+        {
+            var user = await GetCurrentUserAsync();
+            var userAddress = _addressProvider.getAddressByLocation(user,location.Id);
+            _addressProvider.deleteUserAddressById(userAddress.Id);
+            return View("ManageAddressView");
+        }
+
         //Settings:
         //This method will open the search org page
         // GET: /Identity/UpateEmailToOrganisation
