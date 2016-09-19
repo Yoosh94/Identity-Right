@@ -518,16 +518,19 @@ namespace IdentityRight.Controllers
             int userAddressIDtoUpdate = item.userAddressID;
             //Now we need to update the users address with the new location ID.
             _addressProvider.updateUserAddress(userAddressIDtoUpdate, newLocId, item.userAddress.AddressType);
-            return View("ManageAddressView");
+            return RedirectToAction("ManageAddresses");
         }
 
         [HttpGet]
         public async Task<IActionResult> deleteAddress(Locations location)
         {
+            //Get current user
             var user = await GetCurrentUserAsync();
+            //Get the address of the current user address
             var userAddress = _addressProvider.getAddressByLocation(user,location.Id);
+            //Delete user address
             _addressProvider.deleteUserAddressById(userAddress.Id);
-            return View("ManageAddressView");
+            return RedirectToAction("ManageAddresses");
         }
 
         //Settings:
