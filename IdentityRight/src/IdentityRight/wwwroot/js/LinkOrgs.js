@@ -17,4 +17,21 @@ $().ready(function () {
     });
 });
 
+//Function which will allow user to search for an organisation
+function searchOrganisation() {
+    //Get the value of what the user has searched
+    var searchTerm = document.getElementById("srch-term").value;
+    //Foreach option in the multiselect list check if the text contains a substring of what the user has searched
+    $('#rightSelect option').each(function () {
+        //If there are no matches hide the option
+        if ($(this).text().toLowerCase().indexOf(searchTerm.toLowerCase()) < 0) {
+            $(this).hide();
+        }
+        //If the substring exists make sure its visible
+        else {
+            $(this).show();
+        }           
+    })
+}
+
 
