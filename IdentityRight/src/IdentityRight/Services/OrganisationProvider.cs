@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using IdentityRight.Models;
 using IdentityRight.ViewModels.Organisations;
-using Microsoft.AspNet.Identity;
-using Microsoft.Data.Entity;
-using Microsoft.Data.Entity.Infrastructure;
-using Microsoft.Extensions.Configuration;
 
 namespace IdentityRight.Services
 {
@@ -60,6 +52,28 @@ namespace IdentityRight.Services
             return new OrganisationsViewModel
             {
                 Organisations = _dbContext.ApplicationOrganisations.ToList()
+            };
+        }
+
+        /// <summary>
+        /// Gets user details for a particular user, including address, phone numbers and emails
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>The userdetailmodel with user details</returns>
+        public UserDetailsViewModel GetUserDetails(string userId)
+        {
+            var user = _dbContext.Users.First(z => z.Id == userId);
+            var addressIds = _dbContext.UserAddress.Where(z => z.ApplicationUserId == userId).ToList();
+
+            var addresses = addressIds.Select(address => _dbContext.Location.First(z => z.Id == address.LocationsId)).ToList();
+
+            return new UserDetailsViewModel
+            {
+                User = user,
+                UserAddresses = addresses,
+                AddressIds = addressIds,
+                UserEmails = _dbContext.UserEmailAddress.Where(z => z.ApplicationUserId == userId).ToList(),
+                UserPhoneNumbers = _dbContext.UsersPhoneNumbers.Where(z => z.ApplicationUserId == userId).ToList()
             };
         }
     }

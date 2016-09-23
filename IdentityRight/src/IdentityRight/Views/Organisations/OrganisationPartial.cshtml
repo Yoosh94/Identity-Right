@@ -28,7 +28,7 @@
             {
                 <tr>
                     <td>@user.FirstName @user.LastName</td>
-                    <td>@user.IRID</td>
+                    <td>@Html.ActionLink("View User Details", "GetUserDetail" , "Organisations" , new { userId = user.Id }, new { @class = "btn btn-sm", data_toggle="modal", data_target= "#modal-container" })</td>
                 </tr>
             }
             </tbody>
