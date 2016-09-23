@@ -325,18 +325,19 @@ namespace IdentityRight.Controllers
         //This method will open the search org page
         // GET: /Identity/searchorganisation
         [HttpGet]
-        public IActionResult SearchOrg()
+        public IActionResult ManageUserOrganisationConnections()
         {
-            return View("SearchOrganisation");
+            return View("ManageUserOrganisations");
         }
 
         //This method will open the search org page
+        //Do not need this method
         // GET: /Identity/SubscribedOrganisation
-        [HttpGet]
-        public IActionResult SubscribedOrg()
-        {
-            return View("SubscribedOrganisation");
-        }
+        //[HttpGet]
+        //public IActionResult SubscribedOrg()
+        //{
+        //    return View("SubscribedOrganisation");
+        //}
 
         //This method will open the page that allows users to manage their 
         // GET: /Identity/UpdatePostalAddress
@@ -580,23 +581,24 @@ namespace IdentityRight.Controllers
             return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
         }
 
+        //Moved to ViewComponent --> ShowRegisteredOrganisationViewComponent
         // GET: /Identity/Organisations
-        [HttpGet]
-        public IActionResult Organisations()
-        {
-            ApplicationDbContext adc = new ApplicationDbContext();
+        //[HttpGet]
+        //public IActionResult Organisations()
+        //{
+        //    ApplicationDbContext adc = new ApplicationDbContext();
 
-            var uID = User.GetUserId();
+        //    var uID = User.GetUserId();
 
 
-            IQueryable<ApplicationOrganisations> AO = from q in adc.UserOrganisationLinks
-                                                      where q.ApplicationUserId == uID
-                                                      select q.ApplicationOrganisation;
+        //    IQueryable<ApplicationOrganisations> AO = from q in adc.UserOrganisationLinks
+        //                                              where q.ApplicationUserId == uID
+        //                                              select q.ApplicationOrganisation;
 
-            List<ApplicationOrganisations> rowList = AO.ToList();
+        //    List<ApplicationOrganisations> rowList = AO.ToList();
 
-            return View(rowList);
-        }
+        //    return View(rowList);
+        //}
 
 
 

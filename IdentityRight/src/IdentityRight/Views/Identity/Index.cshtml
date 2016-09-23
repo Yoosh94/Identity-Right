@@ -1,92 +1,13 @@
 ﻿@model IndexViewModel
-<div class="navbar-inverse">
-    <img src="~/images/skyline.png" class="banner jumbotron" />
-</div>
+@*<div class="navbar-inverse">
+        <img src="~/images/skyline.png" class="banner jumbotron" />
+    </div>*@
 @{
-    ViewData["Title"] = "Manage your identity";
+    ViewData["Title"] = "Account Overview";
 }
 
 <h2>@ViewData["Title"].</h2>
 <p class="text-success">@ViewData["StatusMessage"]</p>
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-3">
-            <div>
-                <a asp-controller="Identity" asp-action="SearchOrg" class="thumbnail thumbnail-grid">Search for organisation</a>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div>
-                @if (!Model.TwoFactor)
-                {
-                    <a href="@Url.Action("Organisations", "Identity")" class="thumbnail thumbnail-grid">Add/Remove Organisations link</a>
-                }
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div>
-                <a asp-controller="Identity" asp-action="SubscribedOrg" class="thumbnail thumbnail-grid">My current subscribed organisations</a>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div>
-                <a asp-controller="Identity" asp-action="ManageAddresses" class="thumbnail thumbnail-grid">Manage my addresses</a>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div>
-                <a asp-controller="Identity" asp-action="UpdatePhoneNo" class="thumbnail thumbnail-grid">Update my mobile number to organisation</a>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div>
-                <a asp-controller="Identity" asp-action="UpdateHomePhoneNo" class="thumbnail thumbnail-grid">Update my home phone number to organisation</a>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div>
-                <a asp-controller="Identity" asp-action="UpateEmailToOrg" class="thumbnail thumbnail-grid">Update my email to organisation</a>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div>
-                <a asp-controller="Account" asp-action="HomeSet" class="thumbnail thumbnail-grid">Settings</a>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div>
-                <a asp-controller="JointAccount" asp-action="JointAcc" class="thumbnail thumbnail-grid">Add joint account</a>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <!--    
-        <div class="col-md-12">
-        <h3>Update my information</h3>
-        <hr />
-        <h4>Residential Address:</h4>
-        <form>
-            <input size="300" /><input placeholder="Postcode" />
-            <select>
-                <option value="">Select organisation</option>
-                <option value="">All</option>
-                <option value="">Organisation a</option>
-                <option value="">Organisation b</option>
-                <option value="">Organisation c</option>
-                <option value="">Organisation e</option>
-                <option value="">Organisation f</option>
-                <option value="">Organisation g</option>
-            </select><span> or </span>
-            <input placeholder="Search organisation/company" size="150" />
-            <button id="btn">Update Now</button>
-            <button id="btn">Cancel update</button>
-        </form>
-        <small style="float:right;display:block;"> Status: <span style="color:lightgreen;">Updated</span></small>
-    </div>
-    -->
-</div>
 <div>
     <h4>Change your account settings</h4>
     <hr />
@@ -101,7 +22,6 @@
         <dt>Phone Number:</dt>
         <dd>
             <p>We use phone numbers as a second factor of verification.</p>
-            <br/>
             Phone Number:
             @(Model.PhoneNumber ?? "No Phone Number Added")
             @if (Model.PhoneNumber != null)
@@ -132,9 +52,100 @@
                 </form>
             }
         </dd>
-        <dt>Addresses Registered</dt>
+        @*<dt>Addresses Registered</dt>
         <dd>
-            <a href="@Url.Action("showAddress","Identity")">View your registered addresses</a>
-        </dd>
+                <a href="@Url.Action("showAddress","Identity")">View your registered addresses</a>
+            </dd>*@
     </dl>
+</div>
+@if (Model.TwoFactor)
+{
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div>
+                    <a asp-controller="Identity" asp-action="ManageUserOrganisationConnections" class="thumbnail thumbnail-grid">See your organisation connections</a>
+                </div>
+            </div>
+            @*<div class="col-md-3">
+                    <div>
+                        @if (!Model.TwoFactor)
+                        {
+                            <a href="@Url.Action("Organisations", "Identity")" class="thumbnail thumbnail-grid">Add/Remove Organisations link</a>
+                        }
+                    </div>
+                </div>*@
+            @*<div class="col-md-3">
+                    <div>
+                        <a asp-controller="Identity" asp-action="SubscribedOrg" class="thumbnail thumbnail-grid">My current subscribed organisations</a>
+                    </div>
+                </div>*@
+            <div class="col-md-3">
+                <div>
+                    <a asp-controller="Identity" asp-action="ManageAddresses" class="thumbnail thumbnail-grid">Want to view your address details?</a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div>
+                    <a asp-controller="Identity" asp-action="UpdatePhoneNumber" class="thumbnail thumbnail-grid">Want to view your phone numbers?</a>
+                </div>
+            </div>
+            @*<div class="col-md-3">
+                <div>
+                    <a asp-controller="Identity" asp-action="UpdateHomePhoneNo" class="thumbnail thumbnail-grid">Update my home phone number to organisation</a>
+                </div>
+            </div>*@
+            <div class="col-md-3">
+                <div>
+                    <a asp-controller="Identity" asp-action="UpateEmailToOrg" class="thumbnail thumbnail-grid">Want to view your email addresses?</a>
+                </div>
+            </div>
+            @*<div class="col-md-3">
+                <div>
+                    <a asp-controller="Account" asp-action="HomeSet" class="thumbnail thumbnail-grid">Settings</a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div>
+                    <a asp-controller="JointAccount" asp-action="JointAcc" class="thumbnail thumbnail-grid">Add joint account</a>
+                </div>
+            </div>*@
+        </div>
+    </div>
+}
+else
+{
+    <label class="text-danger">To ensure the security of your information and to enable access to update your account please enable two factor authentication above.</label>
+
+}
+
+<div class="row">
+    <!--
+        <div class="col-md-12">
+        <h3>Update my information</h3>
+        <hr />
+        <h4>Residential Address:</h4>
+        <form>
+            <input size="300" /><input placeholder="Postcode" />
+            <select>
+                <option value="">Select organisation</option>
+                <option value="">All</option>
+                <option value="">Organisation a</option>
+                <option value="">Organisation b</option>
+                <option value="">Organisation c</option>
+                <option value="">Organisation e</option>
+                <option value="">Organisation f</option>
+                <option value="">Organisation g</option>
+            </select><span> or </span>
+            <input placeholder="Search organisation/company" size="150" />
+            <button id="btn">Update Now</button>
+            <button id="btn">Cancel update</button>
+        </form>
+        <small style="float:right;display:block;"> Status: <span style="color:lightgreen;">Updated</span></small>
+    </div>
+    -->
+</div>
+<div class="navbar-inverse">
+    <img src="~/images/skyline.png" class="banner jumbotron" />
 </div>
