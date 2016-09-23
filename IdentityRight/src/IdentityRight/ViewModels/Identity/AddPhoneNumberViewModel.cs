@@ -8,5 +8,7 @@ namespace IdentityRight.ViewModels.Identity
         [Phone]
         [Display(Name = "Phone number")]
         public string PhoneNumber { get; set; }
+        public IdentityRight.Models.PhoneNumberTypes NumberType { get; set; }
+
     }
 }

@@ -17,4 +17,8 @@ $().ready(function () {
     });
 });
 
+var url = '@Url.Action("NewNumberInput", "Identity")';
+
+
+
 

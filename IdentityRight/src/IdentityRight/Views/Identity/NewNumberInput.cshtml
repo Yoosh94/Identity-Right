@@ -1,0 +1,11 @@
+﻿@model AddPhoneNumberViewModel
+@{
+    ViewData["Title"] = "Add or Update Phone Numbers";
+}
+
+<form asp-controller="Identity" asp-action="AddOtherPhoneNumber" method="post" role="form">
+    <input asp-for="PhoneNumber" type="text" /><button type="submit">Add</button>
+</form>
+
+
+

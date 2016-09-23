@@ -116,12 +116,39 @@ namespace IdentityRight.Controllers
             {
                 return View(model);
             }
+
             // Generate the token and send it
             var user = await GetCurrentUserAsync();
             var code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, model.PhoneNumber);
             await _smsSender.SendSmsAsync(model.PhoneNumber, "Your security code is: " + code);
             return RedirectToAction(nameof(VerifyPhoneNumber), new { PhoneNumber = model.PhoneNumber });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddOtherPhoneNumber(AddPhoneNumberViewModel model)
+        {
+
+            // Generate the token and send it
+            var user = await GetCurrentUserAsync();
+
+            ApplicationDbContext adc = new ApplicationDbContext();
+
+            //Create new user phone number link
+            UserPhoneNumbers upn = new UserPhoneNumbers();
+
+            upn.ApplicationUserId = user.Id;
+            upn.PhoneNumberType = model.NumberType;
+            upn.PhoneNumber = model.PhoneNumber;
+
+            adc.Add(upn);
+            adc.SaveChanges();
+
+
+            return RedirectToAction(nameof(UpdatePhoneNumber));
+            //return View("UpdatePhoneNumber");
+        }
+
 
         //
         // POST: /Manage/EnableTwoFactorAuthentication
@@ -365,6 +392,10 @@ namespace IdentityRight.Controllers
             return View("UpdatePhoneToOrganisation");
         }
 
+        public ActionResult NewNumberInput(string numType)
+        {
+            return PartialView("NewNumberInput", numType);
+        }
         //This method will open the search org page
         // GET: /Identity/UpdatePhone
         [HttpGet]

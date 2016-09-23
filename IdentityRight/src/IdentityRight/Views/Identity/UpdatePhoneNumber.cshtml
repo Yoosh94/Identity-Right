@@ -1,5 +1,8 @@
-﻿@model AddPhoneNumberViewModel
+﻿
+
+@model AddPhoneNumberViewModel
 @{
+
     ViewData["Title"] = "Add or Update Phone Numbers";
 }
 
@@ -21,14 +24,50 @@
         </div>
     </div>
 </form>
+<div id="NewNumberField">
 
+</div>
 <span>Add New:</span>
-<select asp-for="PhoneNumber" asp-items="Html.GetEnumSelectList<PhoneNumberTypes>()">
-    <!--<option>Work</option>
-    <option>Home</option>
-    <option>Mobile</option>-->
+<select id="numType" asp-for="PhoneNumber" asp-items="Html.GetEnumSelectList<PhoneNumberTypes>()">
 </select>
-<button id="pickNumberType">Add</button>
+<button onclick="newBox()">Add</button>
+
+<script>
+
+    function newBox() {
+
+        var url = '@Url.Action("NewNumberInput", "Identity")';
+        var url2 = '@Url.Content("~/Identity/NewNumberInput")';
+
+       // var keyWord = $('#numType').find(":selected").text();
+
+        //$('#NewNumberField').load(url2, { numType: keyWord });
+
+
+        //alert(url1);
+
+        //$("#button").click(function () {
+            $.ajax({
+                url: url2,
+                type: "get",
+                data: "html", //if you need to post Model data, use this
+                success: function (result) {
+                    $("#NewNumberField").html(result);
+                }
+            });
+        //})
+
+
+            /*$.ajax({
+                type: 'GET',
+                url: '',
+                success: function (data) {
+                    $('#NewNumberField').innerHTML = data;
+                }
+            });*/
+    }
+
+</script>
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
