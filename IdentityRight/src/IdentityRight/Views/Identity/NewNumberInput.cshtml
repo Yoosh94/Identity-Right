@@ -3,7 +3,10 @@
     ViewData["Title"] = "Add or Update Phone Numbers";
 }
 
+<span>New @Model.NumberTypeString Number</span>
+<br />
 <form asp-controller="Identity" asp-action="AddOtherPhoneNumber" method="post" role="form">
+    <input type="hidden" asp-for="NumberType" value="@Model.NumberType" />
     <input asp-for="PhoneNumber" type="text" /><button type="submit">Add</button>
 </form>
 

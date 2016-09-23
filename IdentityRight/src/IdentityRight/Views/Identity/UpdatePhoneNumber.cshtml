@@ -11,8 +11,10 @@
     <h4>Add or Update phone numbers.</h4>
     <hr />
     <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+    
+    
     <div class="form-group">
-        <label asp-for="PhoneNumber" class="col-md-2 control-label"></label>
+        <label asp-for="PhoneNumber" class="col-md-2 control-label">Verification Number</label>
         <div class="col-md-10">
             <input asp-for="PhoneNumber" class="form-control" value="@Model.PhoneNumber"/>
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
@@ -24,25 +26,96 @@
         </div>
     </div>
 </form>
-<div id="NewNumberField">
+<hr />
+<div>
+    <label class="col-md-2 control-label">Mobile Numbers</label>
+        <br />
+        @if (Model.MobileNumbers != null && Model.MobileNumbers.Count > 0)
+        {
+            @foreach (var item in Model.MobileNumbers)
+            {
+                <input value="@Html.DisplayFor(modelItem => item.PhoneNumber)" />
+                <br />
+            }
+        }
+        else
+        {
+            <span>No numbers added.</span>
+            <br />
 
+        }
+
+    <label class="col-md-2 control-label">Work Numbers</label>
+        <br />
+        @if (Model.WorkNumbers != null && Model.WorkNumbers.Count > 0)
+        {
+            @foreach (var item in Model.WorkNumbers)
+            {
+                <input value="@Html.DisplayFor(modelItem => item.PhoneNumber)" />
+                <br />
+            }
+        }
+        else
+        {
+            <span>No numbers added.</span>
+            <br />
+
+        }
+
+    <label class="col-md-2 control-label">Home Numbers</label>
+        <br />
+        @if (Model.HomeNumbers != null && Model.HomeNumbers.Count > 0)
+        {
+            @foreach (var item in Model.HomeNumbers)
+            {
+                <input value="@Html.DisplayFor(modelItem => item.PhoneNumber)" />
+                <br />
+            }
+        }
+        else
+        {
+            <span>No numbers added.</span>
+            <br />
+
+        }
+
+    <label class="col-md-2 control-label">Business Numbers</label>
+        <br />
+        @if (Model.BusinessNumbers != null && Model.BusinessNumbers.Count > 0)
+        {
+            @foreach (var item in Model.BusinessNumbers)
+            {
+                <input value="@Html.DisplayFor(modelItem => item.PhoneNumber)" />
+                <br />
+            }
+        }
+        else
+        {
+            <span>No numbers added.</span>
+            <br />
+
+        }
 </div>
+
 <span>Add New:</span>
 <select id="numType" asp-for="PhoneNumber" asp-items="Html.GetEnumSelectList<PhoneNumberTypes>()">
 </select>
 <button onclick="newBox()">Add</button>
+<br /><br />
+<div id="NewNumberField">
+
+</div>
 
 <script>
 
     function newBox() {
-
+        var type = $('#numType').find(":selected").text();
+        var typeEnum = $('#numType').find(":selected").val();
         var url = '@Url.Action("NewNumberInput", "Identity")';
         var url2 = '@Url.Content("~/Identity/NewNumberInput")';
 
-       // var keyWord = $('#numType').find(":selected").text();
-
         //$('#NewNumberField').load(url2, { numType: keyWord });
-
+        alert(typeEnum);
 
         //alert(url1);
 
@@ -50,7 +123,8 @@
             $.ajax({
                 url: url2,
                 type: "get",
-                data: "html", //if you need to post Model data, use this
+                //data: "html", //if you need to post Model data, use this
+                data: {'type' : type, 'typeIndex': typeEnum},
                 success: function (result) {
                     $("#NewNumberField").html(result);
                 }

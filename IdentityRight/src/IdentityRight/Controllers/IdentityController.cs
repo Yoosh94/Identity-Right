@@ -103,6 +103,57 @@ namespace IdentityRight.Controllers
 
             aphVM.PhoneNumber = uPhNum;
 
+            ApplicationDbContext adc = new ApplicationDbContext();
+
+            IQueryable<UserPhoneNumbers> usersNumbers = from q in adc.UsersPhoneNumbers
+                                                        where q.ApplicationUserId == user.Id
+                                                        select q;
+
+
+            /*        Mobile,
+        Home,
+        Work,
+        Business*/
+            if (usersNumbers != null)
+            {
+                //2
+                IQueryable<UserPhoneNumbers> wNums = from q in usersNumbers
+                                                     where q.PhoneNumberType.Equals(PhoneNumberTypes.Work)
+                                                     select q;
+
+                List<UserPhoneNumbers> wNumsList = wNums.ToList();
+
+                aphVM.WorkNumbers = wNumsList;
+
+                //1
+                IQueryable<UserPhoneNumbers> hNums = from q in usersNumbers
+                                                     where q.PhoneNumberType.Equals(PhoneNumberTypes.Home)
+                                                     select q;
+
+                List<UserPhoneNumbers> hNumsList = hNums.ToList();
+
+                aphVM.HomeNumbers = hNumsList;
+
+                //0
+                IQueryable<UserPhoneNumbers> mNums = from q in usersNumbers
+                                                     where q.PhoneNumberType.Equals(PhoneNumberTypes.Mobile)
+                                                     select q;
+
+                List<UserPhoneNumbers> mNumsList = mNums.ToList();
+
+
+                aphVM.MobileNumbers = mNumsList;
+
+                //3
+                IQueryable<UserPhoneNumbers> bNums = from q in usersNumbers
+                                                     where q.PhoneNumberType.Equals(PhoneNumberTypes.Business)
+                                                     select q;
+
+                List<UserPhoneNumbers> bNumsList = bNums.ToList();
+
+                aphVM.BusinessNumbers = bNumsList;
+            }
+
             return View(aphVM);
         }
 
@@ -392,9 +443,42 @@ namespace IdentityRight.Controllers
             return View("UpdatePhoneToOrganisation");
         }
 
-        public ActionResult NewNumberInput(string numType)
+        public ActionResult NewNumberInput(string type, int typeIndex)
         {
-            return PartialView("NewNumberInput", numType);
+            AddPhoneNumberViewModel apvm = new AddPhoneNumberViewModel();
+
+            apvm.NumberTypeString = type;
+
+            Models.PhoneNumberTypes typeEnum = default(PhoneNumberTypes);
+
+            /*        Mobile,
+                        Home,
+                        Work,
+                        Business
+            */
+            switch (typeIndex)
+            {
+
+                case 0:
+                    typeEnum = PhoneNumberTypes.Mobile;
+                    break;
+
+                case 1:
+                    typeEnum = PhoneNumberTypes.Home;
+                    break;
+
+                case 2:
+                    typeEnum = PhoneNumberTypes.Work;
+                    break;
+
+                case 3:
+                    typeEnum = PhoneNumberTypes.Business;
+                    break;
+            }
+
+            apvm.NumberType = typeEnum;
+
+            return PartialView("NewNumberInput", apvm);
         }
         //This method will open the search org page
         // GET: /Identity/UpdatePhone
@@ -625,7 +709,7 @@ namespace IdentityRight.Controllers
                                                   select q;
                                                   */
 
-                IEnumerable<long> removedFromDB = from q in linkedIDs
+            IEnumerable<long> removedFromDB = from q in linkedIDs
                                                   where !ovm.ReturnedIDs.Contains(q)
                                                   select q;
 

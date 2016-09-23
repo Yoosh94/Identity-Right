@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using IdentityRight.Models;
+using System.Collections.Generic;
 
 namespace IdentityRight.ViewModels.Identity
 {
@@ -8,7 +10,14 @@ namespace IdentityRight.ViewModels.Identity
         [Phone]
         [Display(Name = "Phone number")]
         public string PhoneNumber { get; set; }
-        public IdentityRight.Models.PhoneNumberTypes NumberType { get; set; }
+        public Models.PhoneNumberTypes NumberType { get; set; }
+
+        public string NumberTypeString { get; set; }
+
+        public List<UserPhoneNumbers> WorkNumbers { get; set; }
+        public List<UserPhoneNumbers> MobileNumbers { get; set; }
+        public List<UserPhoneNumbers> BusinessNumbers { get; set; }
+        public List<UserPhoneNumbers> HomeNumbers { get; set; }
 
     }
 }
