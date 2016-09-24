@@ -9,140 +9,6 @@
 <h2>@ViewData["Title"].</h2>
 <p class="text-success">@ViewData["StatusMessage"]</p>
 
-
-<div class="row">
-    <div class="container">
-        <div class="col-sm-3">
-            <div class="thumbnail">
-                <a asp-controller="Identity" asp-action="SearchOrg" class="">
-                    <div class="caption">
-                        <h4 class="">Search</h4>
-                        <p class="">You can search for oganisation to update with.</p>
-                    </div>
-                    <img src="~/images/search.jpg" alt="..." />
-                </a>
-                <h5>Search for Organisaiton</h5>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="thumbnail">
-                @if (!Model.TwoFactor)
-                {
-                    <a href="@Url.Action("Organisations", "Identity")" class="">
-                        <div class="caption">
-                            <h4 class="">Add/Remove Organisations link</h4>
-                            <p class="">
-                                You can choose to remove your current organisation.
-                            </p>
-                        </div>
-                        <img src="~/images/fam.jpg" alt="...">
-                    </a>
-                    <h5>Manage Organisation Link</h5>
-                }
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="thumbnail">
-                <a asp-controller="Identity" asp-action="SubscribedOrg">
-                    <div class="caption">
-                        <h4 class="">My current subscribed organisations</h4>
-                        <p class="">
-                            You can view your list of current subscribed organisations.
-                        </p>
-                    </div>
-                    <img src="~/images/entrep.jpg" alt="...">
-                </a>
-                <h5>Manage Subscribed Organisation</h5>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="thumbnail">
-                <a asp-controller="Identity" asp-action="ManageAddresses">
-                    <div class="caption">
-                        <h4 class="">Manage my addresses</h4>
-                        <p class="">
-                            You can manage your address to your current linked organisation.
-                        </p>
-                    </div>
-                    <img src="~/images/address-to-org.jpg" alt="...">
-                </a>
-                <h5>Manage Address to Organisation</h5>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="thumbnail">
-                <a asp-controller="Identity" asp-action="UpdatePhoneNo">
-                    <div class="caption">
-                        <h4 class="">Update my mobile number to organisation</h4>
-                        <p class="">
-                            You can update your mobile number to organisation.
-                        </p>
-                    </div>
-                    <img src="~/images/phone-girl.jpg" alt="...">
-                </a>
-                <h5>Manage Phone No. to Organisation</h5>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="thumbnail">
-                <a asp-controller="Identity" asp-action="UpateEmailToOrg">
-                    <div class="caption">
-                        <h4 class="">Update my email to organisation</h4>
-                        <p class="">
-                            You can update you email to organisation.
-                        </p>
-                    </div>
-                    <img src="~/images/happy.jpg" alt="...">
-                </a>
-                <h5>Manage Email to Organisation</h5>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="thumbnail">
-                <a asp-controller="Account" asp-action="HomeSet">
-                    <div class="caption">
-                        <h4 class="">Settings</h4>
-                        <p class="">
-                            You can adjust the settings of your account.
-                        </p>
-                    </div>
-                    <img src="~/images/settings.jpg" alt="...">
-                </a>
-                <h5>Manage Settings</h5>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="thumbnail">
-                <a asp-controller="JointAccount" asp-action="JointAcc">
-                    <div class="caption">
-                        <h4 class="">Add joint account</h4>
-                        <p class="">
-                            You can add your family member to your joint account.
-                        </p>
-                    </div>
-                    <img src="~/images/couple.jpg" alt="...">
-                </a>
-                <h5>Manage Joint Account</h5>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $(document).ready(function () {
-        $("[rel='tooltip']").tooltip();
-
-        $('.thumbnail').hover(
-            function () {
-                $(this).find('.caption').slideDown(400); //.fadeIn(250)
-            },
-            function () {
-                $(this).find('.caption').slideUp(400); //.fadeOut(205)
-            }
-        );
-    });
-</script>
-
 <div>
     <h4>Change your account settings</h4>
     <hr />
@@ -194,68 +60,152 @@
             }
         </dd>
         @*<dt>Addresses Registered</dt>
-        <dd>
-                <a href="@Url.Action("showAddress","Identity")">View your registered addresses</a>
-            </dd>*@
+            <dd>
+                    <a href="@Url.Action("showAddress","Identity")">View your registered addresses</a>
+                </dd>*@
     </dl>
 </div>
+
 @if (Model.TwoFactor)
 {
+<div class="row">
     <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <div>
-                    <a asp-controller="Identity" asp-action="ManageUserOrganisationConnections" class="thumbnail thumbnail-grid">See your organisation connections</a>
-                </div>
-            </div>
-            @*<div class="col-md-3">
-                    <div>
-                        @if (!Model.TwoFactor)
-                        {
-                            <a href="@Url.Action("Organisations", "Identity")" class="thumbnail thumbnail-grid">Add/Remove Organisations link</a>
-                        }
+        <div class="col-sm-3">
+            <div class="thumbnail">
+                <a asp-controller="Identity" asp-action="ManageUserOrganisationConnections" class="">
+                    <div class="caption">
+                        <h4 class="">Search</h4>
+                        <p class="">Have a look at which organisations have been linked to your profile.</p>
                     </div>
-                </div>*@
-            @*<div class="col-md-3">
-                    <div>
-                        <a asp-controller="Identity" asp-action="SubscribedOrg" class="thumbnail thumbnail-grid">My current subscribed organisations</a>
-                    </div>
-                </div>*@
-            <div class="col-md-3">
-                <div>
-                    <a asp-controller="Identity" asp-action="ManageAddresses" class="thumbnail thumbnail-grid">Want to view your address details?</a>
-                </div>
+                    <img src="~/images/search.jpg" alt="..." />
+                </a>
+                <h5>See your organisation connections</h5>
             </div>
-            <div class="col-md-3">
-                <div>
-                    <a asp-controller="Identity" asp-action="UpdatePhoneNumber" class="thumbnail thumbnail-grid">Want to view your phone numbers?</a>
-                </div>
-            </div>
-            @*<div class="col-md-3">
-                <div>
-                    <a asp-controller="Identity" asp-action="UpdateHomePhoneNo" class="thumbnail thumbnail-grid">Update my home phone number to organisation</a>
-                </div>
-            </div>*@
-            <div class="col-md-3">
-                <div>
-                    <a asp-controller="Identity" asp-action="UpateEmailToOrg" class="thumbnail thumbnail-grid">Want to view your email addresses?</a>
-                </div>
-            </div>
-            @*<div class="col-md-3">
-                <div>
-                    <a asp-controller="Account" asp-action="HomeSet" class="thumbnail thumbnail-grid">Settings</a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div>
-                    <a asp-controller="JointAccount" asp-action="JointAcc" class="thumbnail thumbnail-grid">Add joint account</a>
-                </div>
-            </div>*@
         </div>
+        @*<div class="col-sm-3">
+            <div class="thumbnail">
+                @if (!Model.TwoFactor)
+                {
+                    <a href="@Url.Action("Organisations", "Identity")" class="">
+                        <div class="caption">
+                            <h4 class="">Add/Remove Organisations link</h4>
+                            <p class="">
+                                You can choose to remove your current organisation.
+                            </p>
+                        </div>
+                        <img src="~/images/fam.jpg" alt="...">
+                    </a>
+                    <h5>Manage Organisation Link</h5>
+                }
+            </div>
+        </div>*@
+        @*<div class="col-sm-3">
+            <div class="thumbnail">
+                <a asp-controller="Identity" asp-action="SubscribedOrg">
+                    <div class="caption">
+                        <h4 class="">My current subscribed organisations</h4>
+                        <p class="">
+                            You can view your list of current subscribed organisations.
+                        </p>
+                    </div>
+                    <img src="~/images/entrep.jpg" alt="...">
+                </a>
+                <h5>Manage Subscribed Organisation</h5>
+            </div>
+        </div>*@
+        <div class="col-sm-3">
+            <div class="thumbnail">
+                <a asp-controller="Identity" asp-action="ManageAddresses" class="">
+                    <div class="caption">
+                        <h4 class="">Manage my addresses</h4>
+                        <p class="">
+                            Checkout all the addresses linked to your account
+                        </p>
+                    </div>
+                    <img src="~/images/address-to-org.jpg" alt="...">
+                </a>
+                <h5>Want to view your address details?</h5>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="thumbnail">
+                <a asp-controller="Identity" asp-action="UpdatePhoneNumber" class="">
+                    <div class="caption">
+                        <h4 class="">Update my mobile number to organisation</h4>
+                        <p class="">
+                            You can update your mobile number to organisation.
+                        </p>
+                    </div>
+                    <img src="~/images/phone-girl.jpg" alt="...">
+                </a>
+                <h5>Want to view your phone numbers?</h5>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="thumbnail">
+                <a asp-controller="Identity" asp-action="UpateEmailToOrg" class="">
+                    <div class="caption">
+                        <h4 class="">Update my email to organisation</h4>
+                        <p class="">
+                            You can update you email to organisation.
+                        </p>
+                    </div>
+                    <img src="~/images/happy.jpg" alt="...">
+                </a>
+                <h5>Want to view your email addresses?</h5>
+            </div>
+        </div>
+        @*<div class="col-sm-3">
+            <div class="thumbnail">
+                <a asp-controller="Account" asp-action="HomeSet">
+                    <div class="caption">
+                        <h4 class="">Settings</h4>
+                        <p class="">
+                            You can adjust the settings of your account.
+                        </p>
+                    </div>
+                    <img src="~/images/settings.jpg" alt="...">
+                </a>
+                <h5>Manage Settings</h5>
+            </div>
+        </div>*@
+        @*<div class="col-sm-3">
+            <div class="thumbnail">
+                <a asp-controller="JointAccount" asp-action="JointAcc">
+                    <div class="caption">
+                        <h4 class="">Add joint account</h4>
+                        <p class="">
+                            You can add your family member to your joint account.
+                        </p>
+                    </div>
+                    <img src="~/images/couple.jpg" alt="...">
+                </a>
+                <h5>Manage Joint Account</h5>
+            </div>
+        </div>*@
     </div>
+</div>
 }
 else
 {
-    <label class="text-danger">To ensure the security of your information and to enable access to update your account please enable two factor authentication above.</label>
+<label class="text-danger">To ensure the security of your information and to enable access to update your account please enable two factor authentication above.</label>
 
 }
+<script>
+    $(document).ready(function () {
+        $("[rel='tooltip']").tooltip();
+
+        $('.thumbnail').hover(
+            function () {
+                $(this).find('.caption').slideDown(400); //.fadeIn(250)
+            },
+            function () {
+                $(this).find('.caption').slideUp(400); //.fadeOut(205)
+            }
+        );
+    });
+</script>
+
+
+
+
