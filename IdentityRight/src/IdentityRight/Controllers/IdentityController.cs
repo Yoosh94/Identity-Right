@@ -205,7 +205,7 @@ namespace IdentityRight.Controllers
         }
 
 
-        
+
         // POST: /Identity/EnableTwoFactorAuthentication
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -507,9 +507,13 @@ namespace IdentityRight.Controllers
 
         //This method will open the search org page
         // GET: /Identity/ManageUserEmails
-        [HttpGet]      
-        public IActionResult ManageUserEmails()
+        [HttpGet]
+        public IActionResult ManageUserEmails(ManageMessageId? message = null)
         {
+            ViewData["StatusMessage"] =
+                message == ManageMessageId.AddEmailSuccess ? "Email has been successfully added."
+                : message == ManageMessageId.AddEmailFail ? "Error: Email was not added."
+                : "";
             return View("ManageUserEmails");
         }
 
@@ -524,8 +528,12 @@ namespace IdentityRight.Controllers
             email.ApplicationUserId = user.Id;
             email.EmailType = model.emailTypes;
             email.emailAddress = model.email;
-            _emailProvider.createEmailForUser(email);
-            return ManageUserEmails();
+            var success = _emailProvider.createEmailForUser(email);
+            if (success)
+            {
+                return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.AddEmailSuccess });
+            }
+            return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.AddEmailFail });
 
         }
 
@@ -634,7 +642,7 @@ namespace IdentityRight.Controllers
             var user = await GetCurrentUserAsync();
             UserAddresses userAddress = _addressProvider.getAddressByLocation(user, loc.Id);
             ViewBag.EditType = "address";
-            return View("UpdateDetails", new UpdateAddressViewModel { location = loc, userAddress = userAddress, countryName = _addressProvider.getCountryById(loc.CountriesId).countryName,userAddressID = userAddress.Id });
+            return View("UpdateDetails", new UpdateAddressViewModel { location = loc, userAddress = userAddress, countryName = _addressProvider.getCountryById(loc.CountriesId).countryName, userAddressID = userAddress.Id });
         }
 
         [HttpPost]
@@ -685,7 +693,7 @@ namespace IdentityRight.Controllers
             //Get current user
             var user = await GetCurrentUserAsync();
             //Get the address of the current user address
-            var userAddress = _addressProvider.getAddressByLocation(user,location.Id);
+            var userAddress = _addressProvider.getAddressByLocation(user, location.Id);
             //Delete user address
             _addressProvider.deleteUserAddressById(userAddress.Id);
             return RedirectToAction("ManageAddresses");
@@ -730,7 +738,9 @@ namespace IdentityRight.Controllers
             RemovePhoneSuccess,
             Error,
             AddAddressSuccess,
-            AddAddressFail
+            AddAddressFail,
+            AddEmailSuccess,
+            AddEmailFail
         }
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
@@ -805,7 +815,7 @@ namespace IdentityRight.Controllers
                                                   select q;
                                                   */
 
-            IEnumerable<long> removedFromDB = from q in linkedIDs
+                IEnumerable<long> removedFromDB = from q in linkedIDs
                                                   where !ovm.ReturnedIDs.Contains(q)
                                                   select q;
 

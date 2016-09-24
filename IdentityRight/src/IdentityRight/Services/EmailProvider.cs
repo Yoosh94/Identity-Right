@@ -21,10 +21,17 @@ namespace IdentityRight.Services
         /// Add email to the database
         /// </summary>
         /// <param name="email">UserEmailAddress object</param>
-        public void createEmailForUser(UserEmailAddresses email)
+        /// <returns>Boolean if the add was successful or not</returns>
+        public bool createEmailForUser(UserEmailAddresses email)
         {
-            _dbContext.UserEmailAddress.Add(email);
-            _dbContext.SaveChanges();
+            bool exist = doesEmailAlreadyExist(email);
+            if (!exist)
+            {
+                _dbContext.UserEmailAddress.Add(email);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            return false;
         }
         #endregion
 
@@ -38,6 +45,21 @@ namespace IdentityRight.Services
         {
             var emails = _dbContext.UserEmailAddress.Where(x => x.ApplicationUser.Id == user.Id).ToList();
             return emails;
+        }
+        /// <summary>
+        /// Check if an email for the user already exists.
+        /// </summary>
+        /// <param name="email">UserEmailAddress</param>
+        /// <returns>Boolean if email already exists for the user</returns>
+        public bool doesEmailAlreadyExist(UserEmailAddresses email)
+        {
+            var emails = _dbContext.UserEmailAddress.Where(x => x.ApplicationUserId == email.ApplicationUserId).Where(y => y.emailAddress == email.emailAddress);
+            if(emails == null)
+            {
+                //If no email exists return false
+                return false;
+            }
+            return true;
         }
         #endregion
 
