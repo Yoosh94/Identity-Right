@@ -57,8 +57,7 @@ namespace IdentityRight.Controllers
         [HttpPost]
         [AllowAnonymous]
         //Comment this out to allow testing using Postman
-
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = "/Identity")//URL to manage homepage
         {
             ViewData["ReturnUrl"] = returnUrl;

@@ -1,6 +1,6 @@
 ﻿@model DisplayAddressViewModel
-
-<table>
+<h3>Here are your current addresses</h3>
+<table class="table">
     <tr>
         <th>
             Address Type
@@ -19,8 +19,8 @@
                 @address.unitNumber @address.streetNumber @address.streetName  @address.suburb  @address.state  @address.postcode
             </td>
             <td>
-                @Html.ActionLink("Edit", "editAddress", @Model) |
-                @Html.ActionLink("Delete", "deleteAddress", @Model) |
+                @Html.ActionLink("Edit", "updateAddress", "Identity", address) |
+                @Html.ActionLink("Delete", "deleteAddress", address) |
                 @Html.ActionLink("Manage links to Organisation", "manageOrglinks", Model)
             </td>
         </tr>

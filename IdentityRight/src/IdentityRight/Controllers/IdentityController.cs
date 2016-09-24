@@ -10,6 +10,8 @@ using IdentityRight.Services;
 using IdentityRight.ViewModels.Identity;
 using System.Collections.Generic;
 using Microsoft.AspNet.Mvc.Rendering;
+using IdentityRight.ViewModels;
+using IdentityRight.ViewModels.UpdateDetails;
 
 namespace IdentityRight.Controllers
 {
@@ -414,18 +416,19 @@ namespace IdentityRight.Controllers
         //This method will open the search org page
         // GET: /Identity/searchorganisation
         [HttpGet]
-        public IActionResult SearchOrg()
+        public IActionResult ManageUserOrganisationConnections()
         {
-            return View("SearchOrganisation");
+            return View("ManageUserOrganisations");
         }
 
         //This method will open the search org page
+        //Do not need this method
         // GET: /Identity/SubscribedOrganisation
-        [HttpGet]
-        public IActionResult SubscribedOrg()
-        {
-            return View("SubscribedOrganisation");
-        }
+        //[HttpGet]
+        //public IActionResult SubscribedOrg()
+        //{
+        //    return View("SubscribedOrganisation");
+        //}
 
         //This method will open the page that allows users to manage their 
         // GET: /Identity/UpdatePostalAddress
@@ -524,7 +527,7 @@ namespace IdentityRight.Controllers
             //Get the current user
             var user = await GetCurrentUserAsync();
             //Create a country object from the form the user has submitted. Region id will be set to 1 for now.
-            Countries country = new Countries { countryName = model.country, RegionsId = 1 };
+            Countries country = new Countries { countryName = model.countryName, RegionsId = 1 };
             //Check if the country exists
             var countryExist = _addressProvider.checkIfCountryExists(country);
             //If there is no country add it to the db
@@ -535,17 +538,17 @@ namespace IdentityRight.Controllers
             }
             //Parse the postcode as an int
             int postcode;
-            bool result = int.TryParse(model.postal_code, out postcode);
+            bool result = int.TryParse(model.postcode, out postcode);
             //Create a location object
             Locations location = new Locations
             {
                 CountriesId = _addressProvider.getCountryId(country),
                 postcode = postcode,
-                state = model.administrative_area_level_1,
-                streetName = model.route,
-                streetNumber = model.street_number,
-                suburb = model.locality,
-                unitNumber = model.subpremise
+                state = model.state,
+                streetName = model.streetName,
+                streetNumber = model.streetNumber,
+                suburb = model.suburb,
+                unitNumber = model.unitNumber
             };
             //Check if location exists 
             var locationExist = _addressProvider.checkIfLocationExists(location);
@@ -595,6 +598,69 @@ namespace IdentityRight.Controllers
             return View("DisplayAddressView", displayAddressViewModel);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> updateAddress(Locations loc)
+        {
+            var user = await GetCurrentUserAsync();
+            UserAddresses userAddress = _addressProvider.getAddressByLocation(user, loc.Id);
+            ViewBag.EditType = "address";
+            return View("UpdateDetails", new UpdateAddressViewModel { location = loc, userAddress = userAddress, countryName = _addressProvider.getCountryById(loc.CountriesId).countryName,userAddressID = userAddress.Id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> updateAddress(UpdateAddressViewModel item)
+        {
+            //Get the current user
+            var user = await GetCurrentUserAsync();
+            //Get current user address
+            //UserAddresses userAddress = _addressProvider.getAddressByLocation(user, item.location.Id);
+            //Create a country object from the form the user has submitted. Region id will be set to 1 for now.
+            Countries country = new Countries { countryName = item.countryName, RegionsId = 1 };
+            //Check if the country exists
+            var countryExist = _addressProvider.checkIfCountryExists(country);
+            //If there is no country add it to the db
+            if (!countryExist)
+            {
+                //Add the country to the db
+                _addressProvider.addCountry(country);
+            }
+            //Create a location object
+            Locations location = new Locations
+            {
+                CountriesId = _addressProvider.getCountryId(country),
+                postcode = item.location.postcode,
+                state = item.location.state,
+                streetName = item.location.streetName,
+                streetNumber = item.location.streetNumber,
+                suburb = item.location.suburb,
+                unitNumber = item.location.unitNumber
+            };
+            //Check if location exists 
+            var locationExist = _addressProvider.checkIfLocationExists(location);
+            //If location does not exist create it in the db
+            if (!locationExist)
+            {
+                _addressProvider.addLocation(location);
+            }
+            int newLocId = _addressProvider.getLocationId(location);
+            int userAddressIDtoUpdate = item.userAddressID;
+            //Now we need to update the users address with the new location ID.
+            _addressProvider.updateUserAddress(userAddressIDtoUpdate, newLocId, item.userAddress.AddressType);
+            return RedirectToAction("ManageAddresses");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> deleteAddress(Locations location)
+        {
+            //Get current user
+            var user = await GetCurrentUserAsync();
+            //Get the address of the current user address
+            var userAddress = _addressProvider.getAddressByLocation(user,location.Id);
+            //Delete user address
+            _addressProvider.deleteUserAddressById(userAddress.Id);
+            return RedirectToAction("ManageAddresses");
+        }
 
         //Settings:
         //This method will open the search org page
@@ -643,23 +709,24 @@ namespace IdentityRight.Controllers
             return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
         }
 
+        //Moved to ViewComponent --> ShowRegisteredOrganisationViewComponent
         // GET: /Identity/Organisations
-        [HttpGet]
-        public IActionResult Organisations()
-        {
-            ApplicationDbContext adc = new ApplicationDbContext();
+        //[HttpGet]
+        //public IActionResult Organisations()
+        //{
+        //    ApplicationDbContext adc = new ApplicationDbContext();
 
-            var uID = User.GetUserId();
+        //    var uID = User.GetUserId();
 
 
-            IQueryable<ApplicationOrganisations> AO = from q in adc.UserOrganisationLinks
-                                                      where q.ApplicationUserId == uID
-                                                      select q.ApplicationOrganisation;
+        //    IQueryable<ApplicationOrganisations> AO = from q in adc.UserOrganisationLinks
+        //                                              where q.ApplicationUserId == uID
+        //                                              select q.ApplicationOrganisation;
 
-            List<ApplicationOrganisations> rowList = AO.ToList();
+        //    List<ApplicationOrganisations> rowList = AO.ToList();
 
-            return View(rowList);
-        }
+        //    return View(rowList);
+        //}
 
 
 

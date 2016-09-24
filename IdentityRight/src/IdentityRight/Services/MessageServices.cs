@@ -12,13 +12,6 @@ namespace IdentityRight.Services
     // For more details see this link http://go.microsoft.com/fwlink/?LinkID=532713
     public class AuthMessageSender : IEmailSender, ISmsSender
     {
-        public AuthMessageSender(IOptions<TextMessageApiConfiguration> smsConfigAccessor)
-        {
-            SmsConfig = smsConfigAccessor.Value;
-        }
-
-        public TextMessageApiConfiguration SmsConfig { get; }
-
         public Task SendEmailAsync(string email, string subject, string message)
         {
             // Plug in your email service here to send an email.
@@ -27,8 +20,7 @@ namespace IdentityRight.Services
 
         public Task SendSmsAsync(string number, string message)
         {
-            // Plug in your SMS service here to send a text message.
-            // Using the Telstra SMS API
+            // Send text messages using the Telstra SMS API
             try
             {
                 SendSms(GetAccessToken(), number, message);
@@ -40,20 +32,27 @@ namespace IdentityRight.Services
             }
         }
 
+        /// <summary>
+        /// Utility class to decode base64 encoded strings
+        /// </summary>
+        /// <param name="base64EncodedData"></param>
+        /// <returns>The plaintext decoded string value</returns>
         public static string Base64Decode(string base64EncodedData)
         {
             var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
             return Encoding.UTF8.GetString(base64EncodedBytes);
         }
 
+        /// <summary>
+        /// Used to retrieve an access token for use with the Telstra SMS API
+        /// </summary>
+        /// <returns></returns>
         public string GetAccessToken()
         {
-            var url = "";
             var consumerKey = Base64Decode("ZEFaTVdQc1ZZUE1GOUJ0SU5sM25WMEI3VXltWEEwQUc=");
             var consumerSecret = Base64Decode("bkltdW5wajFjMDJpZWxGUw==");
 
-            url =
-                $"https://api.telstra.com/v1/oauth/token?client_id={consumerKey}&client_secret={consumerSecret}&grant_type=client_credentials&scope=SMS";
+            string url = $"https://api.telstra.com/v1/oauth/token?client_id={consumerKey}&client_secret={consumerSecret}&grant_type=client_credentials&scope=SMS";
 
             using (var webClient = new WebClient())
             {
@@ -63,6 +62,12 @@ namespace IdentityRight.Services
             }
         }
 
+        /// <summary>
+        /// Method used to submit the SMS to Telstra's API
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="recipientNumber"></param>
+        /// <param name="message"></param>
         public void SendSms(string token, string recipientNumber, string message)
         {
             try
