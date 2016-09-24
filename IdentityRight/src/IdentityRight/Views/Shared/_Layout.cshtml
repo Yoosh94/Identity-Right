@@ -20,8 +20,8 @@
             <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true"/>
             <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" asp-append-version="true" />
             <link rel="stylesheet" href="~/css/linkOrgs.css" asp-append-version="true"/>
+            <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" />
         </environment>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     </head>
     <body>
        
@@ -35,39 +35,13 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-@using System.Security.Claims <!--using system security-->
-@if (User.IsSignedIn())//User signed in function
-{
-                    //If user is logged in redirect to Identity/Index
-                    <a asp-controller="Identity" asp-action="Index" class="navbar-brand"><img src="~/images/IR_logo_white.png" width="120" height="35" /></a>
-}
-else
-{
-                    //If user is not logged in redirect to Home/Index//
-                    <a asp-controller="Home" asp-action="Index" class="navbar-brand"><img src="~/images/IR_logo_white.png" width="120" height="35" /></a>
-}              
+                    <a asp-controller="Home" asp-action="Index" class="navbar-brand"><img src="~/images/IR_logo_white.png" width="120" height="35"/></a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-
-@if (User.IsSignedIn())
-{
-                        //If user is logged in redirect to Identity/Index
-                        <li><a asp-controller="Identity" asp-action="Index">Home</a></li>
-                        <li><a asp-controller="Home" asp-action="About">About</a></li>
-                        <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
-                        <li><a asp-controller="#" asp-action="Contact">API</a></li>
-}
-else
-{
-    //If user is not logged in redirect to Home/Index//
                         <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li>@Html.ActionLink("Organisations", "Index", "Organisations", new { }, null)</li>
                         <li><a asp-controller="Home" asp-action="About">About</a></li>
                         <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
-                        <li><a asp-controller="#" asp-action="Contact">API</a></li>
-}
-               
                     </ul>
                     @await Html.PartialAsync("_LoginPartial")
                 </div>
@@ -138,7 +112,7 @@ else
             </a>
         </div>
         <div class="container body-content">
-            @RenderBody()
+            @RenderBody()<!--IdentityRight-3\Identity-Right\IdentityRight\src\IdentityRight\Views\Home\Index.cshtml-->
             <hr />
             <footer>
                 <p>&copy; 2016 - IdentityRight</p>
@@ -201,7 +175,36 @@ else
                 </script>
                 <script src="~/js/site.min.js" asp-append-version="true"></script>
             </environment>
-
             @RenderSection("scripts", required: false)
-</body>
+
+    <div id="modal-container" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+
+        <script type="text/javascript">
+        $(function () {
+            $('body').on('click', '.modal-link', function (e) {
+                e.preventDefault();
+                $(this).attr('data-target', '#modal-container');
+                $(this).attr('data-toggle', 'modal');
+            });
+
+            $('body').on('click', '.modal-close-btn', function () {
+                $('#modal-container').modal('hide');
+            });
+
+            //clear modal cache, so that new content can be loaded
+            $('#modal-container').on('hidden.bs.modal', function () {
+                $(this).removeData('bs.modal');
+            });
+
+            $('#CancelModal').on('click', function () {
+                return false;
+            });
+        });
+        </script>
+    </body>
 </html>

@@ -1,0 +1,172 @@
+﻿
+
+@model AddPhoneNumberViewModel
+@{
+
+    ViewData["Title"] = "Add or Update Phone Numbers";
+}
+
+<link rel="stylesheet" href="~/css/updateNumbers.css" />
+<h2>@ViewData["Title"].</h2>
+<form asp-controller="Identity" asp-action="AddPhoneNumber" method="post" class="form-horizontal" role="form">
+    <h4>Add or Update phone numbers.</h4>
+    <hr />
+    <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+    
+    
+    <div class="form-group">
+        <label asp-for="PhoneNumber" class="col-md-2 control-label">Verification Number</label>
+        <div class="col-md-10">
+            <input asp-for="PhoneNumber" class="form-control" value="@Model.PhoneNumber"/>
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">Send verification code</button>
+        </div>
+    </div>
+</form>
+<br />
+<div id="c-e"><a href="#" onclick="collapseAll();">Collapse All ( - )</a></div>
+
+<hr />
+<div id="allNumbers">
+        <label data-toggle="collapse" data-target="#mobiles" class="col-md-2 control-label">Mobile Numbers</label>
+        <br />
+        <br />
+        
+        <div id="mobiles" class="collapse in">
+        <ul>
+            @if (Model.MobileNumbers != null && Model.MobileNumbers.Count > 0)
+            {
+                int i = 1;
+                @foreach (var item in Model.MobileNumbers)
+                {
+                    <li><span>Mobile #@i</span><input class="form-control" value="@Html.DisplayFor(modelItem => item.PhoneNumber)" /></li>
+                    i++;
+
+                }
+            }
+            else
+            {
+                <li><span>No numbers added.</span></li>
+            
+
+            }
+        </ul>
+            </div>
+        <hr />
+
+        <label data-toggle="collapse" data-target="#work" class="col-md-2 control-label">Work Numbers</label>
+            <br />
+            <br />
+
+        <div id="work" class="collapse in">
+            <ul>
+                @if (Model.WorkNumbers != null && Model.WorkNumbers.Count > 0)
+                {
+                    int i = 1;
+                    @foreach (var item in Model.WorkNumbers)
+                    {
+                        <li><span>Work #@i</span><input class="form-control" value="@Html.DisplayFor(modelItem => item.PhoneNumber)" /></li>
+                        i++;
+                    }
+                }
+                else
+                {
+                    <li><span>No numbers added.</span></li>
+
+
+                }
+            </ul>
+        </div>
+            <hr />
+
+            <label data-toggle="collapse" data-target="#home" class="col-md-2 control-label">Home Numbers</label>
+            <br />
+            <br />
+        <div id="home" class="collapse in">
+            <ul>
+                @if (Model.HomeNumbers != null && Model.HomeNumbers.Count > 0)
+                {
+                    int i = 0;
+
+                    @foreach (var item in Model.HomeNumbers)
+                    {
+
+                        <li><span>Home #@i</span><input class="form-control" value="@Html.DisplayFor(modelItem => item.PhoneNumber)" /></li>
+                        i++;
+
+                    }
+                }
+                else
+                {
+                    <li><span>No numbers added.</span></li>
+
+                }
+            </ul>
+        </div>
+            <hr />
+
+            <label data-toggle="collapse" data-target="#business" class="col-md-2 control-label">Business Numbers</label>
+            <br />
+            <br />
+    <div id="business" class="collapse in">
+        <ul>
+            @if (Model.BusinessNumbers != null && Model.BusinessNumbers.Count > 0)
+            {
+                int i = 1;
+                @foreach (var item in Model.BusinessNumbers)
+                {
+                    <li><span>Business #@i</span><input class="form-control" value="@Html.DisplayFor(modelItem => item.PhoneNumber)" /></li>
+                    i++;
+                }
+            }
+            else
+            {
+                <li><span>No numbers added.</span></li>
+
+            }
+        </ul>
+    </div>
+
+            <hr />
+        
+    </div>
+
+<label class="control-label">Add New Number</label>
+<br /><span>Select number type</span>
+<select style="margin-top: 1%;" class="form-control" id="numType" asp-for="PhoneNumber" asp-items="Html.GetEnumSelectList<PhoneNumberTypes>()">
+</select>
+<button style="margin-top: 1%;" type="button" class="btn btn-default" onclick="newBox()">Add</button>
+<br /><br />
+<div id="NewNumberField">
+
+</div>
+
+<script src="~/js/updateNumbers.js" asp-append-version="true"></script>
+<script>
+
+    function newBox() {
+        var type = $('#numType').find(":selected").text();
+        var typeEnum = $('#numType').find(":selected").val();
+        var url = '@Url.Action("NewNumberInput", "Identity")';
+        var url2 = '@Url.Content("~/Identity/NewNumberInput")';
+
+            $.ajax({
+                url: url2,
+                type: "get",
+                data: {'type' : type, 'typeIndex': typeEnum},
+                success: function (result) {
+                    $("#NewNumberField").html(result);
+                }
+            });
+
+    }
+
+</script>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
