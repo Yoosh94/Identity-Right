@@ -33,9 +33,9 @@
                 </form>
 
                 <form asp-controller="Identity" asp-action="UpdatePhoneNumber" method="post" role="form">
-                    <button type="submit" class="btn-link">
+                    [<button type="submit" class="btn-link">
                         Add or Update Phone Numbers
-                    </button>
+                    </button>]
                 </form>
             }
             else
@@ -44,21 +44,23 @@
             }
         </dd>
 
-        <dt>Two-Factor Authentication:</dt>
-        <dd>
-            @if (Model.TwoFactor)
+      
+            @*@if (Model.TwoFactor)
             {
                 <form asp-controller="Identity" asp-action="DisableTwoFactorAuthentication" method="post" class="form-horizontal" role="form">
                     Two-Factor Authentication Enabled [<button type="submit" class="btn-link">Disable Two-Factor Authentication</button>]
                 </form>
-            }
-            else
+            }*@
+            @if (!Model.TwoFactor)
             {
-                <form asp-controller="Identity" asp-action="EnableTwoFactorAuthentication" method="post" class="form-horizontal" role="form">
-                    [<button type="submit" class="btn-link">Enable Two-Factor Authentication</button>] Two-Factor Authentication Disabled
-                </form>
+                <dt>Two-Factor Authentication:</dt>
+                <dd>
+                    <form asp-controller="Identity" asp-action="EnableTwoFactorAuthentication" method="post" class="form-horizontal" role="form">
+                        [<button type="submit" class="btn-link">Enable Two-Factor Authentication</button>] Two-Factor Authentication Disabled
+                    </form>
+                </dd>
             }
-        </dd>
+
         @*<dt>Addresses Registered</dt>
             <dd>
                     <a href="@Url.Action("showAddress","Identity")">View your registered addresses</a>
