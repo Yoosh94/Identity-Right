@@ -6,8 +6,8 @@
 <span>New @Model.NumberTypeString Number</span>
 <br />
 <form asp-controller="Identity" asp-action="AddOtherPhoneNumber" method="post" role="form">
-    <input type="hidden" asp-for="NumberType" value="@Model.NumberType" />
-    <input asp-for="PhoneNumber" type="text" /><button type="submit">Add</button>
+    <input  type="hidden" asp-for="NumberType" value="@Model.NumberType" />
+    <input style="margin-top: 1%;" class="form-control" asp-for="PhoneNumber" type="text" /><button style="margin-top: 1%;" class ="btn btn-default"type="submit">Add New Number</button>
 </form>
 
 

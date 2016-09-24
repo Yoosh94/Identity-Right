@@ -1,0 +1,13 @@
+﻿body {
+}
+
+
+#allNumbers ul{
+    list-style: none;
+
+}
+
+#allNumbers li{
+    margin: 1%;
+
+}
