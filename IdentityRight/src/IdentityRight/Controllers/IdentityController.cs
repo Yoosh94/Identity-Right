@@ -512,9 +512,11 @@ namespace IdentityRight.Controllers
         {
             ViewData["StatusMessageSuccess"] =
                 message == ManageMessageId.AddEmailSuccess ? "Email has been successfully added."
+                : message == ManageMessageId.DeleteEmailSuccessful ? "Email has been delete successfully."
                 : "";
             ViewData["StatusMessageFail"] =
                  message == ManageMessageId.AddEmailFail ? "Email was not added. Email already exists."
+                 :message == ManageMessageId.DeleteEmailFail ? "Email was not deleted."
                 : "";
             return View("ManageUserEmails");
         }
@@ -536,7 +538,17 @@ namespace IdentityRight.Controllers
                 return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.AddEmailSuccess });
             }
             return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.AddEmailFail });
+        }
 
+        [HttpGet]
+        public IActionResult deleteEmailAddress(UserEmailAddresses email)
+        {
+            var success = _emailProvider.deleteEmailAddress(email);
+            if (success)
+            {
+                return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.DeleteEmailSuccessful });
+            }
+            return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.DeleteEmailFail });
         }
 
         [HttpGet]
@@ -744,7 +756,9 @@ namespace IdentityRight.Controllers
             AddAddressSuccess,
             AddAddressFail,
             AddEmailSuccess,
-            AddEmailFail
+            AddEmailFail,
+            DeleteEmailSuccessful,
+            DeleteEmailFail
         }
 
         private async Task<ApplicationUser> GetCurrentUserAsync()

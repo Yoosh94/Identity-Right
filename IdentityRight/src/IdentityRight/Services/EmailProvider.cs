@@ -44,6 +44,10 @@ namespace IdentityRight.Services
         public List<UserEmailAddresses> getAllEmailsForUser(ApplicationUser user)
         {
             var emails = _dbContext.UserEmailAddress.Where(x => x.ApplicationUser.Id == user.Id).ToList();
+            foreach(UserEmailAddresses email in emails)
+            {
+                email.ApplicationUser = user;
+            }
             return emails;
         }
         /// <summary>
@@ -53,8 +57,8 @@ namespace IdentityRight.Services
         /// <returns>Boolean if email already exists for the user</returns>
         public bool doesEmailAlreadyExist(UserEmailAddresses email)
         {
-            var emails = _dbContext.UserEmailAddress.Where(x => x.ApplicationUserId == email.ApplicationUserId).Where(y => y.emailAddress == email.emailAddress);
-            if(emails == null)
+            var emails = _dbContext.UserEmailAddress.Where(x => x.ApplicationUserId == email.ApplicationUserId).Where(y => y.emailAddress == email.emailAddress).ToList();
+            if(emails.Count == 0)
             {
                 //If no email exists return false
                 return false;
@@ -67,6 +71,18 @@ namespace IdentityRight.Services
         #endregion
 
         #region Delete Email operation
+        public bool deleteEmailAddress(UserEmailAddresses email)
+        {
+            _dbContext.UserEmailAddress.Remove(email);
+            _dbContext.SaveChanges();
+            var exists = doesEmailAlreadyExist(email);
+            if (!exists)
+            {
+                return true;
+            }
+            //something went wrong and email still exists for the user.
+            return false;
+        }
         #endregion
     }
 }
