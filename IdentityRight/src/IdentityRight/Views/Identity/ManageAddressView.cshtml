@@ -4,11 +4,17 @@
 }
 
 <h2>@ViewData["Title"].</h2>
-<div class="row">
+<div>
     <div>
-        <form asp-controller="Identity" asp-action="addAddress" method="post">
+        @*Create new partial view which will display all the addresses rendered to the user*@
+        @await Component.InvokeAsync("DisplayRegisteredAddress", User)
+    </div>
+</div>
+<div class="row" >
+    <div>
+        <form asp-controller="Identity" asp-action="addAddress" method="post"  >
             <div class="form-horizontal">
-                <h4>Add Address</h4>
+                <h4>Add a new address</h4>
                 <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="addressType" class="col-md-2 control-label"></label>
@@ -132,12 +138,7 @@
             </div>
         </form>
     </div>*@
-<div>
-    <div>
-        @*Create new partial view which will display all the addresses rendered to the user*@
-        @await Component.InvokeAsync("DisplayRegisteredAddress", User)
-    </div>
-</div>
+
 
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvN49EG4_gYq0AiYPl0B5-ZfXcg40qb6U&libraries=places" asp-append-version="true"></script>

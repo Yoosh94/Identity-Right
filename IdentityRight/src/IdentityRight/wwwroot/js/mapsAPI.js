@@ -19,8 +19,11 @@ var fixedComponentForm = {
     postal_code:"postcode",
 };
 
-
-autocomplete = new google.maps.places.Autocomplete(input, null);
+var options = {
+    
+    componentRestrictions: { country: 'au' }
+};
+autocomplete = new google.maps.places.Autocomplete(input, options);
 // When the user selects an address from the dropdown, populate the address
 // fields in the form.
 autocomplete.addListener('place_changed', fillInAddress);
