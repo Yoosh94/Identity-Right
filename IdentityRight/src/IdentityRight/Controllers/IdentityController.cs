@@ -25,6 +25,7 @@ namespace IdentityRight.Controllers
         private readonly ILogger _logger;
         private readonly ApplicationDbContext _dbContext;
         private readonly AddressProvider _addressProvider;
+        private readonly EmailProvider _emailProvider;
 
         public IdentityController(
         UserManager<ApplicationUser> userManager,
@@ -40,6 +41,7 @@ namespace IdentityRight.Controllers
             _logger = loggerFactory.CreateLogger<IdentityController>();
             _dbContext = new ApplicationDbContext();
             _addressProvider = new AddressProvider();
+            _emailProvider = new EmailProvider();
         }
 
         //
@@ -497,18 +499,34 @@ namespace IdentityRight.Controllers
         }
         //This method will open the search org page
         // GET: /Identity/UpdatePhone
-        [HttpGet]
-        public IActionResult UpdateHomePhoneNo()
-        {
-            return View("UpateHomePhoneToOrganisation");
-        }
+        //[HttpGet]
+        //public IActionResult UpdateHomePhoneNo()
+        //{
+        //    return View("UpateHomePhoneToOrganisation");
+        //}
 
         //This method will open the search org page
-        // GET: /Identity/UpateEmailToOrganisation
-        [HttpGet]
-        public IActionResult UpateEmailToOrg()
+        // GET: /Identity/ManageUserEmails
+        [HttpGet]      
+        public IActionResult ManageUserEmails()
         {
-            return View("UpateEmailToOrganisation");
+            return View("ManageUserEmails");
+        }
+
+        //This Method will create an email in the users account
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> addEmail(AddEmailViewModel model)
+        {
+            var user = await GetCurrentUserAsync();
+            UserEmailAddresses email = new UserEmailAddresses();
+            email.ApplicationUser = user;
+            email.ApplicationUserId = user.Id;
+            email.EmailType = model.emailTypes;
+            email.emailAddress = model.email;
+            _emailProvider.createEmailForUser(email);
+            return ManageUserEmails();
+
         }
 
         [HttpGet]
@@ -626,7 +644,6 @@ namespace IdentityRight.Controllers
             //Get the current user
             var user = await GetCurrentUserAsync();
             //Get current user address
-            //UserAddresses userAddress = _addressProvider.getAddressByLocation(user, item.location.Id);
             //Create a country object from the form the user has submitted. Region id will be set to 1 for now.
             Countries country = new Countries { countryName = item.countryName, RegionsId = 1 };
             //Check if the country exists
