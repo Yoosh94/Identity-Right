@@ -510,9 +510,11 @@ namespace IdentityRight.Controllers
         [HttpGet]
         public IActionResult ManageUserEmails(ManageMessageId? message = null)
         {
-            ViewData["StatusMessage"] =
+            ViewData["StatusMessageSuccess"] =
                 message == ManageMessageId.AddEmailSuccess ? "Email has been successfully added."
-                : message == ManageMessageId.AddEmailFail ? "Error: Email was not added."
+                : "";
+            ViewData["StatusMessageFail"] =
+                 message == ManageMessageId.AddEmailFail ? "Email was not added. Email already exists."
                 : "";
             return View("ManageUserEmails");
         }
@@ -551,9 +553,11 @@ namespace IdentityRight.Controllers
         [HttpGet]
         public IActionResult AddAddress(ManageMessageId? message = null)
         {
-            ViewData["StatusMessage"] =
+            ViewData["StatusMessageSuccess"] =
                   message == ManageMessageId.AddAddressSuccess ? "Your address has been successfully added."
-                : message == ManageMessageId.AddAddressFail ? "Address already exists."
+                : "";
+            ViewData["StatusMessageFail"] =
+                message == ManageMessageId.AddAddressFail ? "Address already exists."
                 : "";
             return View("ManageAddressView");
         }
