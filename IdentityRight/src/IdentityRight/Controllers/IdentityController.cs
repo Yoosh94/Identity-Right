@@ -203,8 +203,8 @@ namespace IdentityRight.Controllers
         }
 
 
-        //
-        // POST: /Manage/EnableTwoFactorAuthentication
+        
+        // POST: /Identity/EnableTwoFactorAuthentication
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EnableTwoFactorAuthentication()
@@ -212,15 +212,25 @@ namespace IdentityRight.Controllers
             var user = await GetCurrentUserAsync();
             if (user != null)
             {
-                await _userManager.SetTwoFactorEnabledAsync(user, true);
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                _logger.LogInformation(1, "User enabled two-factor authentication.");
+                //If the user has already confirmed a phone number enable two factor authentication.
+                if (user.PhoneNumberConfirmed)
+                {
+                    await _userManager.SetTwoFactorEnabledAsync(user, true);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    _logger.LogInformation(1, "User enabled two-factor authentication.");
+                }
+                //If they have not got a phone number, redirect them to the addPhoneNumber page.
+                else
+                {
+                    return RedirectToAction(nameof(AddPhoneNumber), "Identity");
+                }
+
             }
             return RedirectToAction(nameof(Index), "Identity");
         }
 
         //
-        // POST: /Manage/DisableTwoFactorAuthentication
+        // POST: /Identity/DisableTwoFactorAuthentication
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DisableTwoFactorAuthentication()
@@ -236,7 +246,7 @@ namespace IdentityRight.Controllers
         }
 
         //
-        // GET: /Manage/VerifyPhoneNumber
+        // GET: /Identity/VerifyPhoneNumber
         [HttpGet]
         public async Task<IActionResult> VerifyPhoneNumber(string phoneNumber)
         {
@@ -283,6 +293,8 @@ namespace IdentityRight.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
+                    //Remove two factor authentication for the account if the phone number is removed on the account
+                    await _userManager.SetTwoFactorEnabledAsync(user, false);
                     return RedirectToAction(nameof(Index), new { Message = ManageMessageId.RemovePhoneSuccess });
                 }
             }
