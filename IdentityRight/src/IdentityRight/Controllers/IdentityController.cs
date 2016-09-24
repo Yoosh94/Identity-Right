@@ -95,6 +95,70 @@ namespace IdentityRight.Controllers
             return View();
         }
 
+        public async Task<IActionResult> UpdatePhoneNumber()
+        {
+
+            var user = await GetCurrentUserAsync();
+            string uPhNum = user.PhoneNumber;
+
+            AddPhoneNumberViewModel aphVM = new AddPhoneNumberViewModel();
+
+            aphVM.PhoneNumber = uPhNum;
+
+            ApplicationDbContext adc = new ApplicationDbContext();
+
+            IQueryable<UserPhoneNumbers> usersNumbers = from q in adc.UsersPhoneNumbers
+                                                        where q.ApplicationUserId == user.Id
+                                                        select q;
+
+
+            /*        Mobile,
+        Home,
+        Work,
+        Business*/
+            if (usersNumbers != null)
+            {
+                //2
+                IQueryable<UserPhoneNumbers> wNums = from q in usersNumbers
+                                                     where q.PhoneNumberType.Equals(PhoneNumberTypes.Work)
+                                                     select q;
+
+                List<UserPhoneNumbers> wNumsList = wNums.ToList();
+
+                aphVM.WorkNumbers = wNumsList;
+
+                //1
+                IQueryable<UserPhoneNumbers> hNums = from q in usersNumbers
+                                                     where q.PhoneNumberType.Equals(PhoneNumberTypes.Home)
+                                                     select q;
+
+                List<UserPhoneNumbers> hNumsList = hNums.ToList();
+
+                aphVM.HomeNumbers = hNumsList;
+
+                //0
+                IQueryable<UserPhoneNumbers> mNums = from q in usersNumbers
+                                                     where q.PhoneNumberType.Equals(PhoneNumberTypes.Mobile)
+                                                     select q;
+
+                List<UserPhoneNumbers> mNumsList = mNums.ToList();
+
+
+                aphVM.MobileNumbers = mNumsList;
+
+                //3
+                IQueryable<UserPhoneNumbers> bNums = from q in usersNumbers
+                                                     where q.PhoneNumberType.Equals(PhoneNumberTypes.Business)
+                                                     select q;
+
+                List<UserPhoneNumbers> bNumsList = bNums.ToList();
+
+                aphVM.BusinessNumbers = bNumsList;
+            }
+
+            return View(aphVM);
+        }
+
         //
         // POST: /Manage/AddPhoneNumber
         [HttpPost]
@@ -105,12 +169,39 @@ namespace IdentityRight.Controllers
             {
                 return View(model);
             }
+
             // Generate the token and send it
             var user = await GetCurrentUserAsync();
             var code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, model.PhoneNumber);
             await _smsSender.SendSmsAsync(model.PhoneNumber, "Your security code is: " + code);
             return RedirectToAction(nameof(VerifyPhoneNumber), new { PhoneNumber = model.PhoneNumber });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddOtherPhoneNumber(AddPhoneNumberViewModel model)
+        {
+
+            // Generate the token and send it
+            var user = await GetCurrentUserAsync();
+
+            ApplicationDbContext adc = new ApplicationDbContext();
+
+            //Create new user phone number link
+            UserPhoneNumbers upn = new UserPhoneNumbers();
+
+            upn.ApplicationUserId = user.Id;
+            upn.PhoneNumberType = model.NumberType;
+            upn.PhoneNumber = model.PhoneNumber;
+
+            adc.Add(upn);
+            adc.SaveChanges();
+
+
+            return RedirectToAction(nameof(UpdatePhoneNumber));
+            //return View("UpdatePhoneNumber");
+        }
+
 
         //
         // POST: /Manage/EnableTwoFactorAuthentication
@@ -355,6 +446,43 @@ namespace IdentityRight.Controllers
             return View("UpdatePhoneToOrganisation");
         }
 
+        public ActionResult NewNumberInput(string type, int typeIndex)
+        {
+            AddPhoneNumberViewModel apvm = new AddPhoneNumberViewModel();
+
+            apvm.NumberTypeString = type;
+
+            Models.PhoneNumberTypes typeEnum = default(PhoneNumberTypes);
+
+            /*        Mobile,
+                        Home,
+                        Work,
+                        Business
+            */
+            switch (typeIndex)
+            {
+
+                case 0:
+                    typeEnum = PhoneNumberTypes.Mobile;
+                    break;
+
+                case 1:
+                    typeEnum = PhoneNumberTypes.Home;
+                    break;
+
+                case 2:
+                    typeEnum = PhoneNumberTypes.Work;
+                    break;
+
+                case 3:
+                    typeEnum = PhoneNumberTypes.Business;
+                    break;
+            }
+
+            apvm.NumberType = typeEnum;
+
+            return PartialView("NewNumberInput", apvm);
+        }
         //This method will open the search org page
         // GET: /Identity/UpdatePhone
         [HttpGet]
@@ -648,7 +776,7 @@ namespace IdentityRight.Controllers
                                                   select q;
                                                   */
 
-                IEnumerable<long> removedFromDB = from q in linkedIDs
+            IEnumerable<long> removedFromDB = from q in linkedIDs
                                                   where !ovm.ReturnedIDs.Contains(q)
                                                   select q;
 

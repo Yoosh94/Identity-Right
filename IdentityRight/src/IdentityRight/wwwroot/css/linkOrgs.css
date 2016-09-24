@@ -22,12 +22,12 @@ h3{
 
 #leftSelect{
     min-width: 100%;
-    min-height: 1000px;
+    min-height: 80%;
 }
 
 #rightSelect{
     min-width: 100%;
-    min-height:1000px;
+    min-height: 80%;
 }
 
 .orgsOption{
@@ -38,6 +38,11 @@ h3{
 #leftSelect option{
     padding: 1%;
 }
+
+select{
+    color: black !important;
+}
+
 
 #buttonsDiv{
     margin-left:37%;
@@ -51,4 +56,6 @@ h3{
     font-size: 1vw;
     margin:1%;
     font-weight:bolder;
+
+    color: black;
 }
