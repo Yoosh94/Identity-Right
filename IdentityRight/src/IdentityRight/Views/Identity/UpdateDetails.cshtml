@@ -1,4 +1,4 @@
-﻿@model IdentityRight.ViewModels.UpdateDetails.UpdateAddressViewModel
+﻿
 @{
     ViewData["Title"] = "Update your current details";
 }
@@ -7,8 +7,8 @@
 @{
     if (ViewBag.EditType == "address")
     {
-
-        <div class="row">
+        @model IdentityRight.ViewModels.UpdateDetails.UpdateAddressViewModel
+            <div class="row">
             <div>
                 <form asp-controller="Identity" asp-action="updateAddress" method="post">
                     <div class="form-horizontal">
@@ -48,7 +48,7 @@
                             <label asp-for="@Model.location.unitNumber" class="col-md-2 control-label"></label>
                             <div class="col-md-10">
                                 @*@Html.TextBox("unitNumber", Model.location.unitNumber, new { @class = "form-control", disabled = "true" })*@
-                                @Html.TextBoxFor(x => x.location.unitNumber, new { @class = "form-control", disabled = "true", @id= "unitNumber" })
+                                @Html.TextBoxFor(x => x.location.unitNumber, new { @class = "form-control", disabled = "true", @id = "unitNumber" })
                                 <span asp-validation-for="@Model.location.unitNumber" class="text-danger" />
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                             <label asp-for="@Model.location.streetNumber" class="col-md-2 control-label"></label>
                             <div class="col-md-10">
                                 @*@Html.TextBox("streetNumber", Model.location.streetNumber, new { @class = "form-control", disabled = "true" })*@
-                                @Html.TextBoxFor(x => x.location.streetNumber, new { @class = "form-control", disabled = "true",@id="streetNumber" })
+                                @Html.TextBoxFor(x => x.location.streetNumber, new { @class = "form-control", disabled = "true", @id = "streetNumber" })
                                 <span asp-validation-for="@Model.location.streetNumber" class="text-danger" />
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                             <label asp-for="@Model.location.suburb" class="col-md-2 control-label"></label>
                             <div class="col-md-10">
                                 @*@Html.TextBox("suburb", Model.location.suburb, new { @class = "form-control", disabled = "true" })*@
-                                @Html.TextBoxFor(x => x.location.suburb, new { @class = "form-control", disabled = "true",@id="suburb" })
+                                @Html.TextBoxFor(x => x.location.suburb, new { @class = "form-control", disabled = "true", @id = "suburb" })
                                 <span asp-validation-for="@Model.location.suburb" class="text-danger" />
                             </div>
                         </div>
@@ -80,7 +80,7 @@
                             <label asp-for="@Model.location.postcode" class="col-md-2 control-label"></label>
                             <div class="col-md-10">
                                 @*@Html.TextBox("postcode",null, new { @class = "form-control", disabled = "true" })*@
-                                @Html.TextBoxFor(x => x.location.postcode, new { @class = "form-control", disabled = "true", @id="postcode" })
+                                @Html.TextBoxFor(x => x.location.postcode, new { @class = "form-control", disabled = "true", @id = "postcode" })
                                 <span asp-validation-for="@Model.location.postcode" class="text-danger" />
                             </div>
                         </div>
@@ -116,5 +116,6 @@
 
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvN49EG4_gYq0AiYPl0B5-ZfXcg40qb6U&libraries=places" asp-append-version="true"></script>
         <script src="~/js/mapsAPI.js" asp-append-version="true"></script>
+        }
+
     }
-}

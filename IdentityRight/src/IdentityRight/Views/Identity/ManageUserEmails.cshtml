@@ -15,9 +15,10 @@
 
 <div class="row">
     <div>
-        <form asp-controller="Identity" asp-action="addEmail" method="post">
+        <h4 data-toggle="collapse" data-target="#addEmailForm">Add a new address</h4>
+        <form asp-controller="Identity" asp-action="addEmail" method="post" id="addEmailForm">
             <div class="form-horizontal">
-                <h4>Add a new address</h4>
+                
                 <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="emailTypes" class="col-md-2 control-label"></label>

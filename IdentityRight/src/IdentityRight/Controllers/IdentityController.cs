@@ -552,6 +552,15 @@ namespace IdentityRight.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> updateEmailAddress(UserEmailAddresses email)
+        {
+            var user = await GetCurrentUserAsync();
+            email.ApplicationUser = user;  
+            ViewBag.EditType = "Email";
+            return View("UpdateDetails", email); 
+        }
+
+        [HttpGet]
         public IActionResult searchorganisations(string userSearch)
         {
             var result = from c in _dbContext.ApplicationOrganisations
@@ -718,20 +727,20 @@ namespace IdentityRight.Controllers
         //Settings:
         //This method will open the search org page
         // GET: /Identity/UpateEmailToOrganisation
-        [HttpGet]
-        public IActionResult SecondaryEmail()
-        {
-            return View("AddSecondaryEmail");
-        }
+        //[HttpGet]
+        //public IActionResult SecondaryEmail()
+        //{
+        //    return View("AddSecondaryEmail");
+        //}
 
-        //Joint Account:
-        //This method will open the search org page
-        // GET: /Identity/UpateEmailToOrganisation
-        [HttpGet]
-        public IActionResult JointAcc()
-        {
-            return View("AddJointAccount");
-        }
+        ////Joint Account:
+        ////This method will open the search org page
+        //// GET: /Identity/UpateEmailToOrganisation
+        //[HttpGet]
+        //public IActionResult JointAcc()
+        //{
+        //    return View("AddJointAccount");
+        //}
 
         #region Helpers
 
