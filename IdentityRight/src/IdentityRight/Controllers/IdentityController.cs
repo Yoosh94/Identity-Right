@@ -25,6 +25,7 @@ namespace IdentityRight.Controllers
         private readonly ILogger _logger;
         private readonly ApplicationDbContext _dbContext;
         private readonly AddressProvider _addressProvider;
+        private readonly EmailProvider _emailProvider;
 
         public IdentityController(
         UserManager<ApplicationUser> userManager,
@@ -40,6 +41,7 @@ namespace IdentityRight.Controllers
             _logger = loggerFactory.CreateLogger<IdentityController>();
             _dbContext = new ApplicationDbContext();
             _addressProvider = new AddressProvider();
+            _emailProvider = new EmailProvider();
         }
 
         //
@@ -203,7 +205,7 @@ namespace IdentityRight.Controllers
         }
 
 
-        
+
         // POST: /Identity/EnableTwoFactorAuthentication
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -497,18 +499,56 @@ namespace IdentityRight.Controllers
         }
         //This method will open the search org page
         // GET: /Identity/UpdatePhone
-        [HttpGet]
-        public IActionResult UpdateHomePhoneNo()
-        {
-            return View("UpateHomePhoneToOrganisation");
-        }
+        //[HttpGet]
+        //public IActionResult UpdateHomePhoneNo()
+        //{
+        //    return View("UpateHomePhoneToOrganisation");
+        //}
 
         //This method will open the search org page
-        // GET: /Identity/UpateEmailToOrganisation
+        // GET: /Identity/ManageUserEmails
         [HttpGet]
-        public IActionResult UpateEmailToOrg()
+        public IActionResult ManageUserEmails(ManageMessageId? message = null)
         {
-            return View("UpateEmailToOrganisation");
+            ViewData["StatusMessageSuccess"] =
+                message == ManageMessageId.AddEmailSuccess ? "Email has been successfully added."
+                : message == ManageMessageId.DeleteEmailSuccessful ? "Email has been delete successfully."
+                : "";
+            ViewData["StatusMessageFail"] =
+                 message == ManageMessageId.AddEmailFail ? "Email was not added. Email already exists."
+                 :message == ManageMessageId.DeleteEmailFail ? "Email was not deleted."
+                : "";
+            return View("ManageUserEmails");
+        }
+
+        //This Method will create an email in the users account
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> addEmail(AddEmailViewModel model)
+        {
+            var user = await GetCurrentUserAsync();
+            UserEmailAddresses email = new UserEmailAddresses();
+            email.ApplicationUser = user;
+            email.ApplicationUserId = user.Id;
+            email.EmailType = model.emailTypes;
+            email.emailAddress = model.email;
+            var success = _emailProvider.createEmailForUser(email);
+            if (success)
+            {
+                return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.AddEmailSuccess });
+            }
+            return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.AddEmailFail });
+        }
+
+        [HttpGet]
+        public IActionResult deleteEmailAddress(UserEmailAddresses email)
+        {
+            var success = _emailProvider.deleteEmailAddress(email);
+            if (success)
+            {
+                return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.DeleteEmailSuccessful });
+            }
+            return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.DeleteEmailFail });
         }
 
         [HttpGet]
@@ -525,9 +565,11 @@ namespace IdentityRight.Controllers
         [HttpGet]
         public IActionResult AddAddress(ManageMessageId? message = null)
         {
-            ViewData["StatusMessage"] =
+            ViewData["StatusMessageSuccess"] =
                   message == ManageMessageId.AddAddressSuccess ? "Your address has been successfully added."
-                : message == ManageMessageId.AddAddressFail ? "Address already exists."
+                : "";
+            ViewData["StatusMessageFail"] =
+                message == ManageMessageId.AddAddressFail ? "Address already exists."
                 : "";
             return View("ManageAddressView");
         }
@@ -616,7 +658,7 @@ namespace IdentityRight.Controllers
             var user = await GetCurrentUserAsync();
             UserAddresses userAddress = _addressProvider.getAddressByLocation(user, loc.Id);
             ViewBag.EditType = "address";
-            return View("UpdateDetails", new UpdateAddressViewModel { location = loc, userAddress = userAddress, countryName = _addressProvider.getCountryById(loc.CountriesId).countryName,userAddressID = userAddress.Id });
+            return View("UpdateDetails", new UpdateAddressViewModel { location = loc, userAddress = userAddress, countryName = _addressProvider.getCountryById(loc.CountriesId).countryName, userAddressID = userAddress.Id });
         }
 
         [HttpPost]
@@ -626,7 +668,6 @@ namespace IdentityRight.Controllers
             //Get the current user
             var user = await GetCurrentUserAsync();
             //Get current user address
-            //UserAddresses userAddress = _addressProvider.getAddressByLocation(user, item.location.Id);
             //Create a country object from the form the user has submitted. Region id will be set to 1 for now.
             Countries country = new Countries { countryName = item.countryName, RegionsId = 1 };
             //Check if the country exists
@@ -668,7 +709,7 @@ namespace IdentityRight.Controllers
             //Get current user
             var user = await GetCurrentUserAsync();
             //Get the address of the current user address
-            var userAddress = _addressProvider.getAddressByLocation(user,location.Id);
+            var userAddress = _addressProvider.getAddressByLocation(user, location.Id);
             //Delete user address
             _addressProvider.deleteUserAddressById(userAddress.Id);
             return RedirectToAction("ManageAddresses");
@@ -713,7 +754,11 @@ namespace IdentityRight.Controllers
             RemovePhoneSuccess,
             Error,
             AddAddressSuccess,
-            AddAddressFail
+            AddAddressFail,
+            AddEmailSuccess,
+            AddEmailFail,
+            DeleteEmailSuccessful,
+            DeleteEmailFail
         }
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
@@ -788,7 +833,7 @@ namespace IdentityRight.Controllers
                                                   select q;
                                                   */
 
-            IEnumerable<long> removedFromDB = from q in linkedIDs
+                IEnumerable<long> removedFromDB = from q in linkedIDs
                                                   where !ovm.ReturnedIDs.Contains(q)
                                                   select q;
 

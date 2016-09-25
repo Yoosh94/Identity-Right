@@ -1,0 +1,36 @@
+﻿@model DisplayEmailAddressViewModel
+
+<h3>Here are your current Email Addresses</h3>
+<table class="table">
+    <tr>
+        <th>
+            Type
+        </th>
+        <th>
+           Email Address
+        </th>
+    </tr>
+    <tr>
+        <td>Primary</td>
+        <td>@Model.emailAddresses.First().ApplicationUser.Email</td>
+        <td></td>
+    </tr>
+    @foreach (var email in Model.emailAddresses)
+    {
+        <tr>
+            <td>
+                @email.EmailType
+            </td>
+            <td>
+                @email.emailAddress
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "updateAddress", "Identity", email) |
+                @Html.ActionLink("Delete", "deleteEmailAddress", email) |
+                @Html.ActionLink("Manage links to Organisation", "manageOrglinks", email)
+            </td>
+        </tr>
+    }
+
+    
+</table>
