@@ -53,7 +53,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  opacity: .6;
+  opacity: .9;
 }
 
 .register-body{
@@ -74,7 +74,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  opacity: .6;
+  opacity: .9;
 }
 .home-body-image{
          background: url('/images/lounch.jpg') no-repeat center center fixed; 
@@ -94,5 +94,27 @@
   position: fixed;
   top: 0;
   left: 0;
-  opacity: .7;
+  opacity: .9;
+}
+.testimonials{
+    background-color: grey;
+    opacity: .9;
+    color:white;
+    margin: 0 20px;
+    height: 300px;
+    max-height:300px;
+}
+.security-home{
+    margin-top:80px;
+    background-color:white;
+    height:100%;
+    overflow:hidden;
+    color:black;
+    opacity:.9;
+}
+.footer-style{
+    background-color:#18bc9c;
+    opacity:.8;
+    color:white;
+    height:100%
 }
