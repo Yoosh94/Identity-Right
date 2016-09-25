@@ -39,12 +39,14 @@
 @if (User.IsSignedIn())//User signed in function
 {
                     //If user is logged in redirect to Identity/Index
-                    <a asp-controller="Identity" asp-action="Index" class="navbar-brand"><img src="~/images/IR_logo_white.png" width="120" height="35" /></a>
+                    @*<a asp-controller="Identity" asp-action="Index" class="navbar-brand"><img src="~/images/IR_logo_white.png" width="120" height="35" /></a>*@
+                    <a asp-controller="Identity" asp-action="Index" class="navbar-brand">Identity Right</a>
 }
 else
 {
     //If user is not logged in redirect to Home/Index//
-                    <a asp-controller="Home" asp-action="Index" class="navbar-brand"><img src="~/images/IR_logo_white.png" width="120" height="35" /></a>
+                    @*<a asp-controller="Home" asp-action="Index" class="navbar-brand"><img src="~/images/IR_logo_white.png" width="120" height="35" /></a>*@
+                    <a asp-controller="Identity" asp-action="Index" class="navbar-brand">Identity Right</a>
 }              
                 </div>
                 <div class="navbar-collapse collapse">
