@@ -2,72 +2,11 @@
     ViewData["Title"] = "Home Page";
 }
 }
+<!--
+    
+-->
 <div class="home-body-image"></div>
-    <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="9000" style="margin-top: -21px;">
-        <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
-            <li data-target="#myCarousel" data-slide-to="3"></li>
-        </ol>
-        <div class="carousel-inner" role="listbox">
-            <div class="item active">
-                <img src="~/images/banner1.png" alt="Identity right" class="img-responsive" style="width:100%;height:300px" />
-                <div class="carousel-caption">
-                    <p>
-                        <!--Learn how to update your address to organisations.-->
-                        <a class="btn btn-default btn-default" href="#">
-                            Learn More
-                        </a>
-                    </p>
-                </div>
-            </div>
-            <div class="item">
-                <img src="~/images/banner2.png" alt="Moving In" class="img-responsive" style="width:100%;height:300px" />
-                <div class="carousel-caption">
-                    <p>
-                        <!--Learn how important to update an address.-->
-                        <a class="btn btn-default btn-default" href="#">
-                            Learn More
-                        </a>
-                    </p>
-                </div>
-            </div>
-            @*
 
-                <div class="item">
-                     <img src="~/images/IdenityRight3.png" alt="Moving out" class="img-responsive" style="width:100%;height:250px"/>
-                     <div class="carousel-caption">
-                         <p>
-                             Learn to which organisation you can update your address with.
-                             <a class="btn btn-default btn-default" href="#">
-                                 Learn More
-                             </a>
-                         </p>
-                     </div>
-                        </div>*@
-
-            <div class="item">
-                <img src="~/images/banner3.png" alt="Update Address" class="img-responsive" style="width:100%; height:300px" />
-                <div class="carousel-caption">
-                    <p>
-                        <!--Learn the importance of your identity information-->
-                        <a class="btn btn-default btn-default" href="#">
-                            Learn More
-                        </a>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-    </div>
 
 <div class="container">
 
@@ -83,10 +22,8 @@
                 </h2>
             </div>
         </div>
-        <div class="row" style="background-image: linear-gradient(
-            rgba(0, 0, 0, 0.7),
-            rgba(0, 0, 0, 0.7)
-            ), url(/images/skyline.PNG); background-position: center;
+        <div class="row" style="background-color: black;
+            opacity: .7;background-position: center;
             background-size: cover;
             background-repeat: no-repeat;background-attachment: fixed; justify-content:center;">
             <!-- <div class="col-md-3">
@@ -111,7 +48,7 @@
 
                 <h2>Advantages of having your address managed by us.</h2>
                 <p>
-                    <ul style="text-align:justify;margin-left:200px">
+                    <ul style="text-align:justify;list-style: url;">
                         <li>
                             Reduces stress during moving houses.
                         </li>
@@ -136,22 +73,28 @@
         </div>
     }
     <div class="row">
-        <h2>Testimonials</h2>
-        <div class="col-md-3">
-            "It is good to have an online website to update my address to organisation I subscribed in the past."
+        <div class="col-md-12">
+            <div class="testimonials-home">
+                <h2>Testimonials</h2>
+                <div class="col-md-3 testimonials">
+                    "It is good to have an online website to update my address to organisation I subscribed in the past."
+                </div>
+                <div class="col-md-2 testimonials">
+                    "Australia post is Australia's current tool to update addres but I highly recommend Identityright website
+                    to update your address with Vicroad, Centrelink and etc quickly."
+                </div>
+                <div class="col-md-2 testimonials">
+                    "Everytime our family had to move to a different place we had to update our address to so many companies and
+                    that is very time consuming and frustrating. IdenityRight is the only website you need to update your address online without worrying about your identity.""
+                </div>
+                <div class="col-md-3 testimonials">
+                    "I am busy single parent and I had to move last year and needed to update my address.
+                    For me I have no time to do all those updates. IdentityRight is the quick and easy to use to update my address.""
+                </div>
+            </div>
         </div>
-        <div class="col-md-3">
-            "Australia post is Australia's current tool to update addres but I highly recommend Identityright website
-            to update your address with Vicroad, Centrelink and etc quickly."
-        </div>
-        <div class="col-md-3">
-            "Everytime our family had to move to a different place we had to update our address to so many companies and
-            that is very time consuming and frustrating. IdenityRight is the only website you need to update your address online without worrying about your identity.""
-        </div>
-        <div class="col-md-3">
-            "I am busy single parent and I had to move last year and needed to update my address.
-            For me I have no time to do all those updates. IdentityRight is the quick and easy to use to update my address.""
-        </div>
+      
+ 
     </div>
     <!--<div class="row">
         <h2>Organisations</h2>
@@ -166,40 +109,41 @@
         <img src="~/images/colorful.jpg" height="200" width="200" />
         <img src="~/images/colorful.jpg" height="200" width="200" />
     </div>-->
+</div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <h2>Worried about security?</h2>
-            <p>
-                <ol>
-                    <li>
-                        Once registered create a strong password that only you know. Avoid using same password for everything.
-                    </li>
-                    <li>
-                        Sign up for two factor authentication. Instructions can be found once you have logged in.
-                    </li>
-                    <li>
-                        Ensure you keep your details updated at all time.
-                    </li>
-                    <li>
-                        We will never ask you for your bank details, so do not provide us with any sensitive data
-                    </li>
-                    <li>
-                        All of your data is encrypted in our server so even we cannot see it.
-                    </li>
-                </ol>
-            </p>
-
+<div class="row">
+    <div class="col-md-12">
+        <div class="security-home">
+            <div class="container">
+                <h2>Worried about security?</h2>
+                <p>
+                    <ol>
+                        <li>
+                            Once registered create a strong password that only you know. Avoid using same password for everything.
+                        </li>
+                        <li>
+                            Sign up for two factor authentication. Instructions can be found once you have logged in.
+                        </li>
+                        <li>
+                            Ensure you keep your details updated at all time.
+                        </li>
+                        <li>
+                            We will never ask you for your bank details, so do not provide us with any sensitive data
+                        </li>
+                        <li>
+                            All of your data is encrypted in our server so even we cannot see it.
+                        </li>
+                    </ol>
+                </p>
+                <div class="col-md-12 col-md-offset-0">
+                    <div class="form-group">
+                        <h2>What are your thoughts about protecting identity right</h2>
+                        <textarea class="comment-web form-control"></textarea>
+                        <button class="btn btn-primary">Post</button>
+                    </div>
+                  
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<div class="container">
-    <div class="row">
-        <div class="col-md-4 col-md-offset-0">
-            <h2>What are your thoughts about protecting identity right</h2>
-            <textarea class="comment-web form-control"></textarea>
-            <button class="btn btn-primary">Post</button>
-        </div>
-        
-        </div>
 </div>
