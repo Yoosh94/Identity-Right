@@ -25,6 +25,7 @@ namespace IdentityRight.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly AuthEmail _authEmail;
+        private readonly EmailProvider _emailProvider;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -40,6 +41,7 @@ namespace IdentityRight.Controllers
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
             _authEmail = new AuthEmail();
+            _emailProvider = new EmailProvider();
         }
 
         //
@@ -289,7 +291,19 @@ namespace IdentityRight.Controllers
             }
             
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+            //If the token was correct add the email to the Email list aswell.
+            bool emailCreated = false;
+            if (result.Succeeded)
+            {
+                UserEmailAddresses email = new UserEmailAddresses();
+                email.ApplicationUser = user;
+                email.ApplicationUserId = user.Id;
+                email.Confirmed = true;
+                email.emailAddress = user.UserName;
+                email.EmailType = EmailTypes.Primary;
+                emailCreated = _emailProvider.createEmailForUser(email);
+            }
+            return View((result.Succeeded && emailCreated) ? "ConfirmEmail" : "Error");
         }
 
         //
