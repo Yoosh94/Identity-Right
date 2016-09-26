@@ -11,5 +11,6 @@ namespace IdentityRight.Models
         //Foreign Key
         public ApplicationUser ApplicationUser { get; set; }
         public string ApplicationUserId { get; set; }
+        public bool Confirmed { get; set; }
     }
 }

@@ -33,6 +33,34 @@ namespace IdentityRight.Services
             }
             return false;
         }
+
+        /// <summary>
+        /// This method will set the specified email to confirmed = true status
+        /// </summary>
+        /// <param name="user">Application User object</param>
+        /// <param name="email">email address to confirm as a string</param>
+        /// <returns>Boolean if email was confirmed</returns>
+        public bool ConfirmEmail(ApplicationUser user, string email)
+        {
+            bool exist = doesEmailAlreadyExist(user,email);
+            if (exist)
+            {
+                var emailObject = getEmailAddress(user, email);
+                //Ensure that an object was returned so we can update it.
+                if(emailObject != null)
+                {
+                    _dbContext.UserEmailAddress.Update(emailObject);
+                    emailObject.Confirmed = true;
+                    _dbContext.SaveChanges();
+                    //Sucessfully confirmed email
+                    return true;
+                }
+                //Email not successfully updated
+                return false;
+            }
+            //Email does not exist.
+            return false;
+        }
         #endregion
 
         #region Read Email Operations
@@ -64,6 +92,41 @@ namespace IdentityRight.Services
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Check if an email for the user already exists.
+        /// </summary>
+        /// <param name="user">Application User object</param>
+        /// <param name="emailAddress">email address as a string</param>
+        /// <returns>Boolean if email already exists for the user</returns>
+        public bool doesEmailAlreadyExist(ApplicationUser user, string emailAddress)
+        {
+            var emails = _dbContext.UserEmailAddress.Where(x => x.ApplicationUserId == user.Id).Where(z => z.emailAddress == emailAddress).ToList();
+            if(emails.Count == 0)
+            {
+                //No email address for that user with that email exists
+                return false;
+            }
+            //Email address does exist.
+            return true;
+        }
+
+        /// <summary>
+        /// Get the UserEmailAddress object for a particular user
+        /// </summary>
+        /// <param name="user">ApplicationUser object</param>
+        /// <param name="emailAddress">email address to find as a string</param>
+        /// <returns>UserEmailAddress object</returns>
+        public UserEmailAddresses getEmailAddress(ApplicationUser user, string emailAddress)
+        {
+            var emails = _dbContext.UserEmailAddress.Where(x => x.ApplicationUserId == user.Id).Where(z => z.emailAddress == emailAddress).ToList();
+            //There should only be one email in the list since we cannot have duplicate emails.
+            if (emails.Count == 1)
+            {
+                return emails.First();
+            }
+            return null;
         }
         #endregion
 
