@@ -270,6 +270,7 @@ namespace IdentityRight.Controllers
             return View(model);
         }
 
+        //This Method is run when a user registers a new account and clicks the link sent in the email.
         // GET: /Account/ConfirmEmail
         [HttpGet]
         [AllowAnonymous]
@@ -315,7 +316,7 @@ namespace IdentityRight.Controllers
             return View();
         }
 
-        //
+        
         // POST: /Account/ForgotPassword
         [HttpPost]
         [AllowAnonymous]
