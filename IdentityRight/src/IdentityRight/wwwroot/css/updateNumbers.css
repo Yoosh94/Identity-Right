@@ -2,6 +2,7 @@
 }
 
 
+
 #allNumbers ul{
     list-style: none;
 
@@ -10,4 +11,8 @@
 #allNumbers li{
     margin: 1%;
 
+}
+
+.phoneLabel{
+    cursor: pointer;
 }
