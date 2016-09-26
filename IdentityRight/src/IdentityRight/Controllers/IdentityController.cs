@@ -26,6 +26,7 @@ namespace IdentityRight.Controllers
         private readonly ApplicationDbContext _dbContext;
         private readonly AddressProvider _addressProvider;
         private readonly EmailProvider _emailProvider;
+        private readonly AuthEmail _authEmail;
 
         public IdentityController(
         UserManager<ApplicationUser> userManager,
@@ -42,6 +43,7 @@ namespace IdentityRight.Controllers
             _dbContext = new ApplicationDbContext();
             _addressProvider = new AddressProvider();
             _emailProvider = new EmailProvider();
+            _authEmail = new AuthEmail();
         }
 
         //
@@ -512,6 +514,7 @@ namespace IdentityRight.Controllers
         {
             ViewData["StatusMessageSuccess"] =
                 message == ManageMessageId.AddEmailSuccess ? "Email has been successfully added."
+                : message == ManageMessageId.AddEmailSuccessVerify ? "Please check your email to verify."
                 : message == ManageMessageId.DeleteEmailSuccessful ? "Email has been delete successfully."
                 : "";
             ViewData["StatusMessageFail"] =
@@ -532,10 +535,50 @@ namespace IdentityRight.Controllers
             email.ApplicationUserId = user.Id;
             email.EmailType = model.emailTypes;
             email.emailAddress = model.email;
+            email.Confirmed = false;
             var success = _emailProvider.createEmailForUser(email);
             if (success)
             {
-                return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.AddEmailSuccess });
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                //Add the email address to the end of the token. When the token is returned we will know for which email.
+                code = code + "./" +  model.email;
+                var callbackUrl = Url.Action("ConfirmAddEmail", "Identity", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                //This method will send an email from identityright@gmail.com to the email the user inputted.
+                await _authEmail.SendEmailAsync(model.email, "Confirm Email", "Please click this <a href=\"" + callbackUrl + "\">link</a> to finish adding this email to your Identity Right Account.");
+                return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.AddEmailSuccessVerify });
+            }
+            return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.AddEmailFail });
+        }
+
+        // GET: /Account/ConfirmEmail
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmAddEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return View("Error");
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return View("Error");
+            }
+            //find the Index of "./". This substring was choosen because it will no exist in the email or the token.
+            int indexOfSubstring = code.LastIndexOf("./");
+            string emailToConfirm = code.Substring(indexOfSubstring+2);
+            string newCode = code.Remove(indexOfSubstring);
+            var result = await _userManager.ConfirmEmailAsync(user, newCode);
+            //If the token is correct.
+            if (result.Succeeded)
+            {
+                //Confirm Email in database
+                var emailUpdated = _emailProvider.ConfirmEmail(user, emailToConfirm);
+                //If update was successful
+                if (emailUpdated)
+                {
+                    return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.AddEmailSuccess });
+                }             
             }
             return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.AddEmailFail });
         }
@@ -549,15 +592,6 @@ namespace IdentityRight.Controllers
                 return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.DeleteEmailSuccessful });
             }
             return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.DeleteEmailFail });
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> updateEmailAddress(UserEmailAddresses email)
-        {
-            var user = await GetCurrentUserAsync();
-            email.ApplicationUser = user;  
-            ViewBag.EditType = "Email";
-            return View("UpdateDetails", email); 
         }
 
         [HttpGet]
@@ -765,6 +799,7 @@ namespace IdentityRight.Controllers
             AddAddressSuccess,
             AddAddressFail,
             AddEmailSuccess,
+            AddEmailSuccessVerify,
             AddEmailFail,
             DeleteEmailSuccessful,
             DeleteEmailFail
