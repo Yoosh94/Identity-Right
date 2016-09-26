@@ -552,15 +552,6 @@ namespace IdentityRight.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> updateEmailAddress(UserEmailAddresses email)
-        {
-            var user = await GetCurrentUserAsync();
-            email.ApplicationUser = user;  
-            ViewBag.EditType = "Email";
-            return View("UpdateDetails", email); 
-        }
-
-        [HttpGet]
         public IActionResult searchorganisations(string userSearch)
         {
             var result = from c in _dbContext.ApplicationOrganisations
