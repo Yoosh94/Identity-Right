@@ -3,39 +3,40 @@
     ViewData["Title"] = "Update your current details";
 }
 
-<h2>@ViewData["Title"].</h2>
+<!---Update current details form.-->
 @{
     if (ViewBag.EditType == "address")
     {
         @model IdentityRight.ViewModels.UpdateDetails.UpdateAddressViewModel
+        <div class="container">
+            <h2>@ViewData["Title"].</h2>
             <div class="row">
-            <div>
-                <form asp-controller="Identity" asp-action="updateAddress" method="post">
-                    <div class="form-horizontal">
-                        <h4>Update Address</h4>
-                        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
-                        <div class="form-group">
-                            <label asp-for="@Model.userAddress.AddressType" class="col-md-2 control-label"></label>
-                            <div class="col-md-10">
-                                <select asp-for="@Model.userAddress.AddressType" asp-items="Html.GetEnumSelectList<AddressType>()" class="form-control"></select>
-                                <span asp-validation-for="@Model.userAddress.AddressType" class="text-danger" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">Address</label>
-                            <div class="col-md-10">
-                                <input id="address" class="form-control">
-                            </div>
-                        </div>
-                        @*Start and End Date will be added in later versions*@
-
-
-                        @*<div class="form-group">
-                                <label asp-for="startDate" class="col-md-2 control-label"></label>
+                <div>
+                    <form asp-controller="Identity" asp-action="updateAddress" method="post">
+                        <div class="form-horizontal">
+                            <h4>Update Address</h4>
+                            <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="@Model.userAddress.AddressType" class="col-md-2 control-label"></label>
                                 <div class="col-md-10">
-                                    <input asp-for="startDate" class="form-control" />
-                                    <span asp-validation-for="startDate" class="text-danger" />
+                                    <select asp-for="@Model.userAddress.AddressType" asp-items="Html.GetEnumSelectList<AddressType>()" class="form-control"></select>
+                                    <span asp-validation-for="@Model.userAddress.AddressType" class="text-danger" />
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Address</label>
+                                <div class="col-md-10">
+                                    <input id="address" class="form-control">
+                                </div>
+                            </div>
+
+                            @*Start and End Date will be added in later versions*@
+                            @*<div class="form-group">
+                                    <label asp-for="startDate" class="col-md-2 control-label"></label>
+                                    <div class="col-md-10">
+                                        <input asp-for="startDate" class="form-control" />
+                                        <span asp-validation-for="startDate" class="text-danger" />
+                                    </div>
                             </div>
                             <div class="form-group">
                                 <label asp-for="endDate" class="col-md-2 control-label"></label>
@@ -44,78 +45,78 @@
                                     <span asp-validation-for="endDate" class="text-danger" />
                                 </div>
                             </div>*@
-                        <div class="form-group">
-                            <label asp-for="@Model.location.unitNumber" class="col-md-2 control-label"></label>
-                            <div class="col-md-10">
-                                @*@Html.TextBox("unitNumber", Model.location.unitNumber, new { @class = "form-control", disabled = "true" })*@
-                                @Html.TextBoxFor(x => x.location.unitNumber, new { @class = "form-control", disabled = "true", @id = "unitNumber" })
-                                <span asp-validation-for="@Model.location.unitNumber" class="text-danger" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@Model.location.streetNumber" class="col-md-2 control-label"></label>
-                            <div class="col-md-10">
-                                @*@Html.TextBox("streetNumber", Model.location.streetNumber, new { @class = "form-control", disabled = "true" })*@
-                                @Html.TextBoxFor(x => x.location.streetNumber, new { @class = "form-control", disabled = "true", @id = "streetNumber" })
-                                <span asp-validation-for="@Model.location.streetNumber" class="text-danger" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@Model.location.streetName" class="col-md-2 control-label"></label>
-                            <div class="col-md-10">
-                                @*@Html.TextBox("streetName", Model.location.streetName, new { @class = "form-control", disabled = "true" })*@
-                                @Html.TextBoxFor(x => x.location.streetName, new { @class = "form-control", disabled = "true", @id = "streetName" })
-                                <span asp-validation-for="@Model.location.streetName" class="text-danger" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@Model.location.suburb" class="col-md-2 control-label"></label>
-                            <div class="col-md-10">
-                                @*@Html.TextBox("suburb", Model.location.suburb, new { @class = "form-control", disabled = "true" })*@
-                                @Html.TextBoxFor(x => x.location.suburb, new { @class = "form-control", disabled = "true", @id = "suburb" })
-                                <span asp-validation-for="@Model.location.suburb" class="text-danger" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@Model.location.postcode" class="col-md-2 control-label"></label>
-                            <div class="col-md-10">
-                                @*@Html.TextBox("postcode",null, new { @class = "form-control", disabled = "true" })*@
-                                @Html.TextBoxFor(x => x.location.postcode, new { @class = "form-control", disabled = "true", @id = "postcode" })
-                                <span asp-validation-for="@Model.location.postcode" class="text-danger" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@Model.location.state" class="col-md-2 control-label"></label>
-                            <div class="col-md-10">
-                                @*@Html.TextBox("state", Model.location.state, new { @class = "form-control" })*@
-                                @Html.TextBoxFor(x => x.location.state, new { @class = "form-control", disabled = "true", @id = "state" })
-                                <span asp-validation-for="@Model.location.state" class="text-danger" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="@Model.location.Countries.countryName" class="col-md-2 control-label"></label>
-                            <div class="col-md-10">
-                                @Html.TextBox("countryName", null, new { @class = "form-control", disabled = "true" })
-                                <span asp-validation-for="@Model.location.Countries.countryName" class="text-danger" />
-                            </div>
-                        </div>
-                        <div>
-                            <input asp-for="@Model.userAddressID" class="form-control"/>
 
-                        </div>
+                            <div class="form-group">
+                                <label asp-for="@Model.location.unitNumber" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    @*@Html.TextBox("unitNumber", Model.location.unitNumber, new { @class = "form-control", disabled = "true" })*@
+                                    @Html.TextBoxFor(x => x.location.unitNumber, new { @class = "form-control", disabled = "true", @id = "unitNumber" })
+                                    <span asp-validation-for="@Model.location.unitNumber" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="@Model.location.streetNumber" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    @*@Html.TextBox("streetNumber", Model.location.streetNumber, new { @class = "form-control", disabled = "true" })*@
+                                    @Html.TextBoxFor(x => x.location.streetNumber, new { @class = "form-control", disabled = "true", @id = "streetNumber" })
+                                    <span asp-validation-for="@Model.location.streetNumber" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="@Model.location.streetName" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    @*@Html.TextBox("streetName", Model.location.streetName, new { @class = "form-control", disabled = "true" })*@
+                                    @Html.TextBoxFor(x => x.location.streetName, new { @class = "form-control", disabled = "true", @id = "streetName" })
+                                    <span asp-validation-for="@Model.location.streetName" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="@Model.location.suburb" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    @*@Html.TextBox("suburb", Model.location.suburb, new { @class = "form-control", disabled = "true" })*@
+                                    @Html.TextBoxFor(x => x.location.suburb, new { @class = "form-control", disabled = "true", @id = "suburb" })
+                                    <span asp-validation-for="@Model.location.suburb" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="@Model.location.postcode" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    @*@Html.TextBox("postcode",null, new { @class = "form-control", disabled = "true" })*@
+                                    @Html.TextBoxFor(x => x.location.postcode, new { @class = "form-control", disabled = "true", @id = "postcode" })
+                                    <span asp-validation-for="@Model.location.postcode" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="@Model.location.state" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    @*@Html.TextBox("state", Model.location.state, new { @class = "form-control" })*@
+                                    @Html.TextBoxFor(x => x.location.state, new { @class = "form-control", disabled = "true", @id = "state" })
+                                    <span asp-validation-for="@Model.location.state" class="text-danger" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="@Model.location.Countries.countryName" class="col-md-2 control-label"></label>
+                                <div class="col-md-10">
+                                    @Html.TextBox("countryName", null, new { @class = "form-control", disabled = "true" })
+                                    <span asp-validation-for="@Model.location.Countries.countryName" class="text-danger" />
+                                </div>
+                            </div>
+                            <div>
+                                <input asp-for="@Model.userAddressID" class="form-control" />
 
-                        <div class="form-group">
-                            <div class="col-md-offset-2 col-md-10">
-                                <input type="submit" value="Update" class="btn btn-default" />
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Update" class="btn btn-default" />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvN49EG4_gYq0AiYPl0B5-ZfXcg40qb6U&libraries=places" asp-append-version="true"></script>
         <script src="~/js/mapsAPI.js" asp-append-version="true"></script>
         }
-
     }

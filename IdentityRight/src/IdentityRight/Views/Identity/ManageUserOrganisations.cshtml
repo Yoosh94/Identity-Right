@@ -2,42 +2,19 @@
     ViewData["Title"] = "See your connections";
 }
 
-@*<form asp-controller="Identity" asp-action="SearchOrganisation" method="get">
-
-</form>
-<div class="row">
-    <div class="col-md-12">
-        <h3>Search for organisation</h3>
-        <hr />
-        <form>
-            <input /><button>Find</button>
-        </form>
-        <h3>Recommended organisations/companies</h3>
-        <div class="col-md-12">
-            <ul class="org-list">
-                <li><a>Vic Road</a><button>link now</button></li>
-                <li><a>Centrelink</a><button>link now</button></li>
-                <li><a>Electoral</a><button>link now</button></li>
-                <li><a>Momentum</a><button>link now</button></li>
-                <li><a>Virgin Mobile</a><button>link now</button></li>
-                <li><a>Optus</a><button>link now</button></li>
-                <li><a>Telstra</a><button>link now</button></li>
-                <li><a>Raywhite</a><button>link now</button></li>
-            </ul>
-        </div>
-        <hr />
-    </div>
-</div>*@
-
-<div>
+<!--Display all connected organsaitions-->
+<div class="container">
     <div>
-        @*Create new partial view which will display all the addresses rendered to the user*@
-        @await Component.InvokeAsync("DisplayRegisteredOrganisations", User)
+        <div>
+            @*Create new partial view which will display all the addresses rendered to the user*@
+            @await Component.InvokeAsync("DisplayRegisteredOrganisations", User)
+        </div>
+    </div>
+    <div>
+        <text>Recently joined a new organisation? Click <a href="@Url.Action("LinkOrganisations", "Identity")"> here</a> to add them to your profile</text>
     </div>
 </div>
-<div>
-    <text>Recently joined a new organisation? Click <a href="@Url.Action("LinkOrganisations", "Identity")"> here</a> to add them to your profile</text>
-</div>
+
 
 
 
