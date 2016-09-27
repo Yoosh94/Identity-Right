@@ -11,6 +11,7 @@ namespace IdentityRight.Services
     public class AddressProvider : ApplicationDbContext
     {
         private readonly ApplicationDbContext _dbContext;
+        
         //Create instance of database
         public AddressProvider()
         {
