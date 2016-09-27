@@ -31,7 +31,6 @@ namespace IdentityRight.Models
             //options.UseInMemoryDatabase();
             //Uncomment UseSqlServer to run normally.
             options.UseSqlServer(@"Server=tcp:sit302db.database.windows.net,1433;Initial Catalog=IRDB;Persist Security Info=False;User ID=sit302;Password=IdentityRightP@ssword;MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-            
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
