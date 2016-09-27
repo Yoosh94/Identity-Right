@@ -3,16 +3,18 @@
     ViewData["Title"] = "Linked Organisations";
 }
 
-
+<div class="container">
 <h2>@ViewData["Title"].</h2>
 <br />
 <a href="@Url.Action("LinkOrganisations", "Identity")">Add/Remove Links</a>
 <ul>
-@foreach (var item in Model)
-{
-   <li>@Html.DisplayFor(modelItem => item.organisationName)</li>
-}
+    @foreach (var item in Model)
+    {
+        <li>@Html.DisplayFor(modelItem => item.organisationName)</li>
+    }
 </ul>
-@section Scripts {
+@
+</div>
+section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
