@@ -446,7 +446,7 @@ namespace IdentityRight.Controllers
         //    return View("SubscribedOrganisation");
         //}
 
-        //This method will open the page that allows users to manage their 
+        //This method will open the page that allows users to manage their address
         // GET: /Identity/UpdatePostalAddress
         [HttpGet]
         public IActionResult ManageAddresses()
