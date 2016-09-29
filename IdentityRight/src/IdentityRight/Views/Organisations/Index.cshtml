@@ -1,4 +1,5 @@
 ﻿@using IdentityRight.ViewModels.Organisations
+
 @{
     if (Model.GetType() != typeof(OrganisationDetailsViewModel))
     {
@@ -7,7 +8,7 @@
     else
     {
         ViewData["Title"] = "Organisations registered with IdentityRight";
-        <br/>
+        <br />
         await Html.RenderPartialAsync("OrganisationsPartial");
     }
 }
