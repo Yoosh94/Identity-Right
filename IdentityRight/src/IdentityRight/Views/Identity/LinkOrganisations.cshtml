@@ -19,13 +19,13 @@
         </div>
     </form>
     <div id="buttonsDiv">
-        <button id="addOrg">&lt; ADD</button>
-        <button id="removeOrg">REMOVE &gt;</button>
+        <button id="addOrg" class="btn">&lt; ADD</button>
+        <button id="removeOrg" class="btn">REMOVE &gt;</button>
     </div>
-    <form asp-controller="Identity" asp-action="SetLinks" method="post" class="form-horizontal" role="form">
+    <form asp-controller="Identity" asp-action="SetLinks" method="post" class="form-horizontal form-group" role="form">
         <div class="splitView" id="left-window">
             <h3>My Linked organisations</h3>
-            <select multiple="multiple" id="leftSelect" asp-for="ReturnedIDs" asp-items="@Model.LinkedOrgs">
+            <select multiple="multiple" id="leftSelect" asp-for="ReturnedIDs" asp-items="@Model.LinkedOrgs" class="form-control">
                 @*@foreach (var item in Model.LinkedOrgs)
                     {
                         <option class="orgsOption" value="@item.Id">@Html.DisplayFor(modelItem => item.organisationName)</option>
@@ -34,14 +34,14 @@
         </div>
         <div class="splitView" id="right-window">
             <h3>Available organisations</h3>
-            <select multiple="multiple" id="rightSelect">
+            <select multiple="multiple" id="rightSelect" class="form-control">
                 @foreach (var item in Model.UnlinkedOrgs)
             {
                     <option class="orgsOption" value="@item.Id">@Html.DisplayFor(modelItem => item.organisationName)</option>
                 }
             </select>
         </div>
-        <button id="submitLinks" type="submit">Save</button>
+        <button id="submitLinks" type="submit" class="btn-success">Save</button>
     </form>
 </div>
 
