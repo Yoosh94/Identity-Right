@@ -26,6 +26,7 @@ namespace IdentityRight.Controllers
         private readonly AddressProvider _addressProvider;
         private readonly EmailProvider _emailProvider;
         private readonly AuthEmail _authEmail;
+        private readonly OrganisationProvider _organisationProvider;
 
         public IdentityController(
         UserManager<ApplicationUser> userManager,
@@ -43,6 +44,7 @@ namespace IdentityRight.Controllers
             _addressProvider = new AddressProvider();
             _emailProvider = new EmailProvider();
             _authEmail = new AuthEmail();
+            _organisationProvider = new OrganisationProvider();
         }
 
         //
@@ -749,6 +751,17 @@ namespace IdentityRight.Controllers
             //Delete user address
             _addressProvider.deleteUserAddressById(userAddress.Id);
             return RedirectToAction("ManageAddresses");
+        }
+
+        [HttpGet("LinkAddress")]
+        public async Task<IActionResult> LinkAddressToOrganisation(Locations loc)
+        {
+            var user = await GetCurrentUserAsync();
+            var userAddress =_addressProvider.getAddressByLocation(user, loc.Id);
+            LinkAddressToOrganisationViewModel model = new LinkAddressToOrganisationViewModel();
+            model.LinkedOrganisation = _organisationProvider.getAllLinkedOrganisations(user);
+            model.UnlinkedOrganisation = _organisationProvider.getAllUnlinkedOrganisations(user, model.LinkedOrganisation);
+            return View("LinkDetailWithOrganisation");
         }
 
         //Settings:
