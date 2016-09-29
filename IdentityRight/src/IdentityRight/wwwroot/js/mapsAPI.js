@@ -19,10 +19,11 @@ var fixedComponentForm = {
     postal_code:"postcode"
 };
 
-var options = {
-    
+//Create the options to only allow address in Australia.
+var options = {   
     componentRestrictions: { country: 'au' }
 };
+//create an instance of the autocomplete object
 autocomplete = new google.maps.places.Autocomplete(input, options);
 // When the user selects an address from the dropdown, populate the address
 // fields in the form.
