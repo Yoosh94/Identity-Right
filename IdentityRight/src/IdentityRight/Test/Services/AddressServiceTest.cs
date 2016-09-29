@@ -20,7 +20,7 @@ namespace IdentityRight.Test.Controller
             _AddressProvider = new Services.AddressProvider();
             _context = new ApplicationDbContext();
             //Ensure all the data is deleted.
-            _context.Database.EnsureDeleted();
+            // _context.Database.EnsureDeleted();
             //seed date
             Countries country = createCountry();
             _context.Country.Add(country);

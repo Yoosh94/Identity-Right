@@ -24,7 +24,9 @@ namespace IdentityRight.Services
         /// <returns>Boolean if the add was successful or not</returns>
         public bool createEmailForUser(UserEmailAddresses email)
         {
+            //Check if the email address already exits
             bool exist = doesEmailAlreadyExist(email);
+            //If it doesn't add the email address to the database.
             if (!exist)
             {
                 _dbContext.UserEmailAddress.Add(email);
@@ -42,7 +44,9 @@ namespace IdentityRight.Services
         /// <returns>Boolean if email was confirmed</returns>
         public bool ConfirmEmail(ApplicationUser user, string email)
         {
+            //check if email already exists
             bool exist = doesEmailAlreadyExist(user,email);
+            //If it does exist find the email and update the 'confirmed' field to true.
             if (exist)
             {
                 var emailObject = getEmailAddress(user, email);
@@ -85,7 +89,8 @@ namespace IdentityRight.Services
         /// <returns>Boolean if email already exists for the user</returns>
         public bool doesEmailAlreadyExist(UserEmailAddresses email)
         {
-            var emails = _dbContext.UserEmailAddress.Where(x => x.ApplicationUserId == email.ApplicationUserId).Where(y => y.emailAddress == email.emailAddress).ToList();
+            var emails = _dbContext.UserEmailAddress.Where(x => x.ApplicationUserId == email.ApplicationUserId)
+                .Where(y => y.emailAddress == email.emailAddress).ToList();
             if(emails.Count == 0)
             {
                 //If no email exists return false
@@ -102,7 +107,8 @@ namespace IdentityRight.Services
         /// <returns>Boolean if email already exists for the user</returns>
         public bool doesEmailAlreadyExist(ApplicationUser user, string emailAddress)
         {
-            var emails = _dbContext.UserEmailAddress.Where(x => x.ApplicationUserId == user.Id).Where(z => z.emailAddress == emailAddress).ToList();
+            var emails = _dbContext.UserEmailAddress.Where(x => x.ApplicationUserId == user.Id)
+                .Where(z => z.emailAddress == emailAddress).ToList();
             if(emails.Count == 0)
             {
                 //No email address for that user with that email exists
@@ -120,7 +126,8 @@ namespace IdentityRight.Services
         /// <returns>UserEmailAddress object</returns>
         public UserEmailAddresses getEmailAddress(ApplicationUser user, string emailAddress)
         {
-            var emails = _dbContext.UserEmailAddress.Where(x => x.ApplicationUserId == user.Id).Where(z => z.emailAddress == emailAddress).ToList();
+            var emails = _dbContext.UserEmailAddress.Where(x => x.ApplicationUserId == user.Id)
+                .Where(z => z.emailAddress == emailAddress).ToList();
             //There should only be one email in the list since we cannot have duplicate emails.
             if (emails.Count == 1)
             {
@@ -128,9 +135,6 @@ namespace IdentityRight.Services
             }
             return null;
         }
-        #endregion
-
-        #region Update Email Operation
         #endregion
 
         #region Delete Email operation

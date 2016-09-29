@@ -17,18 +17,23 @@
     </tr>
     @foreach (var email in Model.emailAddresses)
     {
-        <tr>
-            <td>
-                @email.EmailType
-            </td>
-            <td>
-                @email.emailAddress
-            </td>
-            <td>
-                @Html.ActionLink("Delete", "deleteEmailAddress", email) |
-                @Html.ActionLink("Manage links to Organisation", "manageOrglinks", email)
-            </td>
-        </tr>
+
+        @if (email.Confirmed && (email.EmailType != EmailTypes.Primary))
+        {
+            <tr>
+                <td>
+                    @email.EmailType
+                </td>
+                <td>
+                    @email.emailAddress
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "deleteEmailAddress", email) |
+                    @Html.ActionLink("Manage links to Organisation", "manageOrglinks", email)
+                </td>
+            </tr>
+        }
+
     }
 
     

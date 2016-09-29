@@ -10,7 +10,6 @@ using IdentityRight.Services;
 using IdentityRight.ViewModels.Identity;
 using System.Collections.Generic;
 using Microsoft.AspNet.Mvc.Rendering;
-using IdentityRight.ViewModels;
 using IdentityRight.ViewModels.UpdateDetails;
 
 namespace IdentityRight.Controllers
@@ -114,12 +113,6 @@ namespace IdentityRight.Controllers
             IQueryable<UserPhoneNumbers> usersNumbers = from q in adc.UsersPhoneNumbers
                                                         where q.ApplicationUserId == user.Id
                                                         select q;
-
-
-            /*        Mobile,
-        Home,
-        Work,
-        Business*/
             if (usersNumbers != null)
             {
                 //2
