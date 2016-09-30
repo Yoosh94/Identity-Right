@@ -1,14 +1,30 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿html,
+body {
+	margin:0;
+	padding:0;
+	height:100%;
 }
 
-#mainBody{
-    min-height: 80%;
-    padding-top: 1%;
-    padding-left: 5%;
-    padding-right: 5%;
-    padding-bottom: 5%;
+/*Laptop and desktop styling*/
+@media only screen and (min-width: 1200px){
+    #wrapper {
+	    min-height:100%;
+	    position:relative;
+    }
+    #header {
+	    padding:10px;
+    }
+    #content {
+	    padding-bottom:100px;
+            margin-top: 5%;
+    }
+    #footer {
+	    width:100%;
+	    height:100px;
+	    position:absolute;
+	    bottom:0;
+	    left:0;
+    }
 }
 
 /* Wrapping element */
@@ -43,11 +59,10 @@ textarea {
 
 .company-slogan {
     text-align: center;
-    margin: 50px 0px;
-
-background-color: darkblue;
-opacity: .5;
-color: white;
+    margin: 0px 0px;
+    background-color: darkblue;
+    opacity: .7;
+    color: white;
 }
 
 .org-list > li{

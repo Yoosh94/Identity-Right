@@ -1,10 +1,10 @@
 ﻿@model IdentityRight.ViewModels.Organisations.UserDetailsViewModel
 
+
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <h4 class="modal-title">Details for @Model.User.FirstName @Model.User.LastName</h4>
 </div>
-
 <div class="modal-body">
     @if (Model.AddressIds.Count > 0)
     {

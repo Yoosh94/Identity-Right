@@ -44,8 +44,6 @@
                 <text>[&nbsp;&nbsp;<a asp-controller="Identity" asp-action="AddPhoneNumber">Add Phone Number</a>&nbsp;&nbsp;]</text>
             }
         </dd>
-
-
         @*@if (Model.TwoFactor)
             {
                 <form asp-controller="Identity" asp-action="DisableTwoFactorAuthentication" method="post" class="form-horizontal" role="form">
@@ -60,16 +58,19 @@
                         [<button type="submit" class="btn-link">Enable Two-Factor Authentication</button>] Two-Factor Authentication Disabled
                     </form>
                 </dd>
-        }
-
+            }
         @*<dt>Addresses Registered</dt>
             <dd>
-                    <a href="@Url.Action("showAddress","Identity")">View your registered addresses</a>
-                </dd>*@
+                <a href="@Url.Action("showAddress","Identity")">View your registered addresses</a>
+            </dd>*@
     </dl>
 
     @if (Model.TwoFactor)
     {
+        <div class="alert alert-success fade in">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+             Your two factor authentication is enabled. Please continue and choose your action.
+        </div>
         <div class="row">
             <div class="container">
                 <div class="col-sm-3">
@@ -190,8 +191,10 @@
     }
     else
     {
-        <label class="text-danger">To ensure the security of your information and to enable access to update your account please enable two factor authentication above.</label>
-
+        <label class="text-danger"></label>
+        <div class="alert alert-danger">
+            <strong>Notice!</strong> To ensure the security of your information and to enable access to update your account please enable two factor authentication above.
+        </div>
     }
 </div>
 <script>

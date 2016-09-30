@@ -77,7 +77,7 @@ left: 0;
 opacity: .9;
 }
 .home-body-image{
-background: url('/images/lounch.jpg') no-repeat center center fixed; 
+background: url('/images/lounch4.png') no-repeat center center fixed; 
 -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;
@@ -138,10 +138,14 @@ width:100%;
 opacity:.9;
 }
 .footer-style{
-background-color:#18bc9c;
-opacity:.8;
+background-color:#149c82;
 color:white;
-height:100%
+height:200px;
+top:400px;
+z-index:1;
+}
+div#bs-example-navbar-collapse-1{
+    margin-bottom:-20px
 }
 
 /**********Style for map in contact us page****************/
@@ -160,14 +164,48 @@ border-top-right-radius:20px  }
 #map-outer  { height: 600px;color:white; }
 }
 
+
+/***********************Mobile device styling*************/
+@media (max-width: 767px){
+    #content {
+        margin-top: 100px;
+    }
+    #footer {
+        padding-left: 15px;
+        padding-right: 15px;
+	    width:100%;
+	    height:100px;
+	    position:absolute;
+	    left:0;
+    }
+}
+
 /***********************iPad device styling*************/
-@media (max-width: 991px) {
-#mainBod {
-margin-top: 200px;
+@media (max-width: 991px) and (min-width: 768px) {
+    #content {
+    margin-top: 200px;
+    }
 }
+@media (max-width: 1199px) and (min-width: 992px) {
+    #content {
+    margin-top: 200px;
+    }
 }
-@media (max-width: 1199px) {
-#mainBody {
-margin-top: 200px;
+
+/*************************Carousel Style*****************************/
+.carousel-style{
+
 }
+
+.carousel-item1{
+    background-color:darkblue; opacity:.5;height:400px;width:100%; top:-100px;top: -80px;
+}
+.carousel-item2{
+    background-color:grey; opacity:.5;height:400px;width:100%; top:-100px;top: -80px;
+}
+.carousel-item3{
+    background-color:black; opacity:.5;height:400px;width:100%; top:-100px;top: -80px;
+}
+.carousel-item4{
+    background-color:#18bc9c; opacity:.5;height:400px;width:100%; top:-100px;top: -80px;
 }
