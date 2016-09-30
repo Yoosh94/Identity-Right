@@ -138,10 +138,14 @@ width:100%;
 opacity:.9;
 }
 .footer-style{
-background-color:#18bc9c;
-opacity:.8;
+background-color:#149c82;
 color:white;
-height:100%
+height:200px;
+top:400px;
+z-index:1;
+}
+div#bs-example-navbar-collapse-1{
+    margin-bottom:-20px
 }
 
 /**********Style for map in contact us page****************/
@@ -160,14 +164,30 @@ border-top-right-radius:20px  }
 #map-outer  { height: 600px;color:white; }
 }
 
+
+/***********************Mobile device styling*************/
+@media (max-width: 767px){
+    #content {
+        margin-top: 100px;
+    }
+    #footer {
+        padding-left: 15px;
+        padding-right: 15px;
+	    width:100%;
+	    height:100px;
+	    position:absolute;
+	    left:0;
+    }
+}
+
 /***********************iPad device styling*************/
-@media (max-width: 991px) {
-#mainBod {
-margin-top: 200px;
+@media (max-width: 991px) and (min-width: 768px) {
+    #content {
+    margin-top: 200px;
+    }
 }
-}
-@media (max-width: 1199px) {
-#mainBody {
-margin-top: 200px;
-}
+@media (max-width: 1199px) and (min-width: 992px) {
+    #content {
+    margin-top: 200px;
+    }
 }
