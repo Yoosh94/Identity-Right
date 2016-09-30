@@ -59,11 +59,10 @@ textarea {
 
 .company-slogan {
     text-align: center;
-    margin: 50px 0px;
-
-background-color: darkblue;
-opacity: .5;
-color: white;
+    margin: 0px 0px;
+    background-color: darkblue;
+    opacity: .7;
+    color: white;
 }
 
 .org-list > li{

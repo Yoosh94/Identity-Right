@@ -77,7 +77,7 @@ left: 0;
 opacity: .9;
 }
 .home-body-image{
-background: url('/images/lounch.jpg') no-repeat center center fixed; 
+background: url('/images/lounch4.png') no-repeat center center fixed; 
 -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;
@@ -190,4 +190,22 @@ border-top-right-radius:20px  }
     #content {
     margin-top: 200px;
     }
+}
+
+/*************************Carousel Style*****************************/
+.carousel-style{
+
+}
+
+.carousel-item1{
+    background-color:darkblue; opacity:.5;height:400px;width:100%; top:-100px;top: -80px;
+}
+.carousel-item2{
+    background-color:grey; opacity:.5;height:400px;width:100%; top:-100px;top: -80px;
+}
+.carousel-item3{
+    background-color:black; opacity:.5;height:400px;width:100%; top:-100px;top: -80px;
+}
+.carousel-item4{
+    background-color:#18bc9c; opacity:.5;height:400px;width:100%; top:-100px;top: -80px;
 }
