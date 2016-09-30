@@ -64,13 +64,14 @@
                                @if (User.IsSignedIn())
                                {
                                    //If enable two factor authentication display these menus.
-                                   <li><a asp-controller="Identity" asp-action="ManageUserOrganisationConnections" class="">Connected Organisations</a></li>
-                                   <li>@Html.ActionLink("Organisations", "Index", "Organisations", new { }, null)</li>
-                                   <li><a asp-controller="Identity" asp-action="ManageAddresses" class="">Manage Addressess</a></li>
-                                   <li><a asp-controller="Identity" asp-action="UpdatePhoneNumber" class="">Manage Phone No.</a></li>
-                                   <li><a asp-controller="Identity" asp-action="ManageUserEmails" class="">Manage Emails</a></li>
-                                   <li><a asp-controller="Home" asp-action="About">About</a></li>
-                                   <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+
+                                @*<li><a asp-controller="Identity" asp-action="ManageUserOrganisationConnections" class="">Connected Organisations</a></li>
+    <li>@Html.ActionLink("Organisations", "Index", "Organisations", new { }, null)</li>
+    <li><a asp-controller="Identity" asp-action="ManageAddresses" class="">Manage Addressess</a></li>
+    <li><a asp-controller="Identity" asp-action="UpdatePhoneNumber" class="">Manage Phone No.</a></li>
+    <li><a asp-controller="Identity" asp-action="ManageUserEmails" class="">Manage Emails</a></li>*@
+                                <li><a asp-controller="Home" asp-action="About">About</a></li>
+                                <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
                                }
                                else
                                {

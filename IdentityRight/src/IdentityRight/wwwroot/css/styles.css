@@ -57,24 +57,28 @@ opacity: .9;
 }
 
 .register-body{
-background: url('/images/bathroom.jpeg') no-repeat center center fixed; 
--webkit-background-size: cover;
--moz-background-size: cover;
--o-background-size: cover;
-background-size: cover;
-/*Rules to fill background */
-min-height: 100%;
-min-width: 100%;
+    /*to parse in the image*/
+    background: url('/images/bathroom.jpeg') no-repeat center center fixed; 
+
+    /*Cross browser background size to display as full cover*/
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+    /*Rules to fill background */
+    min-height: 100%;
+    min-width: 100%;
 	
-/*Proportionate scaling */
-width: 100%;
-height: auto;
+    /*Proportionate scaling */
+    width: 100%;
+    height: auto;
 	
-/* Positioning */
-position: fixed;
-top: 0;
-left: 0;
-opacity: .9;
+    /* Positioning */
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: .9;
 }
 .home-body-image{
 background: url('/images/lounch4.png') no-repeat center center fixed; 
