@@ -1,84 +1,82 @@
 ﻿@model IdentityRight.ViewModels.Organisations.UserDetailsViewModel
 
-<div class="container">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Details for @Model.User.FirstName @Model.User.LastName</h4>
-    </div>
 
-    <div class="modal-body">
-        @if (Model.AddressIds.Count > 0)
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">Details for @Model.User.FirstName @Model.User.LastName</h4>
+</div>
+<div class="modal-body">
+    @if (Model.AddressIds.Count > 0)
+    {
+        foreach (var address in Model.AddressIds)
         {
-            foreach (var address in Model.AddressIds)
-            {
-                <address>
-                    @{
-                        var currentAddress = Model.UserAddresses.First(z => z.Id == address.LocationsId);
+            <address>
+                @{
+                    var currentAddress = Model.UserAddresses.First(z => z.Id == address.LocationsId);
 
-                        switch (address.AddressType)
-                        {
-                            case AddressType.Postal:
-                                <strong>Postal Address</strong>
-                                break;
-                            case AddressType.Residential:
-                                <strong>Residential Address</strong>
-                                break;
-                            case AddressType.Work:
-                                <strong>Work Address</strong>
-                                break;
-                            case AddressType.Business:
-                                <strong>Business Address</strong>
-                                break;
+                    switch (address.AddressType)
+                    {
+                        case AddressType.Postal:
+                            <strong>Postal Address</strong>
+                            break;
+                        case AddressType.Residential:
+                            <strong>Residential Address</strong>
+                            break;
+                        case AddressType.Work:
+                            <strong>Work Address</strong>
+                            break;
+                        case AddressType.Business:
+                            <strong>Business Address</strong>
+                            break;
+                    }
+                }
+                <br />
+                @(currentAddress.unitNumber == null ? currentAddress.streetNumber : $"{currentAddress.unitNumber}/{currentAddress.streetNumber}") @currentAddress.streetName
+                <br />
+                @currentAddress.suburb, @currentAddress.state, @currentAddress.postcode
+            </address>
                         }
                     }
-                    <br />
-                    @(currentAddress.unitNumber == null ? currentAddress.streetNumber : $"{currentAddress.unitNumber}/{currentAddress.streetNumber}") @currentAddress.streetName
-                    <br />
-                    @currentAddress.suburb, @currentAddress.state, @currentAddress.postcode
-                </address>
-                            }
-                        }
-                        else
-                        {
-                            <h5>No Address Details Recorded</h5>
-                        }
-        <hr />
+                    else
+                    {
+                        <h5>No Address Details Recorded</h5>
+                    }
+    <hr />
 
-        @if (Model.UserPhoneNumbers.Count > 0)
+    @if (Model.UserPhoneNumbers.Count > 0)
+    {
+        foreach (var phoneNumber in Model.UserPhoneNumbers)
         {
-            foreach (var phoneNumber in Model.UserPhoneNumbers)
-            {
-                <address>
-                    <strong>@phoneNumber.PhoneNumberType Phone Number</strong>
-                    <br />
-                    <a href="tel:@phoneNumber.PhoneNumber">@phoneNumber.PhoneNumber</a>
-                </address>
-            }
+            <address>
+                <strong>@phoneNumber.PhoneNumberType Phone Number</strong>
+                <br />
+                <a href="tel:@phoneNumber.PhoneNumber">@phoneNumber.PhoneNumber</a>
+            </address>
         }
-        else
-        {
-            <h5>No Phone Numbers Recorded</h5>
-        }
-        <hr />
+    }
+    else
+    {
+        <h5>No Phone Numbers Recorded</h5>
+    }
+    <hr />
 
-        @if (Model.UserEmails.Count > 0)
+    @if (Model.UserEmails.Count > 0)
+    {
+        foreach (var email in Model.UserEmails)
         {
-            foreach (var email in Model.UserEmails)
-            {
-                <address>
-                    <strong>@email.EmailType Email</strong>
-                    <br />
-                    <a href="mailto:@email.emailAddress">@email.emailAddress</a>
-                </address>
-            }
+            <address>
+                <strong>@email.EmailType Email</strong>
+                <br />
+                <a href="mailto:@email.emailAddress">@email.emailAddress</a>
+            </address>
         }
-        else
-        {
-            <h5>No Email Addresses Recorded</h5>
-        }
+    }
+    else
+    {
+        <h5>No Email Addresses Recorded</h5>
+    }
 
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
 </div>

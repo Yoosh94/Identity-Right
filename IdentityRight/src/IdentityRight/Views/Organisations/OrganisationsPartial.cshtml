@@ -14,7 +14,7 @@
             {
                 <tr>
                     <td>@organisation.organisationName</td>
-                    <td>@Html.ActionLink("View Organisation Profile", "Organisation", "Organisations", new { organisationId = organisation.Id })</td>
+                    <td>@Html.ActionLink("View Organisation Profile", "Organisation", "Organisations", new { organisationId = organisation.Id }, new { @class = "btn btn-sm btn-default"})</td>
                 </tr>
             }
         </tbody>
