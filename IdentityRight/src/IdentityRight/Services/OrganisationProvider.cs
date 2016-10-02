@@ -83,8 +83,19 @@ namespace IdentityRight.Services
 
         #region Create Methods
 
-        public void CreateUserAddress_UserOrganisationLink(int UserAddressID, List<int> organisationsID, ApplicationUser user)
+        /// <summary>
+        /// Create a 
+        /// </summary>
+        /// <param name="UserAddressID"></param>
+        /// <param name="organisationsID"></param>
+        /// <param name="user"></param>
+        public void CreateUserAddress_UserOrganisationLink(int UserAddressID, List<int> organisationsID, string userId)
         {
+            //If the list in empty initialise it.
+            if(organisationsID == null)
+            {
+                organisationsID = new List<int>();
+            }
             //List of old links.
             var allLinks = getAllAddressOrganisationLinks(UserAddressID);
             //For each UserAddress_UserOrganisation link that was previously there check if the current list contains the organisation ID,
@@ -108,7 +119,7 @@ namespace IdentityRight.Services
                 ListOfLinks.Add(new UserAddresses_CustomerOrganisationLinks
                 {
                     UserAddressesId = UserAddressID,
-                    UserOrganisationLinksId = getUserOrganisationLink(user.Id, id).Id
+                    UserOrganisationLinksId = getUserOrganisationLink(userId, id).Id
                 });
             }
             //save the data into the database.

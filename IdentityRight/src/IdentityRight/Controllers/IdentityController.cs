@@ -801,14 +801,14 @@ namespace IdentityRight.Controllers
             return View("LinkDetailWithOrganisation", model);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> saveOrganisationLink(LinkAddressToOrganisationViewModel model)
         {
             var user = await GetCurrentUserAsync();
-            _organisationProvider.CreateUserAddress_UserOrganisationLink(model.UserAddressID, model.ReturnedIDs, user);
+            _organisationProvider.CreateUserAddress_UserOrganisationLink(model.UserAddressID, model.ReturnedIDs, user.Id);
             return RedirectToAction(nameof(ManageAddresses), new { Message = ManageMessageId.AddOrganisationToEmail });
-            //return Redirect("ManageAddresses", new { Message = ManageMessageId.AddOrganisationToEmail });
         }
 
         //Settings:
