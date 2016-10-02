@@ -26,6 +26,7 @@ namespace IdentityRight.Controllers
         private readonly AddressProvider _addressProvider;
         private readonly EmailProvider _emailProvider;
         private readonly AuthEmail _authEmail;
+        private readonly OrganisationProvider _organisationProvider;
 
         public IdentityController(
         UserManager<ApplicationUser> userManager,
@@ -43,6 +44,7 @@ namespace IdentityRight.Controllers
             _addressProvider = new AddressProvider();
             _emailProvider = new EmailProvider();
             _authEmail = new AuthEmail();
+            _organisationProvider = new OrganisationProvider();
         }
 
         //
@@ -442,8 +444,11 @@ namespace IdentityRight.Controllers
         //This method will open the page that allows users to manage their address
         // GET: /Identity/UpdatePostalAddress
         [HttpGet]
-        public IActionResult ManageAddresses()
+        public IActionResult ManageAddresses(ManageMessageId? message = null)
         {
+            ViewData["StatusMessage"] =
+            message == ManageMessageId.AddOrganisationToEmail ? "Organisations added to address successfully."
+                : "";
             return View("ManageAddressView");
         }
 
@@ -512,7 +517,7 @@ namespace IdentityRight.Controllers
                 : "";
             ViewData["StatusMessageFail"] =
                  message == ManageMessageId.AddEmailFail ? "Email was not added. Email already exists."
-                 :message == ManageMessageId.DeleteEmailFail ? "Email was not deleted."
+                 : message == ManageMessageId.DeleteEmailFail ? "Email was not deleted."
                 : "";
             return View("ManageUserEmails");
         }
@@ -534,7 +539,7 @@ namespace IdentityRight.Controllers
             {
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 //Add the email address to the end of the token. When the token is returned we will know for which email.
-                code = code + "./" +  model.email;
+                code = code + "./" + model.email;
                 var callbackUrl = Url.Action("ConfirmAddEmail", "Identity", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                 //This method will send an email from identityright@gmail.com to the email the user inputted.
                 await _authEmail.SendEmailAsync(model.email, "Confirm Email", "Please click this <a href=\"" + callbackUrl + "\">link</a> to finish adding this email to your Identity Right Account.");
@@ -559,7 +564,7 @@ namespace IdentityRight.Controllers
             }
             //find the Index of "./". This substring was choosen because it will no exist in the email or the token.
             int indexOfSubstring = code.LastIndexOf("./");
-            string emailToConfirm = code.Substring(indexOfSubstring+2);
+            string emailToConfirm = code.Substring(indexOfSubstring + 2);
             string newCode = code.Remove(indexOfSubstring);
             var result = await _userManager.ConfirmEmailAsync(user, newCode);
             //If the token is correct.
@@ -571,7 +576,7 @@ namespace IdentityRight.Controllers
                 if (emailUpdated)
                 {
                     return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.AddEmailSuccess });
-                }             
+                }
             }
             return RedirectToAction("ManageUserEmails", new { Message = ManageMessageId.AddEmailFail });
         }
@@ -751,6 +756,61 @@ namespace IdentityRight.Controllers
             return RedirectToAction("ManageAddresses");
         }
 
+        /// <summary>
+        /// HttpGet.
+        /// </summary>
+        /// <param name="loc"></param>
+        /// <returns></returns>
+        [HttpGet("LinkAddress")]
+        public async Task<IActionResult> LinkAddressToOrganisation(Locations loc)
+        {
+            var user = await GetCurrentUserAsync();
+            var userAddress = _addressProvider.getAddressByLocation(user, loc.Id).Id;
+            //get all the links for the particular user
+            var allLinkedOrganisation = _organisationProvider.getAllLinkedOrganisations(user);
+            //get all the links for the particular UserAddress. 
+            var userAddressOrganisionLinks = _organisationProvider.getAllAddressOrganisationLinks(userAddress);
+            //Convert the UserAddress_UserOrganisationLink to List of ApplicationOrganisaion.
+            var listOfOrganisationsConnectedToAddress = _organisationProvider.convertUserAddressLinkToApplicationOrganisation(userAddressOrganisionLinks);
+            //Find the difference between the two lists.
+            List<ApplicationOrganisations> differenceBetweenLists = new List<ApplicationOrganisations>();
+            foreach (var org in listOfOrganisationsConnectedToAddress)
+            {
+                //allLinkedOrganisation will only contain the list of organisation which are not part of the address.
+                allLinkedOrganisation.Remove(allLinkedOrganisation.Single(s => s.Id == org.Id));
+            }
+            //allLinkedOrganisation.Except(listOfOrganisationsConnectedToAddress);
+            LinkAddressToOrganisationViewModel model = new LinkAddressToOrganisationViewModel
+            {
+                UserAddressID = userAddress
+            };
+            //Create select lists which will be used to render the multiselect listview
+            List<SelectListItem> selectListLinkedOrg = new List<SelectListItem>();
+            List<SelectListItem> selectListUnlinkedOrg = new List<SelectListItem>();
+            foreach (var c in listOfOrganisationsConnectedToAddress)
+            {
+                selectListLinkedOrg.Add(new SelectListItem { Text = c.organisationName, Value = c.Id.ToString() });
+            }
+            foreach (var c in allLinkedOrganisation)
+            {
+                selectListUnlinkedOrg.Add(new SelectListItem { Text = c.organisationName, Value = c.Id.ToString() });
+            }
+            //add the selectListItems to the ModelView
+            model.LinkedOrgs = selectListLinkedOrg;
+            model.UnlinkedOrgs = selectListUnlinkedOrg;
+            return View("LinkDetailWithOrganisation", model);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> saveOrganisationLink(LinkAddressToOrganisationViewModel model)
+        {
+            var user = await GetCurrentUserAsync();
+            _organisationProvider.CreateUserAddress_UserOrganisationLink(model.UserAddressID, model.ReturnedIDs, user.Id);
+            return RedirectToAction(nameof(ManageAddresses), new { Message = ManageMessageId.AddOrganisationToEmail });
+        }
+
         //Settings:
         //This method will open the search org page
         // GET: /Identity/UpateEmailToOrganisation
@@ -795,7 +855,8 @@ namespace IdentityRight.Controllers
             AddEmailSuccessVerify,
             AddEmailFail,
             DeleteEmailSuccessful,
-            DeleteEmailFail
+            DeleteEmailFail,
+            AddOrganisationToEmail
         }
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
