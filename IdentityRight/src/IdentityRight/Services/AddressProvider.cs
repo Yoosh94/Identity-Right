@@ -198,6 +198,16 @@ namespace IdentityRight.Services
             return singleUserAddress;
         }
 
+        /// <summary>
+        /// Get a UserAddress object by its Id
+        /// </summary>
+        /// <param name="UserAddressID">Id of the UserAddress</param>
+        /// <returns>UserAddress Object</returns>
+        public UserAddresses getUserAddressById(int UserAddressID)
+        {
+            return _dbContext.UserAddress.Where(x => x.Id == UserAddressID).Single();
+        }
+
         #endregion
         #endregion
         #region Update Operations

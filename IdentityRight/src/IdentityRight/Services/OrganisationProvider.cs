@@ -80,6 +80,44 @@ namespace IdentityRight.Services
         #endregion
 
         #region User Context
+
+        #region Create Methods
+
+        public void CreateUserAddress_UserOrganisationLink(int UserAddressID, List<int> organisationsID, ApplicationUser user)
+        {
+            //List of old links.
+            var allLinks = getAllAddressOrganisationLinks(UserAddressID);
+            //For each UserAddress_UserOrganisation link that was previously there check if the current list contains the organisation ID,
+            //If it doesn't, it means the user has removed the link with that organisation
+            foreach (var c in allLinks)
+            {
+                var orgID = getUserOrganisationLink(c.UserOrganisationLinksId).ApplicationOrganisationsId;
+                if (!organisationsID.Contains(orgID))
+                {
+                    _dbContext.UserAddress_UserOrganisationLink.Remove(c);
+                }
+                //If the new list contains a organisation ID that was in the old list, just remove it from the new list so we do not add
+                //redundant objects into the db.
+                organisationsID.Remove(organisationsID.SingleOrDefault(s => s == orgID));
+                //If the current list does not contain a value from the old list, it means that the user has deleted it.
+            }
+            //Foreach id that is in the new List add the object to a list.
+            List<UserAddresses_CustomerOrganisationLinks> ListOfLinks = new List<UserAddresses_CustomerOrganisationLinks>();
+            foreach (var id in organisationsID)
+            {
+                ListOfLinks.Add(new UserAddresses_CustomerOrganisationLinks
+                {
+                    UserAddressesId = UserAddressID,
+                    UserOrganisationLinksId = getUserOrganisationLink(user.Id, id).Id
+                });
+            }
+            //save the data into the database.
+            _dbContext.UserAddress_UserOrganisationLink.AddRange(ListOfLinks);
+            _dbContext.SaveChanges();
+        }
+        #endregion
+
+        #region Read Methods
         /// <summary>
         /// Get all the Organisations that are linked to the current user.
         /// </summary>
@@ -91,7 +129,7 @@ namespace IdentityRight.Services
             var links = _dbContext.UserOrganisationLinks.Where(x => x.ApplicationUserId == user.Id).ToList();
             //Get the name of the Organisation by the ID
             List<ApplicationOrganisations> linkedOrganisations = new List<Models.ApplicationOrganisations>();
-            foreach(var link in links)
+            foreach (var link in links)
             {
                 linkedOrganisations.Add(getOrganisation(link.ApplicationOrganisationsId));
             }
@@ -99,17 +137,65 @@ namespace IdentityRight.Services
         }
 
         /// <summary>
-        /// Get all the organisations that are not linked to the current user
+        /// Get a list of UserAddress_UserOrganisationLink objects. 
+        /// </summary>
+        /// <param name="user"></param>
+        public List<UserAddresses_CustomerOrganisationLinks> getAllAddressOrganisationLinks(int userAddressID)
+        {
+            return _dbContext.UserAddress_UserOrganisationLink.Where(x => x.UserAddressesId == userAddressID).ToList();
+        }
+
+        public List<ApplicationOrganisations> convertUserAddressLinkToApplicationOrganisation(List<UserAddresses_CustomerOrganisationLinks> links)
+        {
+            List<ApplicationOrganisations> orgList = new List<ApplicationOrganisations>();
+            foreach (var userAddresslink in links)
+            {
+                var c = _dbContext.UserOrganisationLinks.First(x => x.Id == userAddresslink.UserOrganisationLinksId);
+                var organisation = getOrganisation(c.ApplicationOrganisationsId);
+                orgList.Add(organisation);
+            }
+            return orgList;
+        }
+
+        /// <summary>
+        /// Get a UserOrganisationLink object
+        /// </summary>
+        /// <param name="userID">User Id for the link</param>
+        /// <param name="orgId">Organisation the user is linked ot</param>
+        /// <returns>UserOrganisastionLink object</returns>
+        public UserOrganisationLinks getUserOrganisationLink(string userID, int orgId)
+        {
+            return _dbContext.UserOrganisationLinks.Where(x => x.ApplicationUserId == userID)
+                .Where(x => x.ApplicationOrganisationsId == orgId).Single();
+        }
+
+        public UserOrganisationLinks getUserOrganisationLink(int UserOrganisationLinkID)
+        {
+            return _dbContext.UserOrganisationLinks.Where(x => x.Id == UserOrganisationLinkID).Single();
+        }
+        /// <summary>
+        /// Get all the organisations that are not linked to the current user but have been added to the user.
         /// </summary>
         /// <param name="user">ApplicationUser object</param>
         /// <returns>A list of organisations that are not linked to an User</returns>
-        public List<ApplicationOrganisations> getAllUnlinkedOrganisations(ApplicationUser user, List<ApplicationOrganisations> linkedOrgs)
-        {
-            //Get a list of all not linked organisation with a particular User ID
-            var notLink = _dbContext.ApplicationOrganisations.ToList().Except(linkedOrgs).ToList();
-            return notLink;
-        }
+        //public List<ApplicationOrganisations> getAllUnlinkedOrganisations(ApplicationUser user, List<ApplicationOrganisations> linkedOrgs)
+        //{
+        //    //Get a list of all not linked organisation with a particular User ID
+        //    var TotalListofOrgsLinked = _dbContext.UserOrganisationLinks.Where(x => x.ApplicationUserId == user.Id);
+        //    //If the Total list of organisation linked for the user in UserORganiastionLink equals the number of linkedOrganisations
+        //    if(TotalListofOrgsLinked.ToList().Count == linkedOrgs.Count)
+        //    {
 
+        //    }
+        //    //var notLink = _dbContext.ApplicationOrganisations.ToList().Except(linkedOrgs);
+        //    //return notLink.ToList();
+        //}
+
+        /// <summary>
+        /// Get an Organisation object by its ID
+        /// </summary>
+        /// <param name="id">ID of the organisation that you want to get</param>
+        /// <returns>Organisation object</returns>
         public ApplicationOrganisations getOrganisation(int id)
         {
             var organisation = _dbContext.ApplicationOrganisations.FirstOrDefault(x => x.Id == id);
@@ -121,6 +207,21 @@ namespace IdentityRight.Services
             };
             return model;
         }
+
+        #endregion
+
+        #region Update Methods
+
+        #endregion
+
+        #region Delete Methods
+        #endregion
+
+
+
+
+
+
         #endregion
     }
 }

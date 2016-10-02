@@ -5,7 +5,6 @@
 
 <div class="container">
     <h2>Which organisations do you want to link your address to?</h2>
-
     <form class="navbar-form" role="search">
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term" oninput="searchOrganisation()">
@@ -18,24 +17,17 @@
         <button id="addOrg" class="btn">&lt; ADD</button>
         <button id="removeOrg" class="btn">REMOVE &gt;</button>
     </div>
-    <form asp-controller="Identity" asp-action="SetLinks" method="post" class="form-horizontal form-group" role="form">
+    <form asp-controller="Identity" asp-action="saveOrganisationLink" method="post" class="form-horizontal form-group" role="form">
         <div class="splitView" id="left-window">
             <h3>My Linked organisations</h3>
-            <select id="leftSelect"  class="form-control">
-                @*@foreach (var item in Model.LinkedOrgs)
-                    {
-                        <option class="orgsOption" value="@item.Id">@Html.DisplayFor(modelItem => item.organisationName)</option>
-                    }*@
-            </select>
+            <select id="leftSelect" class="form-control" asp-for="@Model.ReturnedIDs" asp-items="@Model.LinkedOrgs"></select>
         </div>
-        @*<div class="splitView" id="right-window">
+        <div class="splitView" id="right-window">
             <h3>Available organisations</h3>
-            <select multiple="multiple" id="rightSelect" class="form-control">
-                @foreach (var item in Model.UnlinkedOrgs)
-            {
-                    <option class="orgsOption" value="@item.Id">@Html.DisplayFor(modelItem => item.organisationName)</option>
-                }
-            </select>
-        </div>*@
+            <select id="rightSelect" class="form-control" asp-for="@Model.UnlinkedOrgs" asp-items="@Model.UnlinkedOrgs"></select>
+        </div>
+        @Html.HiddenFor(x => x.UserAddressID)
         <button id="submitLinks" type="submit" class="btn-success">Save</button>
+        
     </form>
+</div>
