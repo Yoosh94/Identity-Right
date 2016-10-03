@@ -6,7 +6,7 @@ var componentForm = {
     locality: 'long_name',
     administrative_area_level_1: 'short_name',
     country: 'long_name',
-    postal_code: 'short_name',
+    postal_code: 'short_name'
 };
 
 var fixedComponentForm = {
@@ -16,13 +16,14 @@ var fixedComponentForm = {
     locality:"suburb",
     administrative_area_level_1:"state",
     country: "countryName",
-    postal_code:"postcode",
+    postal_code:"postcode"
 };
 
-var options = {
-    
+//Create the options to only allow address in Australia.
+var options = {   
     componentRestrictions: { country: 'au' }
 };
+//create an instance of the autocomplete object
 autocomplete = new google.maps.places.Autocomplete(input, options);
 // When the user selects an address from the dropdown, populate the address
 // fields in the form.

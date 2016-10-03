@@ -2,13 +2,28 @@
 
 @if (User.IsSignedIn())
 {
-    <form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
-        <ul class="nav navbar-nav navbar-right">
+    <form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-left">
+        <ul class="nav navbar-nav navbar-left">
             <li>
-                <a asp-controller="Identity" asp-action="Index" title="Identity">Hello @User.GetUserName()!</a>
-            </li>
-            <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        <img src="~/images/avatar.png" class="img-responsive img-circle" alt="Avatar" style="width:40px;height:auto;">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu left">
+                        <li role="presentation">
+                            <a asp-controller="Identity" asp-action="Index" title="Identity">Hello @User.GetUserName()!</a>
+                        </li>
+                        <li role="presentation">
+                            <a asp-controller="#" asp-action="#" title="Help">Help?</a>
+                        </li>
+                        <li role="presentation" class="divider"></li>
+
+                        <li role="presentation" style="float: right; padding-right: 5px;">
+                            <button class="btn btn-sm btn-default" type="submit">Logout</button>
+                        </li>
+                    </ul>
+                </div>
             </li>
         </ul>
     </form>

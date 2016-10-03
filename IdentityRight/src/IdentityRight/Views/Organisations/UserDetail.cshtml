@@ -1,10 +1,10 @@
 ﻿@model IdentityRight.ViewModels.Organisations.UserDetailsViewModel
 
+
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <h4 class="modal-title">Details for @Model.User.FirstName @Model.User.LastName</h4>
 </div>
-
 <div class="modal-body">
     @if (Model.AddressIds.Count > 0)
     {
@@ -30,17 +30,17 @@
                             break;
                     }
                 }
-                <br/>
+                <br />
                 @(currentAddress.unitNumber == null ? currentAddress.streetNumber : $"{currentAddress.unitNumber}/{currentAddress.streetNumber}") @currentAddress.streetName
-                <br/>
+                <br />
                 @currentAddress.suburb, @currentAddress.state, @currentAddress.postcode
             </address>
-        }
-    }
-    else
-    {
-        <h5>No Address Details Recorded</h5>
-    }
+                        }
+                    }
+                    else
+                    {
+                        <h5>No Address Details Recorded</h5>
+                    }
     <hr />
 
     @if (Model.UserPhoneNumbers.Count > 0)
@@ -49,7 +49,7 @@
         {
             <address>
                 <strong>@phoneNumber.PhoneNumberType Phone Number</strong>
-                <br/>
+                <br />
                 <a href="tel:@phoneNumber.PhoneNumber">@phoneNumber.PhoneNumber</a>
             </address>
         }
@@ -66,7 +66,7 @@
         {
             <address>
                 <strong>@email.EmailType Email</strong>
-                <br/>
+                <br />
                 <a href="mailto:@email.emailAddress">@email.emailAddress</a>
             </address>
         }
@@ -75,7 +75,7 @@
     {
         <h5>No Email Addresses Recorded</h5>
     }
-    
+
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>

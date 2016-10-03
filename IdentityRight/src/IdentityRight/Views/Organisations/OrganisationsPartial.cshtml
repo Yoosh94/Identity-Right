@@ -1,20 +1,22 @@
 ﻿@model IdentityRight.ViewModels.Organisations.OrganisationsViewModel
 
-<br/>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Organisation Name</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var organisation in Model.Organisations)
-            {
+<div class="container">
+    <br />
+    <table class="table table-hover">
+        <thead>
             <tr>
-                <td>@organisation.organisationName</td>
-                <td>@Html.ActionLink("View Organisation Profile", "Organisation", "Organisations", new { organisationId = organisation.Id })</td>
+                <th>Organisation Name</th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var organisation in Model.Organisations)
+            {
+                <tr>
+                    <td>@organisation.organisationName</td>
+                    <td>@Html.ActionLink("View Organisation Profile", "Organisation", "Organisations", new { organisationId = organisation.Id }, new { @class = "btn btn-sm btn-default"})</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -3,145 +3,145 @@
     ViewData["Title"] = "Manage your address";
 }
 
-<h2>@ViewData["Title"].</h2>
-<p class="text-success">@ViewData["StatusMessageSuccess"]</p>
-<p class="text-danger">@ViewData["StatusMessageFail"]</p>
-<div>
+<div class="container">
+    <h2>@ViewData["Title"].</h2>
+    <p class="text-success">@ViewData["StatusMessageSuccess"]</p>
+    <p class="text-danger">@ViewData["StatusMessageFail"]</p>
+    <p class="text-success">@ViewData["StatusMessage"]</p>
     <div>
-        @*Create new partial view which will display all the addresses rendered to the user*@
-        @await Component.InvokeAsync("DisplayRegisteredAddress", User)
+        <div>
+            @*Create new partial view which will display all the addresses rendered to the user*@
+            @await Component.InvokeAsync("DisplayRegisteredAddress", User)
+        </div>
     </div>
-</div>
-<hr />
-<div class="row" >
-    <div>
-        <h4 data-toggle="collapse" data-target="#addAddressForm">Add a new address</h4>
-        <form asp-controller="Identity" asp-action="addAddress" method="post"  id="addAddressForm">
-            <div class="form-horizontal">
-                <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="addressType" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <select asp-for="addressType" asp-items="Html.GetEnumSelectList<AddressType>()" class="form-control"></select>
-                        <span asp-validation-for="addressType" class="text-danger" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label">Address</label>
-                    <div class="col-md-10">
-                        <input id="address" class="form-control">
-                    </div>
-                </div>
-                @*Start and End Date will be added in later versions*@
-
-
-                @*<div class="form-group">
-                        <label asp-for="startDate" class="col-md-2 control-label"></label>
+    <hr />
+    <div class="row">
+        <div>
+            <h4 data-toggle="collapse" data-target="#addAddressForm">Add a new address</h4>
+            <form asp-controller="Identity" asp-action="addAddress" method="post" id="addAddressForm">
+                <div class="form-horizontal">
+                    <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="addressType" class="col-md-2 control-label"></label>
                         <div class="col-md-10">
-                            <input asp-for="startDate" class="form-control" />
-                            <span asp-validation-for="startDate" class="text-danger" />
+                            <select asp-for="addressType" asp-items="Html.GetEnumSelectList<AddressType>()" class="form-control"></select>
+                            <span asp-validation-for="addressType" class="text-danger" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <label asp-for="endDate" class="col-md-2 control-label"></label>
+                        <label class="col-md-2 control-label">Address</label>
                         <div class="col-md-10">
-                            <input asp-for="endDate" class="form-control" />
-                            <span asp-validation-for="endDate" class="text-danger" />
+                            <input id="address" class="form-control">
                         </div>
-                    </div>*@
-                <div class="form-group">
-                    <label asp-for="@Model.unitNumber" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input asp-for="@Model.unitNumber" class="form-control" disabled="disabled" />
-                        <span asp-validation-for="@Model.unitNumber" class="text-danger" />
                     </div>
-                </div>
-                <div class="form-group">
-                    <label asp-for="@Model.streetNumber" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input asp-for="@Model.streetNumber" class="form-control" disabled="disabled"/>
-                        <span asp-validation-for="@Model.streetNumber" class="text-danger" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label asp-for="streetName" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input asp-for="streetName" class="form-control"  disabled="disabled"/>
-                        <span asp-validation-for="streetName" class="text-danger" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label asp-for="suburb" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input asp-for="suburb" class="form-control"  disabled="disabled"/>
-                        <span asp-validation-for="suburb" class="text-danger" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label asp-for="postcode" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input asp-for="postcode" class="form-control"  disabled="disabled"/>
-                        <span asp-validation-for="postcode" class="text-danger" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label asp-for="state" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input asp-for="state" class="form-control"  disabled="disabled"/>
-                        <span asp-validation-for="state" class="text-danger" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label asp-for="countryName" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input asp-for="countryName" class="form-control"  disabled="disabled"/>
-                        <span asp-validation-for="countryName" class="text-danger" />
-                    </div>
-                </div>
+                    @*Start and End Date will be added in later versions*@
 
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Add" class="btn btn-default" />
+
+                    @*<div class="form-group">
+                            <label asp-for="startDate" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                <input asp-for="startDate" class="form-control" />
+                                <span asp-validation-for="startDate" class="text-danger" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="endDate" class="col-md-2 control-label"></label>
+                            <div class="col-md-10">
+                                <input asp-for="endDate" class="form-control" />
+                                <span asp-validation-for="endDate" class="text-danger" />
+                            </div>
+                        </div>*@
+                    <div class="form-group">
+                        <label asp-for="unitNumber" class="col-md-2 control-label"></label>
+                        <div class="col-md-10">
+                            <input asp-for="@Model.unitNumber" class="form-control" disabled="disabled" />
+                            <span asp-validation-for="@Model.unitNumber" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="streetNumber" class="col-md-2 control-label"></label>
+                        <div class="col-md-10">
+                            <input asp-for="@Model.streetNumber" class="form-control" disabled="disabled" />
+                            <span asp-validation-for="@Model.streetNumber" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="streetName" class="col-md-2 control-label"></label>
+                        <div class="col-md-10">
+                            <input asp-for="streetName" class="form-control" disabled="disabled" />
+                            <span asp-validation-for="streetName" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="suburb" class="col-md-2 control-label"></label>
+                        <div class="col-md-10">
+                            <input asp-for="suburb" class="form-control" disabled="disabled" />
+                            <span asp-validation-for="suburb" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="postcode" class="col-md-2 control-label"></label>
+                        <div class="col-md-10">
+                            <input asp-for="postcode" class="form-control" disabled="disabled" />
+                            <span asp-validation-for="postcode" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="state" class="col-md-2 control-label"></label>
+                        <div class="col-md-10">
+                            <input asp-for="state" class="form-control" disabled="disabled" />
+                            <span asp-validation-for="state" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="countryName" class="col-md-2 control-label"></label>
+                        <div class="col-md-10">
+                            <input asp-for="countryName" class="form-control" disabled="disabled" />
+                            <span asp-validation-for="countryName" class="text-danger" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Add" class="btn btn-default" />
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
+
+    @*<div class="row">
+            <form asp-controller="" asp-action="">
+                <div class="form-horizontal">
+                    <h4>Manage Address to organisation</h4>
+                    <div class="form-group">
+                        <label asp-for="organisation" class="col-md-2 control-label"></label>
+                        <div class="col-md-10">
+                            <select class="form-control">
+                                <option value="">Select organisation</option>
+                                <option value="">My current linked organisations</option>
+                                <option value="">Organisation a</option>
+                                <option value="">Organisation b</option>
+                                <option value="">Organisation c</option>
+                                <option value="">Organisation e</option>
+                                <option value="">Organisation f</option>
+                                <option value="">Organisation g</option>
+                            </select><span> or </span>
+                            <span asp-validation-for="organisation" class="text-danger" />
+                            <input placeholder="Search organisation/company" size="150" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Upate" class="btn btn-default" />
+                        </div>
+                    </div>
+                    <small style="float:right;display:block;"> Status: <span style="color:lightgrey;"></span></small><br />
+                    <button id="btn" style="float:right;display:block;" class="btn btn-default">Cancel update</button>
+                </div>
+            </form>
+        </div>*@
 </div>
-
-@*<div class="row">
-        <form asp-controller="" asp-action="">
-            <div class="form-horizontal">
-                <h4>Manage Address to organisation</h4>
-                <div class="form-group">
-                    <label asp-for="organisation" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <select class="form-control">
-                            <option value="">Select organisation</option>
-                            <option value="">My current linked organisations</option>
-                            <option value="">Organisation a</option>
-                            <option value="">Organisation b</option>
-                            <option value="">Organisation c</option>
-                            <option value="">Organisation e</option>
-                            <option value="">Organisation f</option>
-                            <option value="">Organisation g</option>
-                        </select><span> or </span>
-                        <span asp-validation-for="organisation" class="text-danger" />
-                        <input placeholder="Search organisation/company" size="150" class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Upate" class="btn btn-default" />
-                    </div>
-                </div>
-                <small style="float:right;display:block;"> Status: <span style="color:lightgrey;"></span></small><br />
-                <button id="btn" style="float:right;display:block;" class="btn btn-default">Cancel update</button>
-            </div>
-        </form>
-    </div>*@
-
-
-
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvN49EG4_gYq0AiYPl0B5-ZfXcg40qb6U&libraries=places" asp-append-version="true"></script>
 <script src="~/js/mapsAPI.js" asp-append-version="true"></script>

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using IdentityRight.Models;
 using IdentityRight.Services;
 using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.Data.Entity.Infrastructure;
 
 namespace IdentityRight
 {
@@ -40,7 +41,8 @@ namespace IdentityRight
             services.AddEntityFramework()
                 .AddSqlServer()
                 .AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+                    options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]))
+                    .AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase());
 
 
             services.AddIdentity<ApplicationUser, IdentityRole>()

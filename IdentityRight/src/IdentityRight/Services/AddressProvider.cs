@@ -11,11 +11,13 @@ namespace IdentityRight.Services
     public class AddressProvider : ApplicationDbContext
     {
         private readonly ApplicationDbContext _dbContext;
+        
         //Create instance of database
         public AddressProvider()
         {
             _dbContext = new ApplicationDbContext();
         }
+
         #region Create Operations
         /// <summary>
         /// Add a country to the database
@@ -57,6 +59,7 @@ namespace IdentityRight.Services
         /// <returns>True if the object exists or false if the object does not exist</returns>
         public bool checkIfCountryExists(Countries country)
         {
+            //Look for the country names in the database and return the count. If count equals 1 that means the country was found.
             int count = _dbContext.Country.Where(x => x.countryName == country.countryName).Count();
             if (count == 1)
             {
@@ -82,7 +85,8 @@ namespace IdentityRight.Services
         /// <returns>ID of the specified country</returns>
         public int getCountryId(Countries country)
         {
-            return _dbContext.Country.Where(x => x.countryName == country.countryName).Where(x => x.RegionsId == country.RegionsId).Select(x => x.Id).First();
+            return _dbContext.Country.Where(x => x.countryName == country.countryName)
+                .Where(x => x.RegionsId == country.RegionsId).Select(x => x.Id).First();
         }
 
         #endregion
@@ -94,7 +98,7 @@ namespace IdentityRight.Services
         /// <returns>True if the object exists or false if the object does not exist</returns>
         public bool checkIfLocationExists(Locations loc)
         {
-            //return _dbContext.Location.Contains(loc);
+            //Find the number of locations which match the specific critera
             int count = _dbContext.Location.Where(x => x.CountriesId == loc.CountriesId)
                 .Where(x => x.postcode == loc.postcode)
                 .Where(x => x.state == loc.state)
@@ -103,10 +107,12 @@ namespace IdentityRight.Services
                 .Where(x => x.suburb == loc.suburb)
                 .Where(x => x.unitNumber == loc.unitNumber)
                 .Count();
+            //If there was only 1 found return true
             if (count == 1)
             {
                 return true;
             }
+            //Else either none was found or more than 1 was found and return false
             return false;
         }
 
@@ -151,10 +157,12 @@ namespace IdentityRight.Services
         /// <returns>True if the object exists or false if the object does not exist</returns>
         public bool checkUserAddress(UserAddresses userAddress)
         {
+            //Return the number of UserAddres with the following condition.
             int count = _dbContext.UserAddress.Where(x => x.AddressType == userAddress.AddressType)
                 .Where(x => x.ApplicationUserId == userAddress.ApplicationUserId)
                 .Where(x => x.LocationsId == userAddress.LocationsId)
                 .Count();
+            //If there is only one return true.
             if (count == 1)
             {
                 return true;
@@ -170,6 +178,7 @@ namespace IdentityRight.Services
         /// <returns>List of User addresses</returns>
         public List<UserAddresses> getAllAddresses(ApplicationUser user)
         {
+            //Return a List of UserAddresses which have a user associated with it
             return _dbContext.UserAddress.Where(x => x.ApplicationUserId == user.Id).ToList();
         }
 
@@ -189,14 +198,28 @@ namespace IdentityRight.Services
             return singleUserAddress;
         }
 
+        /// <summary>
+        /// Get a UserAddress object by its Id
+        /// </summary>
+        /// <param name="UserAddressID">Id of the UserAddress</param>
+        /// <returns>UserAddress Object</returns>
+        public UserAddresses getUserAddressById(int UserAddressID)
+        {
+            return _dbContext.UserAddress.Where(x => x.Id == UserAddressID).Single();
+        }
+
         #endregion
         #endregion
         #region Update Operations
         public void updateUserAddress(int UserAddressIDtoUpdate, int newLocationID, AddressType addressType)
         {
+            //Find the UserAddress that needs to be updated
             var address = _dbContext.UserAddress.Where(x => x.Id == UserAddressIDtoUpdate).First();
+            //Add the new location ID for the address
             address.LocationsId = newLocationID;
+            //add the new addressType for the address
             address.AddressType = addressType;
+            //Save the changes
             _dbContext.SaveChanges();
         }
 

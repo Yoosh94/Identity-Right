@@ -58,7 +58,6 @@ namespace IdentityRight.Controllers
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
-        //Comment this out to allow testing using Postman
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = "/Identity")//URL to manage homepage
         {
@@ -150,15 +149,13 @@ namespace IdentityRight.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
-                    // Send an email with this link
+                    // Generate a code which is specified for a particular user.
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //Create a URL which will call the Account Controller ConfirmEmail method.
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     //This method will send an email from identityright@gmail.com to the email the user inputted.
                     await _authEmail.SendEmailAsync(model.Email, "Confirm Email", "Please confirm your account by clicking this <a href=\"" + callbackUrl + "\">link</a>");
-                    //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                      // "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
-                      //uncomment below if we want the user to be signed in automatically. (Not recommended)
+                    //uncomment below if we want the user to be signed in automatically. (Not recommended)
                     //await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToAction(nameof(HomeController.Index), "Home");
@@ -270,6 +267,7 @@ namespace IdentityRight.Controllers
             return View(model);
         }
 
+        //This Method is run when a user registers a new account and clicks the link sent in the email.
         // GET: /Account/ConfirmEmail
         [HttpGet]
         [AllowAnonymous]
@@ -289,9 +287,9 @@ namespace IdentityRight.Controllers
             {
                 return View("Login");
             }
-            
+            //Confirm the token
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            //If the token was correct add the email to the Email list aswell.
+            //If the token was correct, add the email to the UserEmailAddress model aswell.
             bool emailCreated = false;
             if (result.Succeeded)
             {
@@ -301,6 +299,7 @@ namespace IdentityRight.Controllers
                 email.Confirmed = true;
                 email.emailAddress = user.UserName;
                 email.EmailType = EmailTypes.Primary;
+                //Create the email address in the database
                 emailCreated = _emailProvider.createEmailForUser(email);
             }
             return View((result.Succeeded && emailCreated) ? "ConfirmEmail" : "Error");
@@ -315,7 +314,7 @@ namespace IdentityRight.Controllers
             return View();
         }
 
-        //
+        
         // POST: /Account/ForgotPassword
         [HttpPost]
         [AllowAnonymous]
@@ -530,14 +529,6 @@ namespace IdentityRight.Controllers
             await _authEmail.SendEmailAsync(model.Email, "Confirm Email", "Please confirm your account by clicking this <a href=\"" + callbackUrl + "\">link</a>");
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
-
-        //
-        [HttpGet]
-        public IActionResult HomeSet( )
-        { 
-            return View("HomeSettings");
-        }
-
         #region Helpers
 
         private void AddErrors(IdentityResult result)

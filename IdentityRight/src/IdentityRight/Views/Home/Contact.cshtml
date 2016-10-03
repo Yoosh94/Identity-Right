@@ -1,30 +1,83 @@
 ﻿@{
     ViewData["Title"] = "Contact";
 }
-<div class="container">
-    <h2>@ViewData["Title"].</h2>
-    <h4>@ViewData["Message"]</h4>
 
-    <h4>Please provide us details of your enquiries to help us help you.</h4>
-    <technical>
-        Technical Support
-        <abbr title="Phone">P:</abbr>
-        +614.........
-    </technical>
-    <address>
-        <strong>Support:</strong> <a href="mailto:support_identityright@gmail.com">support_identityright@gmail.com</a><br />
-        <strong>Marketing:</strong> <a href="mailto:marketing_identityright@gmail.com">marketing_identityright@gmail.com</a>
-    </address>
-    <p>
-        Identity right are working harder to provide solutions to home movers and organisations to connnect.
-        Send us your enquiries the most details as possible. We wish to provide all enquiries with quality information and
-        service.
-    </p>
-    <p>
-        Identity right is located in Victoria Australia. Face to face communication may be possible on skype.
-        <address>
-            <abbr title="Skype">Skype:</abbr>
-            identityright_skype
-        </address>
-    </p>
+<div class="contact-body-image"></div><!--Contact page background image-->
+<div class="container">
+    <div class="body-transparent"></div><!--Contact page background color-->
 </div>
+
+<!--Contact page content-->
+<div class="container ">
+    <div class="col-md-12 col-md-offset-0" style="color:white;">
+        <h2>@ViewData["Title"].</h2>
+        <h4>@ViewData["Message"]</h4>
+
+        <h4>Please provide us details of your enquiries to help us help you.</h4>
+        <technical>
+            Technical Support
+            <abbr title="Phone">P:</abbr>
+            +614.........
+        </technical>
+        <address>
+            <strong>Support:</strong> <a href="mailto:support_identityright@gmail.com">support_identityright@gmail.com</a><br />
+            <strong>Marketing:</strong> <a href="mailto:marketing_identityright@gmail.com">marketing_identityright@gmail.com</a>
+        </address>
+        <p>
+            Identity right are working harder to provide solutions to home movers and organisations to connnect.
+            Send us your enquiries the most details as possible. We wish to provide all enquiries with quality information and
+            service.
+        </p>
+        <p>
+            Identity right is located in Victoria Australia. Face to face communication may be possible on skype.
+            <address>
+                <abbr title="Skype">Skype:</abbr>
+                identityright_skype
+            </address>
+        </p>
+    </div>
+
+    <!--Map info-->
+    <div class="row">
+        <div id="map-outer" class="col-md-12">
+            <div id="address" class="col-md-4">
+                <h2>Our temporary location</h2>
+                <address>
+                    <strong>70 Elgar Road,  </strong><br>
+                    3125<br>
+                    Burwood VIC<br>
+                    Australia<br>
+                    <abbr>P:</abbr> (03) 9244 6333
+                </address>
+            </div>
+            <!--Display map-->
+            <div id="map-container" class="col-md-8"></div>
+        </div><!-- /map-outer -->
+    </div> <!-- /row -->
+
+
+
+</div>
+<!-- jQuery (Bootstrap's JavaScript plugins) -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<!-- Compiled plugins (below)-->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script><!--twitter bootstrap-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvN49EG4_gYq0AiYPl0B5-ZfXcg40qb6U&libraries=places" asp-append-version="true"></script><!--Google map API-->
+<script>
+    function init_map() {
+        var location = new google.maps.LatLng(-37.8436837, 145.1100666);//Latitude and Longitude of Deakin University as temporary office of IDentity Right.
+        var mapoptions = {
+            center: location,
+            zoom: 14
+        };
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map,
+            title: "Deakin University" 
+        });
+        var map = new google.maps.Map(document.getElementById("map-container"),
+            mapoptions);//Get the id to display map
+        marker.setMap(map);
+    }
+    google.maps.event.addDomListener(window, 'load', init_map);
+</script>

@@ -20,119 +20,131 @@
             <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true"/>
             <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" asp-append-version="true" />
             <link rel="stylesheet" href="~/css/linkOrgs.css" asp-append-version="true"/>
+
+            <!-- Bootstrap core CSS -->
+            <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.css" rel="stylesheet" media="screen">
+
+            <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+            <!--[if lt IE 9]>
+            <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
+            <script src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.3.0/respond.js"></script>
+            <![endif]-->
         </environment>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     </head>
     <body>
-       
+       <div id="wrapper">
+           <div id="header">
+               <div class="navbar navbar-inverse navbar-fixed-top">
+                   <div class="container">
+                       <div class="navbar-header">
+                           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                               <span class="sr-only">Toggle navigation</span>
+                               <span class="icon-bar"></span>
+                               <span class="icon-bar"></span>
+                               <span class="icon-bar"></span>
+                           </button>
+                           @using System.Security.Claims <!--using system security-->
+                           @if (User.IsSignedIn())//User signed in function
+                           {
+                               //If user is logged in redirect to Identity/Index
+                               @*<a asp-controller="Identity" asp-action="Index" class="navbar-brand"><img src="~/images/IR_logo_white.png" width="120" height="35" /></a>*@
+                               <a asp-controller="Identity" asp-action="Index" class="navbar-brand">Identity Right</a>
+                           }
+                           else
+                           {
+                               //If user is not logged in redirect to Home/Index//
+                               @*<a asp-controller="Home" asp-action="Index" class="navbar-brand"><img src="~/images/IR_logo_white.png" width="120" height="35" /></a>*@
+                               <a asp-controller="Home" asp-action="Index" class="navbar-brand">Identity Right</a>
+                           }
+                       </div>
+                       <div class="collapse navbar-collapse">
+                           @await Html.PartialAsync("_LoginPartial")
+                           <ul class="nav navbar-nav">
+                               @if (User.IsSignedIn())
+                               {
+                                   //If enable two factor authentication display these menus.
 
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-@using System.Security.Claims <!--using system security-->
-@if (User.IsSignedIn())//User signed in function
-{
-                    //If user is logged in redirect to Identity/Index
-                    @*<a asp-controller="Identity" asp-action="Index" class="navbar-brand"><img src="~/images/IR_logo_white.png" width="120" height="35" /></a>*@
-                    <a asp-controller="Identity" asp-action="Index" class="navbar-brand">Identity Right</a>
-}
-else
-{
-    //If user is not logged in redirect to Home/Index//
-                    @*<a asp-controller="Home" asp-action="Index" class="navbar-brand"><img src="~/images/IR_logo_white.png" width="120" height="35" /></a>*@
-                    <a asp-controller="Identity" asp-action="Index" class="navbar-brand">Identity Right</a>
-}              
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
+                                @*<li><a asp-controller="Identity" asp-action="ManageUserOrganisationConnections" class="">Connected Organisations</a></li>
+    <li>@Html.ActionLink("Organisations", "Index", "Organisations", new { }, null)</li>
+    <li><a asp-controller="Identity" asp-action="ManageAddresses" class="">Manage Addressess</a></li>
+    <li><a asp-controller="Identity" asp-action="UpdatePhoneNumber" class="">Manage Phone No.</a></li>
+    <li><a asp-controller="Identity" asp-action="ManageUserEmails" class="">Manage Emails</a></li>*@
+                                <li><a asp-controller="Home" asp-action="About">About</a></li>
+                                <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                               }
+                               else
+                               {
+                                   //If user is not logged in redirect to Home/Index//
+                                   <li><a asp-controller="Home" asp-action="About">About</a></li>
+                                   <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
 
-@if (User.IsSignedIn())
-{
-                        //If user is logged in redirect to Identity/Index
-                        <li><a asp-controller="Home" asp-action="About">About</a></li>
-                        <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
-}
-else
-{
-                        //If user is not logged in redirect to Home/Index//
-                        <li>@Html.ActionLink("Organisations", "Index", "Organisations", new { }, null)</li>
-                        <li><a asp-controller="Home" asp-action="About">About</a></li>
-                        <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                               }
 
-}
-               
-                    </ul>
-                    @await Html.PartialAsync("_LoginPartial")
-                </div>
-            </div>
-        </div>
-        <div id="mainBody">
-            @RenderBody()
-        </div>
-        <div class="footer-style">
-            <div class="container">
-                <div class="row ">
+                           </ul>
+                       
+                       </div>
+                   </div>
+               </div>
+           </div><!-- #header -->
+           <div id="content">
+                   @RenderBody()
+           </div><!-- #content -->
 
-                    <footer class="" style="margin-top:400px">
-                        <p>&copy; 2016 - IdentityRight</p>
-                        <div class="navbar navbar-inverse" id="bs-example-navbar-collapse-1">
-                            <ul class="nav navbar-nav">
-                                <li><a href="#">Volunteers <span class="sr-only">(current)</span></a></li>
-                                <li><a href="#">Terms and Conditions</a></li>
-                                <li><a href="#">Privacy Policy</a></li>
-                            </ul>
-                        </div>
-                           
-                          
-                                   
-                              
-                                <div class="form-group">
-                                    <form class="form">
-                                        <input class="form-control" Placeholder="Your email address" />
-                                        <button class="btn btn-primary">Subscribe</button>
-                                    </form>
-                                </div>
-                        
-                     
-                        </footer>
-                </div>
-            </div>
-            </div>
+   
+           <div id="footer">
+               <div class="row ">
 
+                   <footer class="" style="margin-top:100px">
+                       <div class="navbar navbar-inverse bottom" id="bs-example-navbar-collapse-1">
+                           <div class="container">
+                               <ul class="nav navbar-nav">
+                                   <li><a href="#">Instructions <span class="sr-only">(current)</span></a></li>
+                                   <li><a href="#">Terms and Conditions</a></li>
+                                   <li><a href="#">Privacy Policy</a></li>
+                               </ul>
+                           </div>
+                           <div class="container">
+                               <p>&copy; 2016 - Identity Right</p>
+                           </div>
+                       </div>
 
-            <environment names="Development">
-                <script src="~/lib/jquery/dist/jquery.js"></script>
-                <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-                <script src="~/js/site.js" asp-append-version="true"></script>
-                <script src="~/js/LinkOrgs.js" asp-append-version="true"></script>
-            </environment>
-            <environment names="Staging,Production">
-                <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"
-                        asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                        asp-fallback-test="window.jQuery">
-                </script>
-                <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js"
-                        asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                        asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
-                </script>
-                <script src="~/js/site.min.js" asp-append-version="true"></script>
-            </environment>
+                   </footer>
+               </div>
 
-            @RenderSection("scripts", required: false)
+           </div><!-- #footer -->
 
-            <div id="modal-container" class="modal fade" tabindex="-1">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                    </div>
-                </div>
-            </div>
+  
 
+           <environment names="Development">
+               <script src="~/lib/jquery/dist/jquery.js"></script>
+               <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+               <script src="~/js/site.js" asp-append-version="true"></script>
+               <script src="~/js/LinkOrgs.js" asp-append-version="true"></script>
+           </environment>
+           <environment names="Staging,Production">
+               <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"
+                       asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                       asp-fallback-test="window.jQuery">
+               </script>
+               <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js"
+                       asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                       asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+               </script>
+               <script src="~/js/site.min.js" asp-append-version="true"></script>
+           </environment>
+
+           @RenderSection("scripts", required: false)
+
+           <div id="modal-container" class="modal fade" tabindex="-1">
+               <div class="modal-dialog">
+                   <div class="modal-content">
+                   </div>
+               </div>
+           </div>
+       </div>
+
+        
             <script type="text/javascript">
                 $(function () {
                     $('body').on('click', '.modal-link', function (e) {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using IdentityRight.ViewModels.Identity;
+using Microsoft.Data.Entity.Infrastructure;
 
 namespace IdentityRight.Models
 {
@@ -26,6 +27,9 @@ namespace IdentityRight.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
+            //Uncomment options.useInMemoryDatabase() to run unit tests.
+            //options.UseInMemoryDatabase();
+            //Uncomment UseSqlServer to run normally.
             options.UseSqlServer(@"Server=tcp:sit302db.database.windows.net,1433;Initial Catalog=IRDB;Persist Security Info=False;User ID=sit302;Password=IdentityRightP@ssword;MultipleActiveResultSets=True;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
         }
 

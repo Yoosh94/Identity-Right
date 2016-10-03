@@ -23,6 +23,8 @@ namespace IdentityRight.Migrations
 
                     b.Property<Guid>("APIKey");
 
+                    b.Property<string>("email");
+
                     b.Property<string>("organisationAddress");
 
                     b.Property<string>("organisationName");
@@ -212,6 +214,8 @@ namespace IdentityRight.Migrations
 
                     b.Property<string>("ApplicationUserId");
 
+                    b.Property<bool>("Confirmed");
+
                     b.Property<int>("EmailType");
 
                     b.Property<string>("emailAddress");
@@ -271,23 +275,27 @@ namespace IdentityRight.Migrations
 
             modelBuilder.Entity("IdentityRight.ViewModels.Identity.AddAddressViewModel", b =>
                 {
-                    b.Property<string>("street_number");
+                    b.Property<string>("streetNumber");
 
                     b.Property<int>("addressType");
 
-                    b.Property<string>("administrative_area_level_1");
+                    b.Property<string>("countryName");
 
-                    b.Property<string>("country");
+                    b.Property<DateTime>("endDate");
 
-                    b.Property<string>("locality");
+                    b.Property<string>("postcode");
 
-                    b.Property<string>("postal_code");
+                    b.Property<DateTime>("startDate");
 
-                    b.Property<string>("route");
+                    b.Property<string>("state");
 
-                    b.Property<string>("subpremise");
+                    b.Property<string>("streetName");
 
-                    b.HasKey("street_number");
+                    b.Property<string>("suburb");
+
+                    b.Property<string>("unitNumber");
+
+                    b.HasKey("streetNumber");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRole", b =>
