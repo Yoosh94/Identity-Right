@@ -148,6 +148,12 @@ namespace IdentityRight.Services
             }
             return loc;
         }
+
+        public Locations getLocationByUserAddressID(int UserAddressID)
+        {
+            return _dbContext.Location.Where(x => x.Id == getUserAddressById(UserAddressID).LocationsId).Single();
+        }
+
         #endregion
         #region Read Operation for UserAddress
         /// <summary>
@@ -207,6 +213,7 @@ namespace IdentityRight.Services
         {
             return _dbContext.UserAddress.Where(x => x.Id == UserAddressID).Single();
         }
+
 
         #endregion
         #endregion

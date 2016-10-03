@@ -16,7 +16,8 @@
                 @address.UserAddresses.First().AddressType
             </td>
             <td>
-                @address.unitNumber @address.streetNumber @address.streetName  @address.suburb  @address.state  @address.postcode
+                @address.ToString()
+                @*@address.unitNumber @address.streetNumber @address.streetName  @address.suburb  @address.state  @address.postcode*@
             </td>
             <td>
                 @Html.ActionLink("Edit", "updateAddress", "Identity", address) |

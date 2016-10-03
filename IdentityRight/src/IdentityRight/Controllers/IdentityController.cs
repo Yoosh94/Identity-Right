@@ -739,8 +739,18 @@ namespace IdentityRight.Controllers
             }
             int newLocId = _addressProvider.getLocationId(location);
             int userAddressIDtoUpdate = item.userAddressID;
+            var oldAddress = _addressProvider.getLocationByUserAddressID(userAddressIDtoUpdate);
+            //Get list of all oranisations which are part of this address.
+            var org = _organisationProvider.getAllAddressOrganisationLinks(userAddressIDtoUpdate);
+            List<UserOrganisationLinks> listofOrgs = new List<UserOrganisationLinks>();
+            foreach(var link in org)
+            {
+                listofOrgs.Add((_organisationProvider.getUserOrganisationLink(link.UserOrganisationLinksId)));
+            }
             //Now we need to update the users address with the new location ID.
             _addressProvider.updateUserAddress(userAddressIDtoUpdate, newLocId, item.userAddress.AddressType);
+            AuthEmail _authEmail = new AuthEmail();
+            await _authEmail.SendEmailToUpdateAddress(oldAddress.ToString(),location.ToString(),listofOrgs,user);
             return RedirectToAction("ManageAddresses");
         }
 
