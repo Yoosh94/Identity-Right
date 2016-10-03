@@ -149,16 +149,22 @@
 <script>
 
     function newBox() {
+        //Get the text from the dropdown option selected
         var type = $('#numType').find(":selected").text();
+        //Get the value of the dropdown option selected
         var typeEnum = $('#numType').find(":selected").val();
+
+        //Create urls to the controller action for rendering the new number input box
         var url = '@Url.Action("NewNumberInput", "Identity")';
         var url2 = '@Url.Content("~/Identity/NewNumberInput")';
 
+        //Create an ajax call to render the new input box from the controller at the set url
             $.ajax({
                 url: url2,
                 type: "get",
                 data: {'type' : type, 'typeIndex': typeEnum},
                 success: function (result) {
+                    //Replace the contents of the 'NewNumberField' div with the returned html fromm= the ajax call
                     $("#NewNumberField").html(result);
                 }
             });
