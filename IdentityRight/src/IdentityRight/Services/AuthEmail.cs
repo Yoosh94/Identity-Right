@@ -1,10 +1,14 @@
 ﻿using System.Threading.Tasks;
+using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Net.Mail;
 using System.Net;
+using IdentityRight.Models;
 
 namespace IdentityRight.Services
 {
-    public class AuthEmail :IEmailSender
+    public class AuthEmail : IEmailSender
     {
         /// <summary>
         /// This method will create the message and send an email to the specified email
@@ -28,7 +32,7 @@ namespace IdentityRight.Services
             messageToSend.Body = body;
             messageToSend.IsBodyHtml = true;
             //Create the SmtpClient which will allow us to send an email using the IdentityRight Gmail account.
-            var smtp = new SmtpClient();         
+            var smtp = new SmtpClient();
             var credentials = new NetworkCredential
             {
                 UserName = "identityright@gmail.com",
@@ -47,7 +51,7 @@ namespace IdentityRight.Services
                 messageToSend.Dispose();
                 System.Diagnostics.Debug.WriteLine("Email sent successfully");
             };
-            smtp.SendAsync(messageToSend, null);                             
+            smtp.SendAsync(messageToSend, null);
             return Task.FromResult(0);
         }
 
@@ -57,7 +61,22 @@ namespace IdentityRight.Services
 
             if (!e.Cancelled && e.Error != null)
             {
-               
+
+            }
+        }
+
+        public void SendEmailToUpdateAddress(string oldaddress, string newAddress, List<UserOrganisationLinks> links, ApplicationUser user)
+        {
+            OrganisationProvider _provider = new OrganisationProvider();
+            List<ApplicationOrganisations> organisationList = new List<ApplicationOrganisations>();
+            foreach (var organisation in links)
+            {
+                organisationList.Add(_provider.getOrganisation(organisation.ApplicationOrganisationsId));
+            }
+            foreach (ApplicationOrganisations org in organisationList)
+            {
+                string messageToSend = String.Format(@"To {4},<br/> {0} {1} ({5}) has updated their address.<br/><br/>Previous address: {2}<br/>New Address: {3}", user.FirstName.ToUpper(), user.LastName.ToUpper(), oldaddress, newAddress, org.organisationName.ToUpper(),user.IRID);
+                SendEmailAsync(org.email, "Customer address update", messageToSend);
             }
         }
     }

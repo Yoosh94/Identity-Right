@@ -91,7 +91,7 @@ namespace IdentityRight.Services
         /// <param name="user"></param>
         public void CreateUserAddress_UserOrganisationLink(int UserAddressID, List<int> organisationsID, string userId)
         {
-            //If the list in empty initialise it.
+            //If the list in empty initialise it. 
             if(organisationsID == null)
             {
                 organisationsID = new List<int>();
@@ -214,7 +214,8 @@ namespace IdentityRight.Services
             var model = new ApplicationOrganisations
             {
                 Id = id,
-                organisationName = organisation.organisationName
+                organisationName = organisation.organisationName,
+                email = organisation.email
             };
             return model;
         }

@@ -22,5 +22,17 @@ namespace IdentityRight.Models
         //Foreign Key
         public Countries Countries { get; set; }
         public int CountriesId { get; set; }
+
+        public override string ToString()
+        {
+            if(unitNumber == "0" || unitNumber == null)
+            {
+                return  streetNumber + " " + streetName + " " + suburb + ", " + state + " " + postcode;
+            }
+            else
+            {
+                return unitNumber+"/" + streetNumber + " " + streetName + " " + suburb + ", " + state + " " + postcode;
+            }
+        }
     }
 }
