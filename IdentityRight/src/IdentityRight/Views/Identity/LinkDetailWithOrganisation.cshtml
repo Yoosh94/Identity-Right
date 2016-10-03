@@ -24,7 +24,14 @@
         </div>
         <div class="splitView" id="right-window">
             <h3>Available organisations</h3>
-            <select id="rightSelect" class="form-control" asp-for="@Model.UnlinkedOrgs" asp-items="@Model.UnlinkedOrgs"></select>
+            <select multiple="multiple" id="rightSelect" class="form-control" data-style="btn-info">
+                @foreach (var item in Model.UnlinkedOrganisation)
+                {
+                    <option class="" value="@item.Id">@Html.DisplayFor(modelItem => item.organisationName)</option>
+                }
+            </select>
+
+            @*<select id="rightSelect" class="form-control" asp-for="@Model.UnlinkedOrgs" asp-items="@Model.UnlinkedOrgs"></select>*@
         </div>
         @Html.HiddenFor(x => x.UserAddressID)
         <button id="submitLinks" type="submit" class="btn-success">Save</button>

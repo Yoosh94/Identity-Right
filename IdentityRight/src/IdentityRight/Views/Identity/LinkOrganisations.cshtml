@@ -1,7 +1,7 @@
 ﻿@*@model IEnumerable<IdentityRight.Models.ApplicationOrganisations>
-@{
-    ViewData["Title"] = "Add/Remove Organisation Links";
-}*@
+    @{
+        ViewData["Title"] = "Add/Remove Organisation Links";
+    }*@
 
 @model OrganisationsViewModel
 @{
@@ -20,54 +20,53 @@
                     </div>
                 </div>
             </div>
-           
+
         </form>
 
 
 
         <form asp-controller="Identity" asp-action="SetLinks" method="post" class="form-horizontal" role="form">
             <div class="row" id="saveBar">
-                <div class="col-md-8 ">Select one or more organisations from the lists below (hold the ctrl key to select multiple organisations). 
-                Then press 'add' to link them to your account, or 'remove' to unlink them. Press 'save' to confirm any changes you have made.
-                <br />The search bar above can be used to search available organisations.</div>
-                <div class="col-md-4 col-xs-offset-0">
-                    <button id="submitLinks" type="submit" class="btn btn-success">Save</button>
+                <div class="col-md-8 ">
+                    Select one or more organisations from the lists below (hold the ctrl key to select multiple organisations).
+                    Then press 'add' to link them to your account, or 'remove' to unlink them. Press 'save' to confirm any changes you have made.
+                    <br />The search bar above can be used to search available organisations.
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-md-5 " id="" style="height:600px">
+                <div class="col-md-4 " id="" style="height:600px">
                     <h3>My Linked organisations</h3>
                     <select multiple="multiple" id="leftSelect" asp-for="ReturnedIDs" asp-items="@Model.LinkedOrgs" class="form-control">
                         @*@foreach (var item in Model.LinkedOrgs)
-                {
-                    <option class="orgsOption" value="@item.Id">@Html.DisplayFor(modelItem => item.organisationName)</option>
-                }*@
+                            {
+                                <option class="orgsOption" value="@item.Id">@Html.DisplayFor(modelItem => item.organisationName)</option>
+                            }*@
                     </select>
                 </div>
-                <div id="buttonsDiv" class="col-md-2">
+                <div id="buttonsDiv" class="col-md-1">
                     <br /><br /><button id="addOrg" class="btn btn-success">&lt; ADD</button><br />
                     <button id="removeOrg" class="btn btn-danger">REMOVE &gt;</button>
                     <br /><br />
                     <button id="submitLinks" type="submit" class="btn btn-success">Save</button>
                 </div>
-                <div class="col-md-5 " id="" style="height:600px">
+                <div class="col-md-4 " id="" style="height:600px">
                     <h3>Available organisations</h3>
-                    <select multiple="multiple" id="rightSelect" class="form-control"  data-style="btn-info" >
+                    <select multiple="multiple" id="rightSelect" class="form-control" data-style="btn-info">
                         @foreach (var item in Model.UnlinkedOrgs)
             {
-                            <option class=""  value="@item.Id">@Html.DisplayFor(modelItem => item.organisationName)</option>
+                            <option class="" value="@item.Id">@Html.DisplayFor(modelItem => item.organisationName)</option>
                         }
                     </select>
                 </div>
 
 
             </div>
-           
+
         </form>
     </div>
 </div>
 
 
-    @section Scripts {
-        @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-    }
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
