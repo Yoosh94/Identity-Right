@@ -667,6 +667,7 @@ namespace IdentityRight.Controllers
             {
                 //Create a user address
                 _addressProvider.addUserAddress(userAddress);
+                ViewBag.addressToLinkToOrganisation = location.ToString();
                 return RedirectToAction("LinkAddressToOrganisation", location);
                 //return RedirectToAction("AddAddress", new { Message = ManageMessageId.AddAddressSuccess });
             }
@@ -812,6 +813,7 @@ namespace IdentityRight.Controllers
             model.LinkedOrgs = selectListLinkedOrg;
             model.UnlinkedOrganisation = allLinkedOrganisation;
             //model.UnlinkedOrgs = selectListUnlinkedOrg;
+            ViewBag.addressToLinkToOrganisation = loc.ToString();
             return View("LinkDetailWithOrganisation", model);
         }
 
