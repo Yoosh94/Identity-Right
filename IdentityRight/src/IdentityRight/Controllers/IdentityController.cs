@@ -652,6 +652,8 @@ namespace IdentityRight.Controllers
             {
                 _addressProvider.addLocation(location);
             }
+            //get the location id
+            location.Id = _addressProvider.getLocationId(location);
             //Create userAddress object
             UserAddresses userAddress = new UserAddresses
             {
@@ -665,7 +667,8 @@ namespace IdentityRight.Controllers
             {
                 //Create a user address
                 _addressProvider.addUserAddress(userAddress);
-                return RedirectToAction("AddAddress", new { Message = ManageMessageId.AddAddressSuccess });
+                return RedirectToAction("LinkAddressToOrganisation", location);
+                //return RedirectToAction("AddAddress", new { Message = ManageMessageId.AddAddressSuccess });
             }
             else
             {
@@ -801,13 +804,14 @@ namespace IdentityRight.Controllers
             {
                 selectListLinkedOrg.Add(new SelectListItem { Text = c.organisationName, Value = c.Id.ToString() });
             }
-            foreach (var c in allLinkedOrganisation)
-            {
-                selectListUnlinkedOrg.Add(new SelectListItem { Text = c.organisationName, Value = c.Id.ToString() });
-            }
+            //foreach (var c in allLinkedOrganisation)
+            //{
+            //    selectListUnlinkedOrg.Add(new SelectListItem { Text = c.organisationName, Value = c.Id.ToString() });
+            //}
             //add the selectListItems to the ModelView
             model.LinkedOrgs = selectListLinkedOrg;
-            model.UnlinkedOrgs = selectListUnlinkedOrg;
+            model.UnlinkedOrganisation = allLinkedOrganisation;
+            //model.UnlinkedOrgs = selectListUnlinkedOrg;
             return View("LinkDetailWithOrganisation", model);
         }
 
