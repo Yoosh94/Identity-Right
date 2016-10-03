@@ -35,6 +35,7 @@
                     }
                 </select>
             </div>
+            @Html.HiddenFor(x => x.UserAddressID)
         </div>
             @*
             
@@ -50,7 +51,7 @@
 
             @*<select id="rightSelect" class="form-control" asp-for="@Model.UnlinkedOrgs" asp-items="@Model.UnlinkedOrgs"></select>*@
         @*</div>
-        @Html.HiddenFor(x => x.UserAddressID)
+        
         <button id="submitLinks" type="submit" class="btn-success">Save</button>*@
         
     </form>
