@@ -65,7 +65,7 @@ namespace IdentityRight.Services
             }
         }
 
-        public async Task SendEmailToUpdateAddress(string oldaddress, string newAddress, List<UserOrganisationLinks> links, ApplicationUser user)
+        public void SendEmailToUpdateAddress(string oldaddress, string newAddress, List<UserOrganisationLinks> links, ApplicationUser user)
         {
             OrganisationProvider _provider = new OrganisationProvider();
             List<ApplicationOrganisations> organisationList = new List<ApplicationOrganisations>();
@@ -75,7 +75,7 @@ namespace IdentityRight.Services
             }
             foreach (ApplicationOrganisations org in organisationList)
             {
-                string messageToSend = String.Format("To {4},\r\n \r\n {0} {1} has updated their address.\r\n \r\n Previous address: {2}\nNew Address: {3}", user.FirstName.ToUpper(), user.LastName.ToUpper(), oldaddress, newAddress, org.organisationName.ToUpper());
+                string messageToSend = String.Format(@"To {4},<br/> {0} {1} ({5}) has updated their address.<br/><br/>Previous address: {2}<br/>New Address: {3}", user.FirstName.ToUpper(), user.LastName.ToUpper(), oldaddress, newAddress, org.organisationName.ToUpper(),user.IRID);
                 SendEmailAsync(org.email, "Customer address update", messageToSend);
             }
         }

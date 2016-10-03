@@ -750,7 +750,7 @@ namespace IdentityRight.Controllers
             //Now we need to update the users address with the new location ID.
             _addressProvider.updateUserAddress(userAddressIDtoUpdate, newLocId, item.userAddress.AddressType);
             AuthEmail _authEmail = new AuthEmail();
-            await _authEmail.SendEmailToUpdateAddress(oldAddress.ToString(),location.ToString(),listofOrgs,user);
+            _authEmail.SendEmailToUpdateAddress(oldAddress.ToString(),location.ToString(),listofOrgs,user);
             return RedirectToAction("ManageAddresses");
         }
 
