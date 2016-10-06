@@ -60,9 +60,9 @@ textarea {
 .company-slogan {
     text-align: center;
     margin: 0px 0px;
-    background-color: darkblue;
-    opacity: .7;
-    color: white;
+    background-color:darkslategray;
+    opacity: .8;
+    color: beige;
 }
 
 .org-list > li{
